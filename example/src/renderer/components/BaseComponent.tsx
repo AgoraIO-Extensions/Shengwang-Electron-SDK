@@ -7,7 +7,7 @@ import {
   UserOfflineReasonType,
   VideoCanvas,
   VideoSourceType,
-} from 'agora-electron-sdk';
+} from 'shengwang-electron-sdk';
 import React, { Component, ReactElement } from 'react';
 
 import {

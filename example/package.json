@@ -17,7 +17,7 @@
     "appId": "agora.io.ElectronApiExample",
     "asar": true,
     "asarUnpack": [
-      "node_modules/agora-electron-sdk"
+      "node_modules/shengwang-electron-sdk"
     ],
     "buildDependenciesFromSource": true,
     "compression": "normal",
@@ -76,7 +76,7 @@
     ]
   },
   "dependencies": {
-    "agora-electron-sdk": "4.5.0",
+    "shengwang-electron-sdk": "4.5.0",
     "antd": "^4.20.3",
     "download": "^8.0.0",
     "koffi": "2.8.11",

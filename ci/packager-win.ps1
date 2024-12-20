@@ -69,11 +69,11 @@ function Package($archNum,$electronVersion,$example_sdk_mode){
   }
 
   if ($example_sdk_mode -eq 1) {
-    Remove-Item -Path  node_modules/agora-electron-sdk/build -Recurse -Force -ErrorAction Ignore;
-    Remove-Item -Path  node_modules/agora-electron-sdk/js -Recurse -Force -ErrorAction Ignore;
-    Remove-Item -Path  node_modules/agora-electron-sdk/type -Recurse -Force -ErrorAction Ignore;
+    Remove-Item -Path  node_modules/shengwang-electron-sdk/build -Recurse -Force -ErrorAction Ignore;
+    Remove-Item -Path  node_modules/shengwang-electron-sdk/js -Recurse -Force -ErrorAction Ignore;
+    Remove-Item -Path  node_modules/shengwang-electron-sdk/type -Recurse -Force -ErrorAction Ignore;
     # copy native sdk
-    Copy-Item -Path ../Electron-*/* -Destination node_modules/agora-electron-sdk/ -Recurse -Force
+    Copy-Item -Path ../Electron-*/* -Destination node_modules/shengwang-electron-sdk/ -Recurse -Force
   }
 
   # dist start

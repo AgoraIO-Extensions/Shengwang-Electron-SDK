@@ -47,7 +47,7 @@ jobs:
         if: ${{ !inputs.dry-run }}
         id: package-info
         run: |
-          sed "s/\"agora-electron-sdk\": \"\(.*\)\"/\"agora-electron-sdk\": \"${{ inputs.increment }}\"/g" package.json > tmp
+          sed "s/\"shengwang-electron-sdk\": \"\(.*\)\"/\"shengwang-electron-sdk\": \"${{ inputs.increment }}\"/g" package.json > tmp
           mv tmp package.json
         working-directory: example
 
@@ -55,7 +55,7 @@ jobs:
         if: ${{ !inputs.dry-run }}
         run: |
           git add example
-          git commit -m "chore(example): update example to install agora-electron-sdk@${{ inputs.increment }}"
+          git commit -m "chore(example): update example to install shengwang-electron-sdk@${{ inputs.increment }}"
 
       - name: Release
         if: ${{ !inputs.dry-run }}

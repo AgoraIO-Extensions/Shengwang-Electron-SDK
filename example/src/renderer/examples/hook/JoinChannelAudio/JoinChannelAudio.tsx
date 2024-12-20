@@ -4,7 +4,7 @@ import {
   LocalAudioStreamState,
   MediaDeviceType,
   RtcConnection,
-} from 'agora-electron-sdk';
+} from 'shengwang-electron-sdk';
 import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 
 import { AgoraButton, AgoraDivider, AgoraSlider } from '../../../components/ui';
