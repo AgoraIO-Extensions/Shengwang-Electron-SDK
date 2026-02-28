@@ -1,3 +1,4 @@
+import React, { ReactElement } from 'react';
 import {
   ChannelMediaRelayError,
   ChannelMediaRelayState,
@@ -6,7 +7,6 @@ import {
   IRtcEngineEventHandler,
   createAgoraRtcEngine,
 } from 'shengwang-electron-sdk';
-import React, { ReactElement } from 'react';
 
 import {
   BaseComponent,

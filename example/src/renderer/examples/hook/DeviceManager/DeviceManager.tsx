@@ -1,3 +1,4 @@
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
   AudioDeviceInfo,
   ClientRoleType,
@@ -7,7 +8,6 @@ import {
   VideoDeviceInfo,
   VideoSourceType,
 } from 'shengwang-electron-sdk';
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 
 import {
   AgoraButton,

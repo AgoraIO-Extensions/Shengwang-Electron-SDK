@@ -1,3 +1,5 @@
+import React, { ReactElement } from 'react';
+import { SketchPicker } from 'react-color';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -14,8 +16,6 @@ import {
   VideoSourceType,
   createAgoraRtcEngine,
 } from 'shengwang-electron-sdk';
-import React, { ReactElement } from 'react';
-import { SketchPicker } from 'react-color';
 
 import {
   BaseComponent,
