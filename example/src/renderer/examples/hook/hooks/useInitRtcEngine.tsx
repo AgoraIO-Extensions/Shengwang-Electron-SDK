@@ -5,7 +5,7 @@ import createAgoraRtcEngine, {
   RtcConnection,
   RtcStats,
   UserOfflineReasonType,
-} from 'agora-electron-sdk';
+} from 'shengwang-electron-sdk';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Config from '../../../config/agora.config';

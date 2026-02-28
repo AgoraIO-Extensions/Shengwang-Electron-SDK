@@ -1,4 +1,4 @@
-import { VideoCanvas, VideoSourceType } from 'agora-electron-sdk';
+import { VideoCanvas, VideoSourceType } from 'shengwang-electron-sdk';
 import React, { ReactElement, memo } from 'react';
 
 import {

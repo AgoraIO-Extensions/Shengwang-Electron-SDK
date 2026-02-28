@@ -34,8 +34,8 @@ packExample() {
   fi
 
   if [ "$3" -eq 1 ]; then
-    rm -rf node_modules/agora-electron-sdk/build
-    cp -P -R ../Electron-*/* node_modules/agora-electron-sdk/
+    rm -rf node_modules/shengwang-electron-sdk/build
+    cp -P -R ../Electron-*/* node_modules/shengwang-electron-sdk/
   fi
 
   export USE_HARD_LINKS=false
