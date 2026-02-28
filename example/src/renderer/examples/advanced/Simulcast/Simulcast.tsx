@@ -15,7 +15,7 @@ import {
   VideoSourceType,
   VideoStreamType,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
+} from 'shengwang-electron-sdk';
 import { Checkbox, List } from 'antd';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import React, { ReactElement } from 'react';
