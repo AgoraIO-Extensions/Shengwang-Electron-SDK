@@ -1,10 +1,5 @@
 import os from 'os';
 
-import {
-  ClientRoleType,
-  ErrorCodeType,
-  RtcConnection,
-} from 'shengwang-electron-sdk';
 import React, {
   ReactElement,
   useCallback,
@@ -12,6 +7,11 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import {
+  ClientRoleType,
+  ErrorCodeType,
+  RtcConnection,
+} from 'shengwang-electron-sdk';
 
 import {
   AgoraButton,

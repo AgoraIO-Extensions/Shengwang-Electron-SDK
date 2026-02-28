@@ -1,3 +1,4 @@
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
   ClientRoleType,
   RemoteVideoState,
@@ -6,7 +7,6 @@ import {
   RtcStats,
   VideoCanvas,
 } from 'shengwang-electron-sdk';
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 
 import {
   AgoraButton,

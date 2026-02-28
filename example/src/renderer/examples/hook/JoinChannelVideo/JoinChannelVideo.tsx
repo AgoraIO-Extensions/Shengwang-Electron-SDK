@@ -1,10 +1,10 @@
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ClientRoleType,
   LocalVideoStreamReason,
   LocalVideoStreamState,
   VideoSourceType,
 } from 'shengwang-electron-sdk';
-import React, { useCallback, useEffect, useState } from 'react';
 
 import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';

@@ -2,15 +2,15 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
+import download from 'download';
+
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
   IRtcEngineEventHandler,
   createAgoraRtcEngine,
 } from 'shengwang-electron-sdk';
-import download from 'download';
-
-import React, { ReactElement } from 'react';
 
 import {
   BaseAudioComponentState,
