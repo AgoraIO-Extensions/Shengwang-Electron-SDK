@@ -50,7 +50,7 @@
     "windows",
     "mac"
   ],
-  "repository": "https://github.com/AgoraIO-Extensions/Electron-SDK",
+  "repository": "https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK",
   "author": "Agora.io",
   "license": "MIT",
   "bugs": {
