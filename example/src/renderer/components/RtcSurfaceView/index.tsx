@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import {
   AgoraEnv,
   IMediaPlayer,
@@ -9,7 +10,6 @@ import {
   VideoViewSetupMode,
   createAgoraRtcEngine,
 } from 'shengwang-electron-sdk';
-import React, { Component } from 'react';
 
 import { getRandomInt } from '../../utils';
 
