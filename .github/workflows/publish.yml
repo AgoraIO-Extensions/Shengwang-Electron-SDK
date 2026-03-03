@@ -56,7 +56,7 @@ jobs:
         if: ${{ !inputs.dry-run }}
         id: package-info
         run: |
-          sed "s/\"agora-electron-sdk\": \"\(.*\)\"/\"agora-electron-sdk\": \"${{ inputs.increment }}\"/g" package.json > tmp
+          sed "s/\"shengwang-electron-sdk\": \"\(.*\)\"/\"shengwang-electron-sdk\": \"${{ inputs.increment }}\"/g" package.json > tmp
           mv tmp package.json
         working-directory: example
 
@@ -64,7 +64,7 @@ jobs:
         if: ${{ !inputs.dry-run }}
         run: |
           git add example
-          git commit -m "chore(example): update example to install agora-electron-sdk@${{ inputs.increment }}"
+          git commit -m "chore(example): update example to install shengwang-electron-sdk@${{ inputs.increment }}"
 
       - name: Release
         if: ${{ !inputs.dry-run }}
@@ -74,7 +74,7 @@ jobs:
       - name: print publish info
         run: |
           echo "[publish info][tag]: https://github.com/AgoraIO-Extensions/Electron-SDK/releases/tag/v${{ inputs.increment }}"
-          echo "[publish info][url]: https://www.npmjs.com/package/agora-electron-sdk/v/${{ inputs.increment }}"
-          echo "[publish info][url]: https://download.agora.io/sdk/release/Electron-mac-${{ inputs.increment }}-napi.zip"
-          echo "[publish info][url]: https://download.agora.io/sdk/release/Electron-win32-${{ inputs.increment }}-napi.zip"
-          echo "[publish info][url]: https://download.agora.io/sdk/release/Electron-win64-${{ inputs.increment }}-napi.zip"
+          echo "[publish info][url]: https://www.npmjs.com/package/shengwang-electron-sdk/v/${{ inputs.increment }}"
+          echo "[publish info][url]: https://download.shengwang.cn/sdk/release/Electron-mac-${{ inputs.increment }}-napi.zip"
+          echo "[publish info][url]: https://download.shengwang.cn/sdk/release/Electron-win32-${{ inputs.increment }}-napi.zip"
+          echo "[publish info][url]: https://download.shengwang.cn/sdk/release/Electron-win64-${{ inputs.increment }}-napi.zip"

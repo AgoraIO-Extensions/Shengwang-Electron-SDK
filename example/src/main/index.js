@@ -1,7 +1,7 @@
 import path from 'path';
 import { format as formatUrl } from 'url';
 
-import 'agora-electron-sdk/js/Private/ipc/main.js';
+import 'shengwang-electron-sdk/js/Private/ipc/main.js';
 import {
   BrowserWindow,
   app,

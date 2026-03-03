@@ -8,7 +8,7 @@ import {
   UserOfflineReasonType,
   VideoCanvas,
   VideoSourceType,
-} from 'agora-electron-sdk';
+} from 'shengwang-electron-sdk';
 // @ts-ignore
 import { ipcRenderer } from 'electron';
 import React, { Component, ReactElement } from 'react';

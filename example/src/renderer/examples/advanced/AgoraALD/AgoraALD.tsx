@@ -7,7 +7,7 @@ import {
   ClientRoleType,
   IRtcEngineEventHandler,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
+} from 'shengwang-electron-sdk';
 import download from 'download';
 
 import React, { ReactElement } from 'react';
