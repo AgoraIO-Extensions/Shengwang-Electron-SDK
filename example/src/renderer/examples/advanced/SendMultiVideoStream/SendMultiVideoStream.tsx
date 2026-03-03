@@ -1,3 +1,4 @@
+import React, { ReactElement } from 'react';
 import {
   AudioFrame,
   AudioPcmFrame,
@@ -20,7 +21,6 @@ import {
   VideoSourceType,
   createAgoraRtcEngine,
 } from 'shengwang-electron-sdk';
-import React, { ReactElement } from 'react';
 
 import {
   BaseComponent,

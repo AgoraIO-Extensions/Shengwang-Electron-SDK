@@ -1,5 +1,6 @@
 import { Buffer } from 'buffer';
 
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -7,7 +8,6 @@ import {
   RtcConnection,
   createAgoraRtcEngine,
 } from 'shengwang-electron-sdk';
-import React, { ReactElement } from 'react';
 
 import {
   BaseAudioComponentState,

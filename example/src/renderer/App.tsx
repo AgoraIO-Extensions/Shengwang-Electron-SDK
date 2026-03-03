@@ -1,5 +1,4 @@
 import { GithubOutlined, SettingOutlined } from '@ant-design/icons';
-import { createAgoraRtcEngine } from 'shengwang-electron-sdk';
 import { Layout, Menu } from 'antd';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import React, { Component } from 'react';
@@ -10,6 +9,7 @@ import {
   BrowserRouter as Router,
   Switch,
 } from 'react-router-dom';
+import { createAgoraRtcEngine } from 'shengwang-electron-sdk';
 
 import './App.global.scss';
 

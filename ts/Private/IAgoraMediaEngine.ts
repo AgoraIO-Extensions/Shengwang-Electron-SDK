@@ -16,7 +16,7 @@ import {
 } from './AgoraMediaBase';
 
 /**
- * Channel mode.
+ * 声道模式。
  */
 export enum AudioMixingDualMonoMode {
   /**
@@ -24,122 +24,122 @@ export enum AudioMixingDualMonoMode {
    */
   AudioMixingDualMonoAuto = 0,
   /**
-   * 1: Left channel mode. This mode replaces the right channel audio with the left channel audio, so the user hears only the left channel.
+   * 1：左声道模式。该模式用左声道的音频替换右声道的音频，即用户只能听到左声道的音频。
    */
   AudioMixingDualMonoL = 1,
   /**
-   * 2: Right channel mode. This mode replaces the left channel audio with the right channel audio, so the user hears only the right channel.
+   * 2：右声道模式。该模式用右声道的音频替换左声道的音频，即用户只能听到右声道的音频。
    */
   AudioMixingDualMonoR = 2,
   /**
-   * 3: Mixed mode. This mode overlays the left and right channel data, so the user hears both the left and right channels simultaneously.
+   * 3：混合模式。该模式将左右声道的数据叠加，即用户能同时听到左声道和右声道的音频。
    */
   AudioMixingDualMonoMix = 3,
 }
 
 /**
- * The IMediaEngine class.
+ * IMediaEngine 类。
  */
 export abstract class IMediaEngine {
   /**
-   * Registers an audio frame observer object.
+   * 注册音频观测器对象。
    *
-   * This method registers an audio frame observer object, i.e., registers callbacks. You need to call this method to register callbacks if you want the SDK to trigger the onMixedAudioFrame, onRecordAudioFrame, onPlaybackAudioFrame, onPlaybackAudioFrameBeforeMixing, and onEarMonitoringAudioFrame callbacks.
+   * 该方法用于注册音频观测器对象，即注册回调。当需要 SDK 触发 onMixedAudioFrame 、 onRecordAudioFrame 、 onPlaybackAudioFrame 、 onPlaybackAudioFrameBeforeMixing 和 onEarMonitoringAudioFrame 回调时，需要调用该方法注册回调。
    *
-   * @param observer Instance of the interface object. See IAudioFrameObserver. It is recommended to call this after receiving onLeaveChannel to release the audio frame observer object.
+   * @param observer 接口对象实例。详见 IAudioFrameObserver 。建议在收到 onLeaveChannel 后调用，来释放音频观测器对象。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract registerAudioFrameObserver(observer: IAudioFrameObserver): number;
 
   /**
-   * Registers a raw video frame observer object.
+   * 注册原始视频观测器对象。
    *
-   * If you want to observe raw video frames (such as YUV or RGBA format), Agora recommends registering an IVideoFrameObserver class using this method.
-   * When registering the video observer, you can choose to register callbacks from the IVideoFrameObserver class as needed. Once registered successfully, the SDK triggers the registered callbacks whenever a video frame is captured. When handling callbacks, you need to consider changes in the width and height parameters of the video frame, as the observed video frame may vary due to the following conditions:
-   *  When the network condition is poor, the resolution may drop in steps.
-   *  When the user adjusts the resolution manually, the resolution reported in the callback will also change.
+   * 如果你想要观测原始视频帧 (如 YUV 或 RGBA 格式)，声网推荐你通过该方法注册一个 IVideoFrameObserver 类。
+   * 调用该方法注册视频观测器时，你可以根据需要注册 IVideoFrameObserver 类中的回调。在成功注册视频观测器后，SDK 会在捕捉到每个视频帧时，触发你所注册的上述回调。 在处理回调时，你需要考虑视频帧中 width 和 height 参数的变化，因为观测得到的视频帧可能会随以下情况变化：
+   *  当网络状况差时，分辨率会阶梯式下降。
+   *  当用户自行调整分辨率时，回调中报告的分辨率也会变化。
    *
-   * @param observer Instance of the interface object. See IVideoFrameObserver.
+   * @param observer 接口对象实例。详见 IVideoFrameObserver 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract registerVideoFrameObserver(observer: IVideoFrameObserver): number;
 
   /**
-   * Registers a video frame observer for encoded video frames.
+   * 为编码后的视频图像注册视频帧接收观测器。
    *
-   * If you only want to observe encoded video frames (e.g., H.264 format) and do not need to decode or render them, Agora recommends using this method to register an IVideoEncodedFrameObserver class. This method must be called before joining a channel.
+   * 如果你只想要观测编码后的视频帧 (如 H.264 格式)，而不需要对视频进行解码和渲染，声网推荐你通过该方法注册一个 IVideoEncodedFrameObserver 类。 该方法需要在加入频道前调用。
    *
-   * @param observer Video frame observer. See IVideoEncodedFrameObserver.
+   * @param observer 视频帧接收观测器，详见 IVideoEncodedFrameObserver 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0：方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract registerVideoEncodedFrameObserver(
     observer: IVideoEncodedFrameObserver
   ): number;
 
   /**
-   * Registers a face information observer.
+   * 注册一个人脸信息观测器。
    *
-   * You can call this method to register the onFaceInfo callback to obtain face information processed by the Agora voice driver plugin. When registering a face information observer using this method, you can register the callbacks in the IFaceInfoObserver class as needed. After successful registration, the SDK triggers the registered callback when face information converted by the voice driver plugin is detected.
-   *  This method must be called before joining a channel.
-   *  Before calling this method, make sure you have called enableExtension to enable the voice driver plugin.
+   * 你可以调用该方法注册 onFaceInfo 回调获取声网语音驱动插件处理后的人脸信息。调用该方法注册人脸信息观测器时，你可以根据需要注册 IFaceInfoObserver 类中的回调。在成功注册人脸信息观测器后，SDK 会在捕捉到经过语音驱动插件转换的人脸信息时，触发你所注册的回调。
+   *  该方法需要在加入频道前调用。
+   *  调用该方法前，你需要确保已调用 enableExtension 启用语音驱动插件。
    *
-   * @param observer The face information observer. See IFaceInfoObserver.
+   * @param observer 人脸信息观测器，详见 IFaceInfoObserver 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract registerFaceInfoObserver(observer: IFaceInfoObserver): number;
 
   /**
-   * Pushes external audio frames.
+   * 推送外部音频帧。
    *
-   * Call this method to push external audio frames through an audio track.
+   * 调用该方法通过音频轨道推送外部音频帧。
    *
-   * @param frame The external audio frame. See AudioFrame.
-   * @param trackId The audio track ID. If you want to publish a custom external audio source, set this parameter to the custom audio track ID you want to publish.
+   * @param frame 外部音频帧。详见 AudioFrame 。
+   * @param trackId 音频轨道 ID。如果你要发布自定义的外部音频源，则将该参数设置为你想要发布的自定义音频轨道 ID。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract pushAudioFrame(frame: AudioFrame, trackId?: number): number;
 
   /**
-   * Pulls remote audio data.
+   * 拉取远端音频数据。
    *
-   * After calling this method, the app actively pulls the decoded and mixed remote audio data for audio playback. This method and the onPlaybackAudioFrame callback can both be used to obtain the mixed remote audio playback data. After calling setExternalAudioSink to enable external audio rendering, the app will no longer receive data from the onPlaybackAudioFrame callback. Therefore, choose between this method and the onPlaybackAudioFrame callback based on your actual business needs. The two have different handling mechanisms. The differences are as follows:
-   *  After calling this method, the app actively pulls audio data. By setting the audio data, the SDK can adjust the buffer to help the app handle latency, effectively avoiding audio playback jitter.
-   *  After registering the onPlaybackAudioFrame callback, the SDK delivers audio data to the app through the callback. When the app handles audio frame latency, it may cause audio playback jitter. This method is only used to pull mixed remote audio playback data. To obtain the original captured audio data, or the original playback data of each stream before mixing, call registerAudioFrameObserver to register the corresponding callback.
+   * 调用该方法后，App 会采取主动拉取的方式获取远端已解码和混音后的音频数据，用于音频播放。 该方法和 onPlaybackAudioFrame 回调均可用于获取远端混音后的音频播放数据。在调用 setExternalAudioSink 开启外部音频渲染后，App 将无法从 onPlaybackAudioFrame 回调中获得数据。因此，请根据实际的业务需求在该方法和 onPlaybackAudioFrame 回调之间进行选择。二者的处理机制不同，具体区别如下：
+   *  调用该方法后，App 会主动拉取音频数据。通过设置音频数据，SDK 可以调整缓存，帮助 App 处理延时，从而有效避免音频播放抖动。
+   *  注册 onPlaybackAudioFrame 回调后，SDK 通过该回调将音频数据传输给 App。App 在处理音频帧的延迟时，可能会导致音频播放抖动。 该方法仅用于拉取远端混音后的音频播放数据，如需获取采集的原始音频数据、混音前每条拉流单独的原始音频播放数据等，可以通过调用 registerAudioFrameObserver 注册相应的回调。
    *
    * @returns
-   * If the method call succeeds, returns an AudioFrame object.
-   *  If the method call fails, returns an error code.
+   * 方法调用成功，返回一个 AudioFrame 对象。
+   *  方法调用失败，返回错误码。
    */
   abstract pullAudioFrame(frame: AudioFrame): number;
 
   /**
-   * Sets the external video source.
+   * 设置外部视频源。
    *
-   * After calling this method to enable the external video source, you can call pushVideoFrame to push external video data to the SDK. Dynamic switching of video sources within a channel is not supported. If you have enabled the external video source and joined a channel, to switch to the internal video source, you must leave the channel first, then call this method to disable the external video source, and rejoin the channel.
+   * 调用该方法启用外部视频源后，你可以调用 pushVideoFrame 向 SDK 推送外部视频数据。 不支持在频道内动态切换视频源。如果已调用该方法启用外部视频源并加入频道，若想切换为内部视频源，必须先退出频道，然后调用该方法关闭外部视频源，再重新加入频道。
    *
-   * @param enabled Whether to enable the external video source: true : Enable the external video source. The SDK is ready to receive external video frames. false : (Default) Do not enable the external video source.
-   * @param useTexture Whether to use external video frames in Texture format: true : Use external video frames in Texture format. false : Do not use external video frames in Texture format.
-   * @param sourceType Whether the external video frame is encoded. See ExternalVideoSourceType.
-   * @param encodedVideoOption Video encoding options. If sourceType is EncodedVideoFrame, you need to set this parameter. You can [contact technical support](https://ticket.shengwang.cn/) to learn how to configure this parameter.
+   * @param enabled 是否启用外部视频源： true : 启用外部视频源。SDK 准备接收外部视频帧。 false :（默认）不启用外部视频源。
+   * @param useTexture 是否使用 Texture 格式的外部视频帧： true : 使用 Texture 格式的外部视频帧。 false : 不使用 Texture 格式的外部视频帧。
+   * @param sourceType 外部视频帧是否编码，详见 ExternalVideoSourceType 。
+   * @param encodedVideoOption 视频编码选项。如果 sourceType 为 EncodedVideoFrame ，则需要设置该参数。你可以[联系技术支持](https://ticket.shengwang.cn/)了解如何设置该参数。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0：方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setExternalVideoSource(
     enabled: boolean,
@@ -154,19 +154,19 @@ export abstract class IMediaEngine {
   abstract setExternalRemoteEglContext(eglContext: any): number;
 
   /**
-   * Sets external audio capture parameters.
+   * 设置外部音频采集参数。
    *
-   * Deprecated Deprecated: This method is deprecated. Use createCustomAudioTrack instead.
+   * 废弃 弃用： 该方法已废弃，请改用 createCustomAudioTrack 。
    *
-   * @param enabled Whether to enable the use of external audio sources: true : Enable external audio source. false : (Default) Disable external audio source.
-   * @param sampleRate Sampling rate (Hz) of the external audio source. Can be set to 8000, 16000, 32000, 44100, or 48000.
-   * @param channels Number of channels of the external audio source. Can be set to 1 (mono) or 2 (stereo).
-   * @param localPlayback Whether to play the external audio source locally: true : Play locally. false : (Default) Do not play locally.
-   * @param publish Whether to publish the audio to the remote end: true : (Default) Publish to remote. false : Do not publish to remote.
+   * @param enabled 是否开启使用外部音频源的功能： true ：开启外部音频源。 false ：（默认）关闭外部音频源。
+   * @param sampleRate 外部音频源的采样率 (Hz)，可设置为 8000 ， 16000 ， 32000 ， 44100 或 48000 。
+   * @param channels 外部音频源的声道数，可设置为 1 （单声道）或 2 （双声道）。
+   * @param localPlayback 是否在本地播放外部音频源： true ：在本地播放。 false ：（默认）不在本地播放。
+   * @param publish 是否将音频发布到远端： true ：（默认）发布到远端。 false ：不发布到远端。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0：方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setExternalAudioSource(
     enabled: boolean,
@@ -177,19 +177,19 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
-   * Creates a custom audio capture track.
+   * 创建一个自定义音频采集轨道。
    *
-   * To publish custom captured audio in a channel, follow these steps:
-   *  Call this method to create an audio track and obtain the audio track ID.
-   *  When calling joinChannel to join a channel, set publishCustomAudioTrackId in ChannelMediaOptions to the audio track ID you want to publish, and set publishCustomAudioTrack to true.
-   *  Call pushAudioFrame and set trackId to the audio track ID specified in step 2 to publish the corresponding custom audio source in the channel. This method must be called before joining a channel.
+   * 如需在频道中发布自定义采集音频，可参考以下步骤：
+   *  调用该方法创建音频轨道并获得音频轨道 ID。
+   *  调用 joinChannel 加入频道时，将 ChannelMediaOptions 中的 publishCustomAudioTrackId 设置为你想要发布的音频轨道 ID，并将 publishCustomAudioTrack 设置为 true 。
+   *  调用 pushAudioFrame 将 trackId 指定为步骤 2 中指定的音频轨道 ID，即可实现在频道内发布对应的自定义音频源。 该方法需要在加入频道前调用。
    *
-   * @param trackType Custom audio track type. See AudioTrackType. If AudioTrackDirect is specified, you must set publishMicrophoneTrack in ChannelMediaOptions to false when calling joinChannel, otherwise joining the channel will fail and return error code -2.
-   * @param config Custom audio track configuration. See AudioTrackConfig.
+   * @param trackType 自定义音频轨道类型。详见 AudioTrackType 。 如指定 AudioTrackDirect ，则必须在调用 joinChannel 加入频道时，将 ChannelMediaOptions 中的 publishMicrophoneTrack 设为 false ，否则加入频道失败并返回错误码 -2。
+   * @param config 自定义音频轨道配置。详见 AudioTrackConfig 。
    *
    * @returns
-   * If the method call succeeds, returns the audio track ID as the unique identifier of the audio track.
-   *  If the method call fails, returns 0xffffffff. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 方法调用成功，返回音频轨道 ID 作为该音频轨道的唯一标识。
+   *  方法调用失败，返回 0xffffffff。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract createCustomAudioTrack(
     trackType: AudioTrackType,
@@ -197,30 +197,30 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
-   * Destroys the specified audio track.
+   * 销毁指定的音频轨道。
    *
-   * @param trackId Custom audio track ID returned by the createCustomAudioTrack method.
+   * @param trackId 调用 createCustomAudioTrack 方法返回的自定义音频轨道 ID。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract destroyCustomAudioTrack(trackId: number): number;
 
   /**
-   * Sets external audio rendering.
+   * 设置外部音频渲染。
    *
-   * After calling this method to enable external audio rendering, you can call pullAudioFrame to pull remote audio data. The app can process the pulled raw audio data before rendering to achieve the desired audio effect. After calling this method to enable external audio rendering, the app will no longer receive data from the onPlaybackAudioFrame callback.
+   * 调用该方法开启外部音频渲染后，你可以调用 pullAudioFrame 拉取远端音频数据。App 可以对拉取到的原始音频数据进行处理后再渲染，获取想要的音频效果。 调用该方法开启外部音频渲染后，App 将无法从 onPlaybackAudioFrame 回调中获得数据。
    *
-   * @param enabled Whether to enable external audio rendering: true : Enable external audio rendering. false : (Default) Disable external audio rendering.
-   * @param sampleRate The sample rate (Hz) for external audio rendering. Can be set to 16000, 32000, 44100, or 48000.
-   * @param channels The number of channels for external audio rendering:
-   *  1: Mono
-   *  2: Stereo
+   * @param enabled 设置是否开启外部音频渲染： true ：开启外部音频渲染。 false ：（默认）关闭外部音频渲染。
+   * @param sampleRate 外部音频渲染的采样率 (Hz)，可设置为 16000，32000，44100 或 48000。
+   * @param channels 外部音频渲染的声道数:
+   *  1: 单声道
+   *  2: 双声道
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setExternalAudioSink(
     enabled: boolean,
@@ -237,21 +237,21 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
-   * Publishes external raw video frames to the channel through a custom video track.
+   * 将外部原始视频帧通过自定义视频轨道发布到频道中。
    *
-   * When you need to publish a custom captured video in the channel, follow these steps:
-   *  Call createCustomVideoTrack to create a video track and get the video track ID.
-   *  When calling joinChannel to join the channel, set customVideoTrackId in ChannelMediaOptions to the video track ID you want to publish, and set publishCustomVideoTrack to true.
-   *  Call this method and specify videoTrackId as the video track ID from step 2 to publish the corresponding custom video source in the channel. After calling this method, even if you stop pushing external video frames to the SDK, the custom captured video stream will still be counted in video duration usage and incur charges. Agora recommends taking appropriate actions based on your actual needs to avoid such video billing:
-   *  If you no longer need to capture external video data, call destroyCustomVideoTrack to destroy the custom captured video track.
-   *  If you only want to use the captured external video data for local preview and not publish it in the channel, call muteLocalVideoStream to stop sending the video stream, or call updateChannelMediaOptions and set publishCustomVideoTrack to false.
+   * 当你需要在频道中发布自定义采集视频时，可参考以下步骤：
+   *  调用 createCustomVideoTrack 方法创建视频轨道并获得视频轨道 ID。
+   *  调用 joinChannel 加入频道时，将 ChannelMediaOptions 中的 customVideoTrackId 设置为你想要发布的视频轨道 ID，并将 publishCustomVideoTrack 设置为 true 。
+   *  调用该方法将 videoTrackId 指定为步骤 2 中指定的视频轨道 ID，即可实现在频道内发布对应的自定义视频源。 调用该方法后，即使你停止推送外部视频帧到 SDK，自定义采集的视频流仍然会被计入视频时长用量并产生费用，声网建议你根据实际情况采取相应措施避免此类视频计费：
+   *  如果你不再需要采集外部视频数据，可以调用 destroyCustomVideoTrack 销毁自定义采集的视频轨道。
+   *  如果你只想将采集到的外部视频数据用于本地预览、而不在频道内发布，可以调用 muteLocalVideoStream 取消发送视频流，或调用 updateChannelMediaOptions 将 publishCustomVideoTrack 设置为 false 。
    *
-   * @param frame The video frame to be pushed. See ExternalVideoFrame.
-   * @param videoTrackId The video track ID returned by the createCustomVideoTrack method. If you only need to push a single external video stream, set videoTrackId to 0.
+   * @param frame 待推送的视频帧。详见 ExternalVideoFrame 。
+   * @param videoTrackId 调用 createCustomVideoTrack 方法返回的视频轨道 ID。 如果你只需推送一路外部视频流， videoTrackId 设置为 0 即可。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract pushVideoFrame(
     frame: ExternalVideoFrame,
@@ -274,48 +274,48 @@ export abstract class IMediaEngine {
   abstract release(): void;
 
   /**
-   * Unregisters the audio frame observer.
+   * 取消注册音频帧观测器。
    *
-   * @param observer The audio frame observer that monitors each received audio frame. See IAudioFrameObserver.
+   * @param observer 音频帧观测器，观测每帧音频的接收，详见 IAudioFrameObserver 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and troubleshooting.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract unregisterAudioFrameObserver(observer: IAudioFrameObserver): number;
 
   /**
-   * Unregisters the video frame observer.
+   * 取消注册视频帧观测器。
    *
-   * @param observer The video frame observer that observes the reception of each video frame. See IVideoFrameObserver.
+   * @param observer 视频帧观测器，观测每帧视频的接收, 详见 IVideoFrameObserver 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract unregisterVideoFrameObserver(observer: IVideoFrameObserver): number;
 
   /**
-   * Unregisters the video frame observer for encoded video frames.
+   * 为编码后的视频图像取消注册视频帧接收观测器。
    *
-   * @param observer Video frame observer that observes the reception of each video frame. See IVideoEncodedFrameObserver.
+   * @param observer 视频帧观测器，观测每帧视频的接收, 详见 IVideoEncodedFrameObserver 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract unregisterVideoEncodedFrameObserver(
     observer: IVideoEncodedFrameObserver
   ): number;
 
   /**
-   * Unregisters the face information observer.
+   * 取消注册人脸信息观测器。
    *
-   * @param observer The face information observer. See IFaceInfoObserver.
+   * @param observer 人脸信息观测器，详见 IFaceInfoObserver 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract unregisterFaceInfoObserver(observer: IFaceInfoObserver): number;
 }
