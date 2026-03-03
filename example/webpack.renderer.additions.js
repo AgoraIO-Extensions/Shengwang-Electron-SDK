@@ -80,7 +80,7 @@ module.exports = function (config) {
   config.externals = [
     // ...config.externals,
     'webpack',
-    'agora-electron-sdk',
+    'shengwang-electron-sdk',
     'koffi',
     'ref-napi',
   ];

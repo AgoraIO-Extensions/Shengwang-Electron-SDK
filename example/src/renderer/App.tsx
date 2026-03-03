@@ -1,5 +1,5 @@
 import { GithubOutlined, SettingOutlined } from '@ant-design/icons';
-import { createAgoraRtcEngine } from 'agora-electron-sdk';
+import { createAgoraRtcEngine } from 'shengwang-electron-sdk';
 import { Layout, Menu } from 'antd';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import React, { Component } from 'react';

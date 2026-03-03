@@ -1,4 +1,4 @@
-import { ThumbImageBuffer } from 'agora-electron-sdk';
+import { ThumbImageBuffer } from 'shengwang-electron-sdk';
 
 export default (input: any) => {
   const keyStr =

@@ -13,7 +13,7 @@ import {
   VideoCodecType,
   VideoMirrorModeType,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
+} from 'shengwang-electron-sdk';
 import React, { ReactElement } from 'react';
 
 import {
