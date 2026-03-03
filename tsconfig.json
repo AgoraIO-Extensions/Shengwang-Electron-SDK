@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "agora-electron-sdk": [
+      "shengwang-electron-sdk": [
         "./ts/AgoraSdk"
       ]
     },

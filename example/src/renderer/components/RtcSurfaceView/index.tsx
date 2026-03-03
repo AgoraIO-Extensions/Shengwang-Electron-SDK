@@ -8,7 +8,7 @@ import {
   VideoSourceType,
   VideoViewSetupMode,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
+} from 'shengwang-electron-sdk';
 import React, { Component } from 'react';
 
 import { getRandomInt } from '../../utils';
