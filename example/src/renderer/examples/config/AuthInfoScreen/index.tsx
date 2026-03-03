@@ -1,4 +1,4 @@
-import { AgoraEnv } from 'agora-electron-sdk';
+import { AgoraEnv } from 'shengwang-electron-sdk';
 import { Button, Card, Checkbox, Form, Input, Row } from 'antd';
 import React from 'react';
 

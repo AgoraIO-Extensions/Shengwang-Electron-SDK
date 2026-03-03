@@ -3,7 +3,7 @@ import {
   LocalVideoStreamReason,
   LocalVideoStreamState,
   VideoSourceType,
-} from 'agora-electron-sdk';
+} from 'shengwang-electron-sdk';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import * as log from '../../../utils/log';

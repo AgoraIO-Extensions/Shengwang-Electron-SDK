@@ -5,7 +5,7 @@ import {
   RtcConnection,
   RtcStats,
   VideoCanvas,
-} from 'agora-electron-sdk';
+} from 'shengwang-electron-sdk';
 import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 
 import {
