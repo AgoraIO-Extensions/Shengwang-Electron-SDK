@@ -1,3 +1,5 @@
+import React, { ReactElement } from 'react';
+import { SketchPicker } from 'react-color';
 import {
   AudioCodecProfileType,
   AudioSampleRateType,
@@ -12,9 +14,7 @@ import {
   VideoCodecProfileType,
   VideoCodecTypeForStream,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import React, { ReactElement } from 'react';
-import { SketchPicker } from 'react-color';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseComponent,

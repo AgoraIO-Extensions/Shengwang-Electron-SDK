@@ -1,4 +1,4 @@
-import { AgoraEnvType } from './Types';
+import { AgoraEnvType, VideoFallbackStrategy } from './Types';
 
 /**
  * @ignore
@@ -44,6 +44,21 @@ export const logError = (msg: string, ...optParams: any[]) => {
   console.error(`${TAG} ${msg}`, ...optParams);
 };
 
+const getCurrentTime = () => {
+  const date = new Date();
+
+  const year = date.getFullYear().toString().slice(-2);
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  const milliseconds = date.getMilliseconds().toString().padStart(3, '0');
+
+  return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}:${milliseconds}`;
+};
+
 /**
  * @ignore
  */
@@ -51,7 +66,7 @@ export const logInfo = (msg: string, ...optParams: any[]) => {
   if (!AgoraEnv.enableLogging) {
     return;
   }
-  console.info(`${TAG} ${msg}`, ...optParams);
+  console.info(`[${getCurrentTime()}]${TAG} ${msg}`, ...optParams);
 };
 
 /**
@@ -85,14 +100,14 @@ export function classMix(...mixins: any[]): any {
   class MixClass {
     constructor() {
       for (let mixin of mixins) {
-        copyProperties(this, new mixin()); // 拷贝实例属性
+        copyProperties(this, new mixin()); // Copy instance properties
       }
     }
   }
 
   for (let mixin of mixins) {
-    copyProperties(MixClass, mixin); // 拷贝静态属性
-    copyProperties(MixClass.prototype, mixin.prototype); // 拷贝原型属性
+    copyProperties(MixClass, mixin); // Copy static properties
+    copyProperties(MixClass.prototype, mixin.prototype); // Copy prototype properties
   }
 
   return MixClass;
@@ -138,7 +153,36 @@ export function isSupportWebGL(): boolean {
   return flag;
 }
 
-const AgoraNode = require('../build/Release/agora_node_ext');
+/**
+ * @ignore
+ */
+export function getContextByCanvas(
+  // eslint-disable-next-line auto-import/auto-import
+  canvas: OffscreenCanvas,
+  enableAlphaMask: boolean = false
+): WebGLRenderingContext | WebGL2RenderingContext | null {
+  const contextNames = ['webgl2', 'webgl', 'experimental-webgl'];
+
+  for (const contextName of contextNames) {
+    //@ts-ignore
+    const context = canvas.getContext(contextName, {
+      depth: true,
+      stencil: true,
+      alpha: enableAlphaMask,
+      antialias: false,
+      premultipliedAlpha: true,
+      preserveDrawingBuffer: !enableAlphaMask,
+      powerPreference: 'default',
+      failIfMajorPerformanceCaveat: false,
+    }) as WebGLRenderingContext | WebGL2RenderingContext | null;
+
+    if (context) {
+      return context;
+    }
+  }
+
+  return null;
+}
 
 /**
  * @ignore
@@ -147,5 +191,8 @@ export const AgoraEnv: AgoraEnvType = {
   enableLogging: true,
   enableDebugLogging: false,
   webEnvReady: true,
-  AgoraElectronBridge: new AgoraNode.AgoraElectronBridge(),
+  enableWebCodecsDecoder: false,
+  videoFallbackStrategy: VideoFallbackStrategy.PerformancePriority,
+  maxDecodeRetryCount: 50,
+  enableArgusCounters: true,
 };

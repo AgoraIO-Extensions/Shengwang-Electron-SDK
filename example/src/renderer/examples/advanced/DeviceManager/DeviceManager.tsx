@@ -1,3 +1,4 @@
+import React, { ReactElement } from 'react';
 import {
   AudioDeviceInfo,
   ChannelProfileType,
@@ -11,8 +12,7 @@ import {
   VideoDeviceInfo,
   VideoSourceType,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import React, { ReactElement } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseComponent,

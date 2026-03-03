@@ -1,8 +1,8 @@
 const path = require('path');
 
-const download = require('download');
-
 const { cleanDir } = require('./clean');
+const download = require('./download');
+
 const getConfig = require('./getConfig');
 const logger = require('./logger');
 
@@ -27,12 +27,14 @@ const checkElectron = async (cb) => {
     }
   }
   let tp = path.join(electron_path, `../dist`);
-  let downloadUrl = `https://download.agora.io/sdk/release/electron-v${electron_version}-${platform}-${arch}.zip`;
+  let downloadUrl = `https://download.shengwang.cn/sdk/release/electron-v${electron_version}-${platform}-${arch}.zip`;
   logger.info(`Downloading:${downloadUrl}`);
   await cleanDir(tp);
+
   await download(downloadUrl, tp, {
     extract: true,
   });
+
   logger.info(`Finish download:${downloadUrl}`);
   logger.info(`sync electron success`);
   cb();

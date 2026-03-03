@@ -1,10 +1,10 @@
+import React, { ReactElement, useState } from 'react';
+import { SketchPicker } from 'react-color';
 import {
   BackgroundBlurDegree,
   BackgroundSourceType,
   ClientRoleType,
-} from 'agora-electron-sdk';
-import React, { ReactElement, useState } from 'react';
-import { SketchPicker } from 'react-color';
+} from 'shengwang-electron-sdk';
 
 import {
   AgoraButton,

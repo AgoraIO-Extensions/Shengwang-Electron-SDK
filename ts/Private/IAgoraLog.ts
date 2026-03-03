@@ -1,27 +1,27 @@
 import './extension/IAgoraLogExtension';
 
 /**
- * The output log level of the SDK.
+ * 日志输出等级。
  */
 export enum LogLevel {
   /**
-   * 0: Do not output any log information.
+   * 0: 不输出任何日志。
    */
   LogLevelNone = 0x0000,
   /**
-   * 0x0001: (Default) Output FATAL, ERROR, WARN, and INFO level log information. We recommend setting your log filter to this level.
+   * 0x0001:（默认）输出 FATAL 、 ERROR 、 WARN 、 INFO 级别的日志。建议你将日志级别设为该等级。
    */
   LogLevelInfo = 0x0001,
   /**
-   * 0x0002: Output FATAL, ERROR, and WARN level log information.
+   * 0x0002: 仅输出 FATAL 、 ERROR 、 WARN 级别的日志。
    */
   LogLevelWarn = 0x0002,
   /**
-   * 0x0004: Output FATAL and ERROR level log information.
+   * 0x0004: 仅输出 FATAL 、 ERROR 级别的日志。
    */
   LogLevelError = 0x0004,
   /**
-   * 0x0008: Output FATAL level log information.
+   * 0x0008: 仅输出 FATAL 级别的日志。
    */
   LogLevelFatal = 0x0008,
   /**
@@ -35,31 +35,31 @@ export enum LogLevel {
 }
 
 /**
- * The output log level of the SDK.
+ * 日志过滤等级。
  */
 export enum LogFilterType {
   /**
-   * 0: Do not output any log information.
+   * 0: 不输出日志信息。
    */
   LogFilterOff = 0,
   /**
-   * 0x080f: Output all log information. Set your log filter to this level if you want to get the most complete log file.
+   * 0x080f: 输出所有 API 日志信息。如果你想获取最完整的日志，可以将日志级别设为该等级。
    */
   LogFilterDebug = 0x080f,
   /**
-   * 0x000f: Output LogFilterCritical, LogFilterError, LogFilterWarn, and LogFilterInfo level log information. We recommend setting your log filter to this level.
+   * 0x000f: 输出 LogFilterCritical 、 LogFilterError 、 LogFilterWarn 和 LogFilterInfo 级别的日志信息。建议你将日志级别设为该等级。
    */
   LogFilterInfo = 0x000f,
   /**
-   * 0x000e: Output LogFilterCritical, LogFilterError, and LogFilterWarn level log information.
+   * 0x000e: 输出 LogFilterCritical 、 LogFilterError 和 LogFilterWarn 级别的日志信息。
    */
   LogFilterWarn = 0x000e,
   /**
-   * 0x000c: Output LogFilterCritical and LogFilterError level log information.
+   * 0x000c: 输出 LogFilterCritical 和 LogFilterError 级别的日志信息。
    */
   LogFilterError = 0x000c,
   /**
-   * 0x0008: Output LogFilterCritical level log information.
+   * 0x0008: 输出 LogFilterCritical 级别的日志信息。
    */
   LogFilterCritical = 0x0008,
   /**
@@ -69,23 +69,25 @@ export enum LogFilterType {
 }
 
 /**
- * Configuration of Agora SDK log files.
+ * SDK 日志文件的配置。
  */
 export class LogConfig {
   /**
-   * The complete path of the log files. Agora recommends using the default log directory. If you need to modify the default directory, ensure that the directory you specify exists and is writable. The default log directory is:
-   *  macOS:
-   *  If Sandbox is enabled: App Sandbox/Library/Logs/agorasdk.log. For example, /Users/<username>/Library/Containers/<AppBundleIdentifier>/Data/Library/Logs/agorasdk.log.
-   *  If Sandbox is disabled: ~/Library/Logs/agorasdk.log
-   *  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\agorasdk.log.
+   * 日志文件的完整路径。声网建议你使用默认的日志路径。如果你需要修改默认的日志路径，请确保你指定的路径存在且可写。
+   * 默认路径为：
+   *  macOS：
+   *  开启沙盒: App Sandbox/Library/Logs/agorasdk.log，例如 /Users/<username>/Library/Containers/<AppBundleIdentifier>/Data/Library/Logs/agorasdk.log。
+   *  关闭沙盒: ～/Library/Logs/agorasdk.log
+   *  Windows：C:\Users\<user_name>\AppData\Local\Agora\<process_name>\agorasdk.log。
    */
   filePath?: string;
   /**
-   * The size (KB) of an agorasdk.log file. The value range is [128,20480]. The default value is 2,048 KB. If you set fileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you set fileSizeInKByte greater than 20,480 KB, the SDK automatically adjusts it to 20,480 KB.
+   * 单个 agorasdk.log 日志文件的大小，单位为 KB，取值范围为 [128,20480]，默认值为 2,048 KB。如果你将 fileSizeInKByte 设为小于 128 KB，SDK 会自动调整到 128 KB；如果你将 fileSizeInKByte 设为大于 20,480 KB，SDK 会自动调整到 20,480 KB。
    */
   fileSizeInKB?: number;
   /**
-   * The output level of the SDK log file. See LogLevel. For example, if you set the log level to WARN, the SDK outputs the logs within levels FATAL, ERROR, and WARN.
+   * SDK 的日志输出等级，详见 LogLevel 。
+   * 例如，如果你选择 WARN 级别，就可以看到在 FATAL、ERROR 和 WARN 级别上的所有日志信息。
    */
   level?: LogLevel;
 }

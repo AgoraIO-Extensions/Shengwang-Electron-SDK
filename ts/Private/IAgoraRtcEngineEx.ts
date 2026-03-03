@@ -5,6 +5,7 @@ import {
   DataStreamConfig,
   EncryptionConfig,
   LiveTranscoding,
+  RdtStreamType,
   SimulcastConfig,
   SimulcastStreamConfig,
   SimulcastStreamMode,
@@ -15,6 +16,7 @@ import {
   VideoMirrorModeType,
   VideoStreamType,
   VideoSubscriptionOptions,
+  WatermarkConfig,
   WatermarkOptions,
 } from './AgoraBase';
 import {
@@ -30,47 +32,48 @@ import {
 } from './IAgoraRtcEngine';
 
 /**
- * Contains connection information.
+ * 包含连接信息的类。
  */
 export class RtcConnection {
   /**
-   * The channel name.
+   * 频道名。
    */
   channelId?: string;
   /**
-   * The ID of the local user.
+   * 本地用户 ID。
    */
   localUid?: number;
 }
 
 /**
- * This interface class contains multi-channel methods.
+ * 提供多频道方法的接口类。
  *
- * Inherited from IRtcEngine.
+ * 继承自 IRtcEngine 。
  */
 export abstract class IRtcEngineEx extends IRtcEngine {
   /**
-   * Joins a channel.
+   * 加入频道。
    *
-   * You can call this method multiple times to join more than one channel. If you want to join the same channel from different devices, ensure that the user IDs are different for all devices.
+   * 调用该方法，你可以同时加入多个频道。如果你想在不同的设备上加入相同的频道，请确保你在不同设备上使用的用户 ID 都不同。 如果你已经在一个频道内，你不能用相同的用户 ID 再次加入该频道。
+   * 加入频道前，请确保用于生成 Token 的 App ID 和调用 initialize 方法初始化引擎时使用的是同一个 App ID，否则使用 Token 加入频道会失败。
    *
-   * @param token The token generated on your server for authentication.
-   *  (Recommended) If your project has enabled the security mode (using APP ID and Token for authentication), this parameter is required.
-   *  If you have only enabled the testing mode (using APP ID for authentication), this parameter is optional. You will automatically exit the channel 24 hours after successfully joining in.
-   *  If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
-   * @param connection The connection information. See RtcConnection.
-   * @param options The channel media options. See ChannelMediaOptions.
+   * @param token 在服务端生成的用于鉴权的动态密钥。详见[使用 Token 鉴权](https://doc.shengwang.cn/doc/rtc/electron/basic-features/token-authentication)。
+   *  （推荐）如果你的项目开启了安全模式，即选择 APP ID + Token 为鉴权机制，则该参数为必填。
+   *  如果你的项目仅开启调试模式，即选择 APP ID 为鉴权机制，则无需填入 Token 即可加入频道。成功加入频道 24 小时后会自动退出该频道。
+   *  如果你需要同时加入多个频道或在频道间频繁切换，声网推荐你使用通配 Token 以避免每加入一个新的频道都需向服务端申请一个新的 Token，详见 [使用通配 Token](https://doc.shengwang.cn/doc/rtc/electron/best-practice/wildcard-token)。
+   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param options 频道媒体设置选项。详见 ChannelMediaOptions 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The parameter is invalid. For example, the token is invalid, the uid parameter is not set to an integer, or the value of a member in ChannelMediaOptions is invalid. You need to pass in a valid parameter and join the channel again.
-   *  -3: Fails to initialize the IRtcEngine object. You need to reinitialize the IRtcEngine object.
-   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
-   *  -8: The internal state of the IRtcEngine object is wrong. The typical cause is that after calling startEchoTest to start a call loop test, you call this method to join the channel without calling stopEchoTest to stop the test. You need to call stopEchoTest before calling this method.
-   *  -17: The request to join the channel is rejected. The typical cause is that the user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to see whether the user is in the channel. Do not call this method to join the channel unless you receive the ConnectionStateDisconnected (1) state.
-   *  -102: The channel name is invalid. You need to pass in a valid channel name in channelId to rejoin the channel.
-   *  -121: The user ID is invalid. You need to pass in a valid user ID in uid to rejoin the channel.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   *  -2：传入的参数无效。例如，使用了不合法的 Token， uid 参数未设置为整型，或 ChannelMediaOptions 成员值不合法。你需要填入有效的参数，重新加入频道。
+   *  -3： IRtcEngine 对象初始化失败。你需要重新初始化 IRtcEngine 对象。
+   *  -7： IRtcEngine 对象尚未初始化。你需要在调用该方法前成功初始化 IRtcEngine 对象。
+   *  -8： IRtcEngine 对象内部状态错误。可能的原因是：调用 startEchoTest 开始通话回路测试后，未调用 stopEchoTest 停止测试就调用该方法加入频道。你需要在该方法前调用 stopEchoTest 。
+   *  -17：加入频道被拒绝。可能的原因是用户已经在频道中。建议通过 onConnectionStateChanged 回调判断用户是否在频道中。除收到 ConnectionStateDisconnected (1) 状态外，不要再次调用该方法加入频道。
+   *  -102：频道名无效。你需要在 channelId 中填入有效的频道名，重新加入频道。
+   *  -121：用户 ID 无效。你需要在 uid 中填入有效的用户 ID，重新加入频道。
    */
   abstract joinChannelEx(
     token: string,
@@ -79,18 +82,19 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sets channel options and leaves the channel.
+   * 设置频道选项并离开频道。
    *
-   * After calling this method, the SDK terminates the audio and video interaction, leaves the current channel, and releases all resources related to the session. After calling joinChannelEx to join a channel, you must call this method to end the call, otherwise, the next call cannot be started.
-   *  This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel.
-   *  If you call leaveChannel, you will leave all the channels you have joined by calling joinChannel or joinChannelEx.
+   * 调用该方法后，SDK 会终止音视频互动、离开当前频道，并会释放会话相关的所有资源。
+   * 调用 joinChannelEx 成功加入频道后，必须调用本方法结束通话，否则无法开始下一次通话。
+   *  该方法是异步操作，调用返回时并没有真正退出频道。
+   *  如果你调用了 leaveChannel 后，会同时离开 joinChannel 及 joinChannelEx 加入的频道。 如果你调用了该方法后立即调用 release 方法，SDK 将不会触发 onLeaveChannel 回调。
    *
-   * @param connection The connection information. See RtcConnection.
-   * @param options The options for leaving the channel. See LeaveChannelOptions. This parameter only supports the stopMicrophoneRecording member in the LeaveChannelOptions settings; setting other members does not take effect.
+   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param options 离开频道的选项，详见 LeaveChannelOptions 。 该参数仅支持设置 LeaveChannelOptions 中的 stopMicrophoneRecording 成员，设置其他成员均不生效。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract leaveChannelEx(
     connection: RtcConnection,
@@ -107,17 +111,17 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Updates the channel media options after joining the channel.
+   * 加入频道后更新频道媒体选项 。
    *
-   * @param options The channel media options. See ChannelMediaOptions.
-   * @param connection The connection information. See RtcConnection.
+   * @param options 频道媒体选项，详见 ChannelMediaOptions 。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The value of a member in ChannelMediaOptions is invalid. For example, the token or the user ID is invalid. You need to fill in a valid parameter.
-   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
-   *  -8: The internal state of the IRtcEngine object is wrong. The possible reason is that the user is not in the channel. Agora recommends that you use the onConnectionStateChanged callback to see whether the user is in the channel. If you receive the ConnectionStateDisconnected (1) or ConnectionStateFailed (5) state, the user is not in the channel. You need to call joinChannel to join a channel before calling this method.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   *  -2： ChannelMediaOptions 成员值设置无效。例如，使用了不合法的 Token，设置了无效的用户角色。你需要填入有效的参数。
+   *  -7： IRtcEngine 对象尚未初始化。你需要在调用该方法前成功初始化 IRtcEngine 对象。
+   *  -8： IRtcEngine 对象内部状态错误。可能的原因是用户不在频道中。建议通过 onConnectionStateChanged 回调判断用户是否在频道中。如果收到 ConnectionStateDisconnected (1) 或 ConnectionStateFailed (5)，则表示用户不在频道中。你需要在调用该方法前调用 joinChannel 加入频道。
    */
   abstract updateChannelMediaOptionsEx(
     options: ChannelMediaOptions,
@@ -125,16 +129,16 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sets the video encoder configuration.
+   * 设置视频编码属性。
    *
-   * Sets the encoder configuration for the local video. Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate.
+   * 设置本地视频的编码属性。每一种视频编码属性对应一系列视频相关参数设置，包含分辨率、帧率和码率。 该方法的 config 参数设置是在理想网络状态下能达到的最大值。如果网络状态不好，视频引擎便不能使用该 config 渲染本地视频，它会自动降低到一个合适的视频参数设置。
    *
-   * @param config Video profile. See VideoEncoderConfiguration.
-   * @param connection The connection information. See RtcConnection.
+   * @param config 视频编码参数配置。详见 VideoEncoderConfiguration 。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setVideoEncoderConfigurationEx(
     config: VideoEncoderConfiguration,
@@ -142,17 +146,23 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Initializes the video view of a remote user.
+   * 初始化远端用户视图。
    *
-   * This method initializes the video view of a remote stream on the local device. It affects only the video view that the local user sees. Call this method to bind the remote video stream to a video view and to set the rendering and mirror modes of the video view. The application specifies the uid of the remote video in the VideoCanvas method before the remote user joins the channel. If the remote uid is unknown to the application, set it after the application receives the onUserJoined callback. If the Video Recording function is enabled, the Video Recording Service joins the channel as a dummy client, causing other clients to also receive the onUserJoined callback. Do not bind the dummy client to the application view because the dummy client does not send any video streams. To unbind the remote user from the view, set the view parameter to NULL. Once the remote user leaves the channel, the SDK unbinds the remote user.
-   *  To update the rendering or mirror mode of the remote video view during a call, use the setRemoteRenderModeEx method.
+   * 该方法绑定远端用户和显示视图，并设置远端用户视图在本地显示时的渲染模式和镜像模式，只影响本地用户看到的视频画面。
+   * 调用该方法时需要在 VideoCanvas 中指定远端视频的用户 ID，一般可以在进频道前提前设置好。
+   * 如果无法在加入频道前得到远端用户的 uid，可以在收到 onUserJoined 回调时调用该方法。如果启用了视频录制功能，视频录制服务会做为一个哑客户端加入频道，因此其他客户端也会收到它的 onUserJoined 事件， App 不应给它绑定视图（因为它不会发送视频流）。
+   * 如需解除某个远端用户的绑定视图，可以调用该方法并将 view 设置为空。
+   * 离开频道后，SDK 会清除远端用户视图的绑定关系。
+   *  该方法需要在 joinChannelEx 之后调用。
+   *  在 Flutter 中你不需要主动调用该方法，请使用 AgoraVideoView 渲染本地和远端视图。
+   *  如果你希望在通话中更新远端用户视图的渲染或镜像模式，请使用 setRemoteRenderModeEx 方法。
    *
-   * @param canvas The remote video view settings. See VideoCanvas.
-   * @param connection The connection information. See RtcConnection.
+   * @param canvas 视频画布信息。详见 VideoCanvas 。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setupRemoteVideoEx(
     canvas: VideoCanvas,
@@ -160,15 +170,17 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes receiving the audio stream of a specified user.
+   * 停止/恢复接收指定的音频流。
    *
-   * @param uid The ID of the specified user.
-   * @param mute Whether to stop receiving the audio stream of the specified user: true : Stop receiving the audio stream of the specified user. false : (Default) Resume receiving the audio stream of the specified user.
-   * @param connection The connection information. See RtcConnection.
+   * 该方法停止/恢复接收某一个指定远端用户的音频流。在加入频道前或后都可以调用。该方法的设置在离开频道后失效。
+   *
+   * @param uid 指定用户的 ID。
+   * @param mute 是否停止接收指定音频流： true : 停止接收指定音频流。 false :（默认）继续接收指定音频流。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract muteRemoteAudioStreamEx(
     uid: number,
@@ -177,17 +189,17 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes receiving the video stream of a specified user.
+   * 停止/恢复接收指定的视频流。
    *
-   * This method is used to stop or resume receiving the video stream of a specified user. You can call this method before or after joining a channel. If a user leaves a channel, the settings in this method become invalid.
+   * 该方法停止/恢复接收某一个指定远端用户的视频流。在加入频道前或后都可以调用。该方法的设置在离开频道后失效。
    *
-   * @param uid The user ID of the remote user.
-   * @param mute Whether to stop receiving the video stream of the specified user: true : Stop receiving the video stream of the specified user. false : (Default) Resume receiving the video stream of the specified user.
-   * @param connection The connection information. See RtcConnection.
+   * @param uid 远端用户的 ID。
+   * @param mute 是否停止接收某个远端用户的视频： true : 停止接收。 false : （默认）恢复接收。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract muteRemoteVideoStreamEx(
     uid: number,
@@ -196,22 +208,20 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sets the video stream type to subscribe to.
+   * 设置订阅的视频流类型。
    *
-   * The SDK will dynamically adjust the size of the corresponding video stream based on the size of the video window to save bandwidth and computing resources. The default aspect ratio of the low-quality video stream is the same as that of the high-quality video stream. According to the current aspect ratio of the high-quality video stream, the system will automatically allocate the resolution, frame rate, and bitrate of the low-quality video stream. Depending on the default behavior of the sender and the specific settings when calling setDualStreamMode, the scenarios for the receiver calling this method are as follows:
-   *  The SDK enables low-quality video stream adaptive mode (AutoSimulcastStream) on the sender side by default, meaning only the high-quality video stream is transmitted. Only the receiver with the role of the host can call this method to initiate a low-quality video stream request. Once the sender receives the request, it starts automatically sending the low-quality video stream. At this point, all users in the channel can call this method to switch to low-quality video stream subscription mode.
-   *  If the sender calls setDualStreamMode and sets mode to DisableSimulcastStream (never send low-quality video stream), then calling this method will have no effect.
-   *  If the sender calls setDualStreamMode and sets mode to EnableSimulcastStream (always send low-quality video stream), both the host and audience receivers can call this method to switch to low-quality video stream subscription mode.
-   *  If the publisher has already called setDualStreamModeEx and set mode to DisableSimulcastStream (never send low-quality video stream), calling this method will not take effect, you should call setDualStreamModeEx again on the sending end and adjust the settings.
-   *  Calling this method on the receiving end of the audience role will not take effect.
+   * 取决于发送端的默认行为和调用 setDualStreamMode 的具体设置，接收端调用该方法分为以下几种情况：
+   *  SDK 默认在发送端开启小流自适应模式 (AutoSimulcastStream)，即：发送端仅发送大流，仅主播身份的接收端可以调用该方法发起小流申请，发送端收到申请后开始自动发送小流，此时频道内所有用户均可调用该方法切换到小流订阅模式。
+   *  当发送端调用 setDualStreamMode 并将 mode 设置为 DisableSimulcastStream （始终不发送小流），则调用该方法不生效。
+   *  当发送端调用 setDualStreamMode 并将 mode 设置为 EnableSimulcastStream （始终发送小流），则主播或观众身份的接收端均可调用该方法切换到小流订阅模式。 在接收视频小流时，SDK 会根据视频窗口的大小动态调整对应视频流的大小，以节约带宽和计算资源。视频小流默认的宽高比和视频大流的宽高比一致。根据当前大流的宽高比，系统会自动分配小流的分辨率、帧率及码率。 如果发送端已调用 setDualStreamModeEx 并将 mode 设置为 DisableSimulcastStream （始终不发送小流），则调用该方法不生效，你需要在发送端重新调用 setDualStreamModeEx 修改设置。
    *
-   * @param uid The user ID.
-   * @param streamType The video stream type, see VideoStreamType.
-   * @param connection The connection information. See RtcConnection.
+   * @param uid 用户 ID。
+   * @param streamType 视频流类型: VideoStreamType 。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setRemoteVideoStreamTypeEx(
     uid: number,
@@ -220,16 +230,16 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes publishing the local audio stream.
+   * 取消或恢复发布本地音频流。
    *
-   * This method does not affect any ongoing audio recording, because it does not disable the audio capture device. A successful call of this method triggers the onUserMuteAudio and onRemoteAudioStateChanged callbacks on the remote client.
+   * 成功调用该方法后，远端会触发 onUserMuteAudio 回调和 onRemoteAudioStateChanged 回调。 该方法不影响音频采集状态，因为没有禁用音频采集设备。
    *
-   * @param mute Whether to stop publishing the local audio stream: true : Stops publishing the local audio stream. false : (Default) Resumes publishing the local audio stream.
-   * @param connection The connection information. See RtcConnection.
+   * @param mute 是否取消发布本地音频流。 true : 取消发布。 false :（默认）发布。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract muteLocalAudioStreamEx(
     mute: boolean,
@@ -237,17 +247,17 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes publishing the local video stream.
+   * 取消或恢复发布本地视频流。
    *
-   * A successful call of this method triggers the onUserMuteVideo callback on the remote client.
-   *  This method does not affect any ongoing video recording, because it does not disable the camera.
+   * 成功调用该方法后，远端会触发 onUserMuteVideo 回调。
+   *  该方法不影响视频采集状态，没有禁用摄像头。
    *
-   * @param mute Whether to stop publishing the local video stream. true : Stop publishing the local video stream. false : (Default) Publish the local video stream.
-   * @param connection The connection information. See RtcConnection.
+   * @param mute 是否取消发送本地视频流。 true : 取消发送本地视频流。 false : （默认）发送本地视频流。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract muteLocalVideoStreamEx(
     mute: boolean,
@@ -255,18 +265,18 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
+   * 取消或恢复订阅所有远端用户的音频流。
    *
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones join the channel subsequent to this call.
-   *  Call this method after joining a channel.
-   *  If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel.
+   * 成功调用该方法后，本地用户会取消或恢复订阅远端用户的音频流，包括在调用该方法后加入频道的用户的音频流。
+   *  该方法需要在加入频道后调用。
+   *  如果需要在加入频道前设置默认不订阅远端用户音频流，可以在调用 joinChannel 加入频道时设置 autoSubscribeAudio 为 false 。
    *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users: true : Stops subscribing to the audio streams of all remote users. false : (Default) Subscribes to the audio streams of all remote users by default.
-   * @param connection The connection information. See RtcConnection.
+   * @param mute 是否取消订阅所有远端用户的音频流： true : 取消订阅所有远端用户的音频流。 false :（默认）订阅所有远端用户的音频流。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract muteAllRemoteAudioStreamsEx(
     mute: boolean,
@@ -274,16 +284,16 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes subscribing to the video streams of all remote users.
+   * 取消或恢复订阅所有远端用户的视频流。
    *
-   * After successfully calling this method, the local user stops or resumes subscribing to the video streams of all remote users, including all subsequent users.
+   * 成功调用该方法后，本地用户会取消或恢复订阅所有远端用户的视频流，包括在调用该方法后加入频道的用户的视频流。
    *
-   * @param mute Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the video streams of all remote users by default.
-   * @param connection The connection information. See RtcConnection.
+   * @param mute 是否取消订阅所有远端用户的视频流。 true : 取消订阅所有用户的视频流。 false :（默认）订阅所有用户的视频流。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract muteAllRemoteVideoStreamsEx(
     mute: boolean,
@@ -291,21 +301,22 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Set the blocklist of subscriptions for audio streams.
+   * 设置音频订阅黑名单。
    *
-   * You can call this method to specify the audio streams of a user that you do not want to subscribe to.
-   *  You can call this method either before or after joining a channel.
-   *  The blocklist is not affected by the setting in muteRemoteAudioStream, muteAllRemoteAudioStreams, and autoSubscribeAudio in ChannelMediaOptions.
-   *  Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   *  If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
+   * 你可以调用该方法指定不订阅的音频流。
+   *  该方法在加入频道前后均可调用。
+   *  音频订阅黑名单不受 muteRemoteAudioStream 、 muteAllRemoteAudioStreams 以及 ChannelMediaOptions 中的 autoSubscribeAudio 影响。
+   *  设置订阅黑名单后，如果离开当前频道后再重新加入频道，黑名单依然生效。
+   *  如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。
    *
-   * @param uidList The user ID list of users that you do not want to subscribe to. If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeAudioBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
-   * @param uidNumber The number of users in the user ID list.
-   * @param connection The connection information. See RtcConnection.
+   * @param uidList 订阅黑名单的用户 ID 列表。
+   * 如果你想指定不订阅某一发流用户的音频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅黑名单中移除，需要重新调用 setSubscribeAudioBlocklist 方法更新订阅黑名单的用户 ID 列表，使其不包含你想移除的用户的 uid 。
+   * @param uidNumber 黑名单用户 ID 列表中的用户数量。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setSubscribeAudioBlocklistEx(
     uidList: number[],
@@ -314,21 +325,22 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sets the allowlist of subscriptions for audio streams.
+   * 设置音频订阅白名单。
    *
-   * You can call this method to specify the audio streams of a user that you want to subscribe to.
-   *  If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   *  You can call this method either before or after joining a channel.
-   *  The allowlist is not affected by the setting in muteRemoteAudioStream, muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions.
-   *  Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+   * 你可以调用该方法指定想要订阅的音频流。
+   *  该方法在加入频道前后均可调用。
+   *  音频订阅白名单不受 muteRemoteAudioStream 、 muteAllRemoteAudioStreams 以及 ChannelMediaOptions 中的 autoSubscribeAudio 的影响。
+   *  设置订阅白名单后，如果离开当前频道后再重新加入频道，白名单依然生效。
+   *  如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。
    *
-   * @param uidList The user ID list of users that you want to subscribe to. If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeAudioAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
-   * @param uidNumber The number of users in the user ID list.
-   * @param connection The connection information. See RtcConnection.
+   * @param uidList 音频订阅白名单的用户 ID 列表。
+   * 如果你想指定订阅某一发流用户的音频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅白名单中移除，需要重新调用 setSubscribeAudioAllowlist 方法更新音频订阅白名单的用户 ID 列表，使其不包含你想移除的用户的 uid 。
+   * @param uidNumber 白名单用户 ID 列表中的用户数量。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setSubscribeAudioAllowlistEx(
     uidList: number[],
@@ -337,21 +349,22 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Set the blocklist of subscriptions for video streams.
+   * 设置视频订阅黑名单。
    *
-   * You can call this method to specify the video streams of a user that you do not want to subscribe to.
-   *  If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   *  Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   *  You can call this method either before or after joining a channel.
-   *  The blocklist is not affected by the setting in muteRemoteVideoStream, muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions.
+   * 你可以调用该方法指定不订阅的视频流。
+   *  该方法在加入频道前后均可调用。
+   *  视频订阅黑名单不受 muteRemoteVideoStream 、 muteAllRemoteVideoStreams 以及 ChannelMediaOptions 中的 autoSubscribeVideo 的影响。
+   *  设置订阅黑名单后，如果离开当前频道后再重新加入频道，黑名单依然生效。
+   *  如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。
    *
-   * @param uidList The user ID list of users that you do not want to subscribe to. If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeVideoBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
-   * @param uidNumber The number of users in the user ID list.
-   * @param connection The connection information. See RtcConnection.
+   * @param uidList 视频订阅黑名单的用户 ID 列表。
+   * 如果你想指定不订阅某一发流用户的视频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅黑名单中移除，需要重新调用 setSubscribeVideoBlocklist 方法更新订阅黑名单的用户 ID 列表，使其不包含你想移除的用户的 uid 。
+   * @param uidNumber 黑名单用户 ID 列表中的用户数量。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setSubscribeVideoBlocklistEx(
     uidList: number[],
@@ -360,21 +373,22 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Set the allowlist of subscriptions for video streams.
+   * 设置视频订阅白名单。
    *
-   * You can call this method to specify the video streams of a user that you want to subscribe to.
-   *  If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   *  Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   *  You can call this method either before or after joining a channel.
-   *  The allowlist is not affected by the setting in muteRemoteVideoStream, muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions.
+   * 你可以调用该方法指定想要订阅的视频流。
+   *  该方法在加入频道前后均可调用。
+   *  视频订阅白名单不受 muteRemoteVideoStream 、 muteAllRemoteVideoStreams 以及 ChannelMediaOptions 中的 autoSubscribeVideo 的影响。
+   *  设置订阅白名单后，如果离开当前频道后再重新加入频道，白名单依然生效。
+   *  如果某个用户同时在音频订阅黑名单和白名单中，仅订阅黑名单生效。
    *
-   * @param uidList The user ID list of users that you want to subscribe to. If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeVideoAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
-   * @param uidNumber The number of users in the user ID list.
-   * @param connection The connection information. See RtcConnection.
+   * @param uidList 视频订阅白名单的用户 ID 列表。
+   * 如果你想指定仅订阅某一发流用户的视频流，将该用户的 ID 加入此列表中。如果你想要将某一用户从订阅白名单中移除，需要重新调用 setSubscribeVideoAllowlist 方法更新音频订阅白名单的用户 ID 列表，使其不包含你想移除的用户的 uid 。
+   * @param uidNumber 白名单用户 ID 列表中的用户数量。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setSubscribeVideoAllowlistEx(
     uidList: number[],
@@ -383,17 +397,17 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Options for subscribing to remote video streams.
+   * 设置远端视频流的订阅选项。
    *
-   * When a remote user has enabled dual-stream mode, you can call this method to choose the option for subscribing to the video streams sent by the remote user.
+   * 当远端发送双流时，可调用此方法来设置远端视频流的订阅选项。
    *
-   * @param uid The user ID of the remote user.
-   * @param options The video subscription options. See VideoSubscriptionOptions.
-   * @param connection The connection information. See RtcConnection.
+   * @param uid 远端用户 ID。
+   * @param options 视频流的订阅设置，详见 VideoSubscriptionOptions 。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setRemoteVideoSubscriptionOptionsEx(
     uid: number,
@@ -402,23 +416,24 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sets the 2D position (the position on the horizontal plane) of the remote user's voice.
+   * 设置远端用户声音的 2D 位置，即水平面位置。
    *
-   * This method sets the voice position and volume of a remote user. When the local user calls this method to set the voice position of a remote user, the voice difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a sense of space. This method applies to massive multiplayer online games, such as Battle Royale games.
-   *  For the best voice positioning, Agora recommends using a wired headset.
-   *  Call this method after joining a channel.
+   * 设置远端用户声音的空间位置和音量，方便本地用户听声辨位。
+   * 通过调用该接口设置远端用户声音出现的位置，左右声道的声音差异会产生声音的方位感，从而判断出远端用户的实时位置。在多人在线游戏场景，如吃鸡游戏中，该方法能有效增加游戏角色的方位感，模拟真实场景。
+   *  为获得最佳听觉体验，建议用户佩戴有线耳机。
+   *  该方法需要在加入频道后调用。
    *
-   * @param uid The user ID of the remote user.
-   * @param pan The voice position of the remote user. The value ranges from -1.0 to 1.0:
-   *  -1.0: The remote voice comes from the left.
-   *  0.0: (Default) The remote voice comes from the front.
-   *  1.0: The remote voice comes from the right.
-   * @param gain The volume of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original volume of the remote user). The smaller the value, the lower the volume.
-   * @param connection The connection information. See RtcConnection.
+   * @param uid 远端用户的 ID。
+   * @param pan 设置远端用户声音的空间位置，取值范围为 [-1.0,1.0]:
+   *  -1.0: 声音出现在左边。
+   *  （默认）0.0: 声音出现在正前方。
+   *  1.0: 声音出现在右边。
+   * @param gain 设置远端用户声音的音量，取值范围为 [0.0,100.0]，默认值为 100.0，表示该用户的原始音量。取值越小，则音量越低。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setRemoteVoicePositionEx(
     uid: number,
@@ -437,20 +452,18 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sets the video display mode of a specified remote user.
+   * 设置远端视图显示模式。
    *
-   * After initializing the video view of a remote user, you can call this method to update its rendering and mirror modes. This method affects only the video view that the local user sees.
-   *  Call this method after initializing the remote view by calling the setupRemoteVideo method.
-   *  During a call, you can call this method as many times as necessary to update the display mode of the video view of a remote user.
+   * 初始化远端用户视图后，你可以调用该方法更新远端用户视图在本地显示时的渲染和镜像模式。该方法只影响本地用户看到的视频画面。
    *
-   * @param uid The user ID of the remote user.
-   * @param renderMode The video display mode of the remote user. See RenderModeType.
-   * @param mirrorMode The mirror mode of the remote user view. See VideoMirrorModeType.
-   * @param connection The connection information. See RtcConnection.
+   * @param uid 远端用户 ID。
+   * @param renderMode 远端视图显示模式，详见 RenderModeType 。
+   * @param mirrorMode 远端用户视图的镜像模式，详见 VideoMirrorModeType 。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setRemoteRenderModeEx(
     uid: number,
@@ -460,20 +473,21 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Enables loopback audio capturing.
+   * 开启声卡采集。
    *
-   * If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
-   *  macOS does not support loopback audio capture of the default sound card. If you need to use this function, use a virtual sound card and pass its name to the deviceName parameter. Agora recommends using AgoraALD as the virtual sound card for audio capturing.
-   *  This method only supports using one sound card for audio capturing.
+   * 启用声卡采集功能后，声卡播放的声音会被合到本地音频流中，从而可以发送到远端。
+   *  macOS 系统默认声卡不支持采集功能，如果你需要使用该功能，请启用一个虚拟声卡，并将 deviceName 设为该虚拟声卡的设备名。声网推荐你使用声网自研的虚拟声卡 AgoraALD 进行采集。
+   *  该方法目前仅支持一路声卡采集。
    *
-   * @param connection The connection information. See RtcConnection.
-   * @param enabled Sets whether to enable loopback audio capture: true : Enable loopback audio capturing. false : (Default) Disable loopback audio capturing.
-   * @param deviceName macOS: The device name of the virtual sound card. The default value is set to NULL, which means using AgoraALD for loopback audio capturing.
-   *  Windows: The device name of the sound card. The default is set to NULL, which means the SDK uses the sound card of your device for loopback audio capturing.
+   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param enabled 是否开启声卡采集： true : 开启声卡采集。 false :（默认）不开启声卡采集。
+   * @param deviceName Electron for 统信 OS SDK 不支持该参数。
+   *  macOS: 虚拟声卡的设备名。默认为空，代表使用 AgoraALD 虚拟声卡进行采集。
+   *  Windows: 声卡的设备名。默认为空，代表使用设备自带的声卡进行采集。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract enableLoopbackRecordingEx(
     connection: RtcConnection,
@@ -498,20 +512,20 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Adjusts the playback signal volume of a specified remote user.
+   * 调节本地播放的指定远端用户信号音量。
    *
-   * You can call this method to adjust the playback volume of a specified remote user. To adjust the playback volume of different remote users, call the method as many times, once for each remote user.
+   * 你可以在通话中调用该方法调节指定远端用户在本地播放的音量。如需调节多个用户在本地播放的音量，则需多次调用该方法。
    *
-   * @param uid The user ID of the remote user.
-   * @param volume The volume of the user. The value range is [0,400].
-   *  0: Mute.
-   *  100: (Default) The original volume.
-   *  400: Four times the original volume (amplifying the audio signals by four times).
-   * @param connection The connection information. See RtcConnection.
+   * @param uid 远端用户 ID。
+   * @param volume 音量，取值范围为 [0,400]。
+   *  0: 静音。
+   *  100: （默认）原始音量。
+   *  400: 原始音量的 4 倍，自带溢出保护。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract adjustUserPlaybackSignalVolumeEx(
     uid: number,
@@ -520,27 +534,29 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Gets the current connection state of the SDK.
+   * 获取当前网络连接状态。
    *
-   * @param connection The connection information. See RtcConnection.
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * The current connection state. See ConnectionStateType.
+   * 当前网络连接状态。详见 ConnectionStateType 。
    */
   abstract getConnectionStateEx(connection: RtcConnection): ConnectionStateType;
 
   /**
-   * Enables or disables the built-in encryption.
+   * 开启或关闭内置加密。
    *
-   * After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again.
+   * 用户离开频道后，SDK 会自动关闭加密。如需重新开启加密，你需要在用户再次加入频道前调用该方法。
+   *  同一频道内的所有用户在调用该方法时，必须设置相同的加密模式和密钥。
+   *  如果开启了内置加密，则不能使用旁路推流功能。
    *
-   * @param connection The connection information. See RtcConnection.
-   * @param enabled Whether to enable built-in encryption: true : Enable the built-in encryption. false : (Default) Disable the built-in encryption.
-   * @param config Built-in encryption configurations. See EncryptionConfig.
+   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param enabled 是否开启内置加密： true : 开启内置加密。 false :（默认）关闭内置加密。
+   * @param config 配置内置加密模式和密钥。详见 EncryptionConfig 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract enableEncryptionEx(
     connection: RtcConnection,
@@ -549,14 +565,16 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Creates a data stream.
+   * 创建数据流。
    *
-   * @param config The configurations for the data stream. See DataStreamConfig.
-   * @param connection The connection information. See RtcConnection.
+   * 在 IRtcEngine 生命周期内，每个用户最多只能创建 5 个数据流。离开频道时数据流会被销毁，如需使用需要重新创建数据流。
+   *
+   * @param config 数据流设置。详见 DataStreamConfig 。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * ID of the created data stream, if the method call succeeds.
-   *  < 0: Failure.
+   * 创建的数据流的 ID：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract createDataStreamEx(
     config: DataStreamConfig,
@@ -564,23 +582,23 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sends data stream messages.
+   * 发送数据流。
    *
-   * A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client. The SDK has the following restrictions on this method:
-   *  Each client within the channel can have up to 5 data channels simultaneously, with a total shared packet bitrate limit of 30 KB/s for all data channels.
-   *  Each data channel can send up to 60 packets per second, with each packet being a maximum of 1 KB. After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel.
-   *  Call this method after joinChannelEx.
-   *  Ensure that you call createDataStreamEx to create a data channel before calling this method.
-   *  This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
+   * 调用 createDataStreamEx 后，你可以调用本方法向频道内所有用户发送数据流消息。
+   * SDK 对该方法的实现进行了如下限制：
+   *  频道内每个客户端最多可以同时拥有 5 个数据通道，所有数据通道共用的总发包码率限制为 30 KB/s。
+   *  每个数据通道每秒最多能发送 60 个包，每个包最大为 1 KB。 成功调用该方法后，远端会触发 onStreamMessage 回调，远端用户可以在该回调中获取接收到的流消息；若调用失败，远端会触发 onStreamMessageError 回调。
+   *  该方法需要在 joinChannelEx 后调用。
+   *  请确保在调用该方法前，已调用 createDataStreamEx 创建了数据通道。
    *
-   * @param streamId The data stream ID. You can get the data stream ID by calling createDataStreamEx.
-   * @param data The message to be sent.
-   * @param length The length of the data.
-   * @param connection The connection information. See RtcConnection.
+   * @param streamId 数据流 ID。可以通过 createDataStreamEx 获取。
+   * @param data 待发送的数据。
+   * @param length 数据长度。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract sendStreamMessageEx(
     streamId: number,
@@ -590,25 +608,47 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Adds a watermark image to the local video.
+   * @ignore
+   */
+  abstract sendRdtMessageEx(
+    uid: number,
+    type: RdtStreamType,
+    data: string,
+    length: number,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract sendMediaControlMessageEx(
+    uid: number,
+    data: string,
+    length: number,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * 添加本地视频水印。
    *
-   * This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. The Agora SDK supports adding only one watermark image onto a local video or CDN live stream. The newly added watermark image replaces the previous one. The watermark coordinates are dependent on the settings in the setVideoEncoderConfigurationEx method:
-   *  If the orientation mode of the encoding video (OrientationMode) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.
-   *  If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.
-   *  When setting the watermark position, the region must be less than the dimensions set in the setVideoEncoderConfigurationEx method; otherwise, the watermark image will be cropped.
-   *  Ensure that you have called enableVideo before calling this method.
-   *  This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.
-   *  If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.
-   *  If you have enabled the local video preview by calling the startPreview method, you can use the visibleInPreview member to set whether or not the watermark is visible in the preview.
-   *  If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
+   * 废弃 弃用：该方法已废弃，请改用 addVideoWatermarkWithConfigEx 。 该方法将一张 PNG 图片作为水印添加到本地发布的直播视频流上，同一直播频道中的用户、旁路直播观众和采集设备都能看到或采集到该水印图片。当前只支持在直播视频流中添加一个水印，后添加的水印会替换掉之前添加的水印。
+   * 水印坐标和 setVideoEncoderConfigurationEx 方法中的设置有依赖关系：
+   *  如果视频编码方向（ OrientationMode ）固定为横屏或自适应模式下的横屏，那么水印使用横屏坐标。
+   *  如果视频编码方向（ OrientationMode ）固定为竖屏或自适应模式下的竖屏，那么水印使用竖屏坐标。
+   *  设置水印坐标时，水印的图像区域不能超出 setVideoEncoderConfigurationEx 方法中设置的视频尺寸，否则超出部分将被裁剪。
+   *  你需要在调用 enableVideo 方法之后再调用本方法。
+   *  待添加水印图片必须是 PNG 格式。本方法支持所有像素格式的 PNG 图片：RGBA、RGB、Palette、Gray 和 Alpha_gray。
+   *  如果待添加的 PNG 图片的尺寸与你在本方法中设置的尺寸不一致，SDK 会对 PNG 图片进行缩放或裁剪，以与设置相符。
+   *  如果你已经使用 startPreview 方法开启本地视频预览，那么本方法的 visibleInPreview 可设置水印在预览时是否可见。
+   *  如果你已设置本地视频为镜像模式，那么此处的本地水印也为镜像。为避免本地用户看本地视频时的水印也被镜像，建议你不要对本地视频同时使用镜像和水印功能，请在应用层实现本地水印功能。
    *
-   * @param watermarkUrl The local file path of the watermark image to be added. This method supports adding a watermark image from the local absolute or relative file path.
-   * @param options The options of the watermark image to be added. See WatermarkOptions.
-   * @param connection The connection information. See RtcConnection.
+   * @param watermarkUrl 待添加的水印图片的本地路径。该方法支持从本地绝对/相对路径添加水印图片。
+   * @param options 待添加的水印图片的设置选项，详见 WatermarkOptions 。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract addVideoWatermarkEx(
     watermarkUrl: string,
@@ -617,20 +657,37 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Removes the watermark image from the video stream.
+   * 从本地或远端视频流中移除指定的水印图像。
    *
-   * @param connection The connection information. See RtcConnection.
+   * 自从 自 v4.6.2 版本新增。
+   *
+   * @param id 水印 ID。
+   * @param connection 连接信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   */
+  abstract removeVideoWatermarkEx(
+    id: string,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * 删除已添加的视频水印。
+   *
+   * @param connection Connection 信息。详见 RtcConnection 。
+   *
+   * @returns
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract clearVideoWatermarkEx(connection: RtcConnection): number;
 
   /**
-   * Agora supports reporting and analyzing customized messages.
+   * 自定义数据上报和分析服务。
    *
-   * Agora supports reporting and analyzing customized messages. This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact and discuss the format of customized messages with us.
+   * 声网提供自定义数据上报和分析服务。该服务当前处于免费内测期。内测期提供的能力为 6 秒内最多上报 10 条数据，每条自定义数据不能超过 256 字节，每个字符串不能超过 100 字节。如需试用该服务，请[联系销售](https://www.shengwang.cn/contact-sales/)开通并商定自定义数据格式。
    */
   abstract sendCustomReportMessageEx(
     id: string,
@@ -642,20 +699,20 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Enables the reporting of users' volume indication.
+   * 启用用户音量提示。
    *
-   * This method enables the SDK to regularly report the volume information to the app of the local user who sends a stream and remote users (three users at most) whose instantaneous volumes are the highest.
+   * 该方法允许 SDK 定期向 App 报告本地发流用户和瞬时音量最高的远端用户（最多 3 位）的音量相关信息。
    *
-   * @param interval Sets the time interval between two consecutive volume indications:
-   *  ≤ 0: Disables the volume indication.
-   *  > 0: Time interval (ms) between two consecutive volume indications. Ensure this parameter is set to a value greater than 10, otherwise you will not receive the onAudioVolumeIndication callback. Agora recommends that this value is set as greater than 100.
-   * @param smooth The smoothing factor that sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The recommended value is 3. The greater the value, the more sensitive the indicator.
-   * @param reportVad true : Enables the voice activity detection of the local user. Once it is enabled, the vad parameter of the onAudioVolumeIndication callback reports the voice activity status of the local user. false : (Default) Disables the voice activity detection of the local user. Once it is disabled, the vad parameter of the onAudioVolumeIndication callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
-   * @param connection The connection information. See RtcConnection.
+   * @param interval 指定音量提示的时间间隔：
+   *  ≤ 0: 禁用音量提示功能。
+   *  > 0: 返回音量提示的间隔，单位为毫秒。建议设置到大于 100 毫秒，不得小于 10 毫秒，否则会收不到 onAudioVolumeIndication 回调。
+   * @param smooth 平滑系数，指定音量提示的灵敏度。取值范围为 [0,10]，建议值为 3。数字越大，波动越灵敏；数字越小，波动越平滑。
+   * @param reportVad true ：开启本地人声检测功能。开启后， onAudioVolumeIndication 回调的 vad 参数会报告是否在本地检测到人声。 false ：（默认）关闭本地人声检测功能。除引擎自动进行本地人声检测的场景外， onAudioVolumeIndication 回调的 vad 参数不会报告是否在本地检测到人声。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract enableAudioVolumeIndicationEx(
     interval: number,
@@ -665,21 +722,24 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Starts pushing media streams to a CDN without transcoding.
+   * 开始非转码推流。
    *
-   * Call this method after joining a channel.
-   *  Only hosts in the LIVE_BROADCASTING profile can call this method.
-   *  If you want to retry pushing streams after a failed push, make sure to call stopRtmpStream first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push. Agora recommends that you use the server-side Media Push function. You can call this method to push an audio or video stream to the specified CDN address. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times. After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
+   * 声网推荐你使用更加完善的服务端推流功能，详见[实现服务端旁路推流](https://doc.shengwang.cn/doc/media-push/restful/landing-page)。
+   * 调用该方法，你可以向指定的旁路推流地址推送直播音视频流。该方法每次只能向一个地址推送媒体流，如果你需要向多个地址转码推流，则需多次调用该方法。
+   * 调用该方法后，SDK 会在本地触发 onRtmpStreamingStateChanged 回调，报告推流的状态。
+   *  请在加入频道后调用该方法。
+   *  只有直播场景下的主播才能调用该方法。
+   *  调用该方法推流失败后，如果你想要重新推流，那么请你务必先调用 stopRtmpStream ，再调用该方法重推，否则 SDK 会返回与上次推流失败时一样的错误码。
    *
-   * @param url The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
-   * @param connection The connection information. See RtcConnection.
+   * @param url 旁路推流地址。格式为 RTMP 或 RTMPS。字符长度不能超过 1024 字节。不支持中文字符等特殊字符。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The URL or configuration of transcoding is invalid; check your URL and transcoding configurations.
-   *  -7: The SDK is not initialized before calling this method.
-   *  -19: The Media Push URL is already in use; use another URL instead.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   *  -2：URL 或转码属性参数错误，请检查你的 URL 或参数设置。
+   *  -7：调用该方法前，未初始化 SDK。
+   *  -19：该旁路推流 URL 已在使用中，请使用其他旁路推流 URL。
    */
   abstract startRtmpStreamWithoutTranscodingEx(
     url: string,
@@ -687,24 +747,26 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Starts Media Push and sets the transcoding configuration.
+   * 开始旁路推流并设置转码属性。
    *
-   * Agora recommends that you use the server-side Media Push function. You can call this method to push a live audio-and-video stream to the specified CDN address and set the transcoding configuration. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times. After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
-   *  Ensure that you enable the Media Push service before using this function.
-   *  Call this method after joining a channel.
-   *  Only hosts in the LIVE_BROADCASTING profile can call this method.
-   *  If you want to retry pushing streams after a failed push, make sure to call stopRtmpStreamEx first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
+   * 声网推荐你使用更加完善的服务端推流功能，详见[实现服务端旁路推流](https://doc.shengwang.cn/doc/media-push/restful/landing-page)。
+   * 调用该方法，你可以向指定的旁路推流地址推送直播音视频流并设置转码属性。该方法每次只能向一个地址推送媒体流，如果你需要向多个地址转码推流，则需多次调用该方法。
+   * 调用该方法后，SDK 会在本地触发 onRtmpStreamingStateChanged 回调，报告推流的状态。
+   *  请确保已开通旁路推流服务。
+   *  请在加入频道后调用该方法。
+   *  只有直播场景下的主播才能调用该方法。
+   *  调用该方法推流失败后，如果你想要重新推流，那么请你务必先调用 stopRtmpStreamEx ，再调用该方法重推，否则 SDK 会返回与上次推流失败时一样的错误码。
    *
-   * @param url The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
-   * @param transcoding The transcoding configuration for Media Push. See LiveTranscoding.
-   * @param connection The connection information. See RtcConnection.
+   * @param url 旁路推流地址。格式为 RTMP 或 RTMPS。字符长度不能超过 1024 字节。不支持中文字符等特殊字符。
+   * @param transcoding 旁路推流的转码属性，详见 LiveTranscoding 。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The URL or configuration of transcoding is invalid; check your URL and transcoding configurations.
-   *  -7: The SDK is not initialized before calling this method.
-   *  -19: The Media Push URL is already in use; use another URL instead.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   *  -2：URL 或转码属性参数错误，请检查你的 URL 或参数设置。
+   *  -7：调用该方法前，未初始化 SDK。
+   *  -19：该旁路推流 URL 已在使用中，请使用其他旁路推流 URL。
    */
   abstract startRtmpStreamWithTranscodingEx(
     url: string,
@@ -713,16 +775,17 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Updates the transcoding configuration.
+   * 更新旁路推流转码属性。
    *
-   * Agora recommends that you use the server-side Media Push function. After you start pushing media streams to CDN with transcoding, you can dynamically update the transcoding configuration according to the scenario. The SDK triggers the onTranscodingUpdated callback after the transcoding configuration is updated.
+   * 声网推荐你使用更加完善的服务端推流功能，详见[实现服务端旁路推流](https://doc.shengwang.cn/doc/media-push/restful/landing-page)。
+   * 开启转码推流后，你可以根据场景需求，动态更新转码属性。转码属性更新后，SDK 会触发 onTranscodingUpdated 回调。
    *
-   * @param transcoding The transcoding configuration for Media Push. See LiveTranscoding.
-   * @param connection The connection information. See RtcConnection.
+   * @param transcoding 旁路推流的转码属性，详见 LiveTranscoding 。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract updateRtmpTranscodingEx(
     transcoding: LiveTranscoding,
@@ -730,38 +793,42 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops pushing media streams to a CDN.
+   * 结束旁路推流。
    *
-   * Agora recommends that you use the server-side Media Push function. You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times. After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
+   * 声网推荐你使用更加完善的服务端推流功能，详见[实现服务端旁路推流](https://doc.shengwang.cn/doc/media-push/restful/landing-page)。
+   * 调用该方法，你可以结束指定的旁路推流地址上的直播。该方法每次只能结束一个推流地址上的直播，如果你需要结束多个推流地址的直播，则需多次调用该方法。
+   * 调用该方法后，SDK 会在本地触发 onRtmpStreamingStateChanged 回调，报告推流的状态。
    *
-   * @param url The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+   * @param url 旁路推流地址。格式为 RTMP 或 RTMPS。字符长度不能超过 1024 字节。不支持中文字符等特殊字符。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract stopRtmpStreamEx(url: string, connection: RtcConnection): number;
 
   /**
-   * Starts relaying media streams across channels or updates channels for media relay.
+   * 开始或更新跨频道媒体流转发。
    *
-   * The first successful call to this method starts relaying media streams from the source channel to the destination channels. To relay the media stream to other channels, or exit one of the current media relays, you can call this method again to update the destination channels. This feature supports relaying media streams to a maximum of six destination channels. After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback, and this callback returns the state of the media stream relay. Common states are as follows:
-   *  If the onChannelMediaRelayStateChanged callback returns RelayStateRunning (2) and RelayOk (0), it means that the SDK starts relaying media streams from the source channel to the destination channel.
-   *  If the onChannelMediaRelayStateChanged callback returns RelayStateFailure (3), an exception occurs during the media stream relay.
-   *  Call this method after joining the channel.
-   *  This method takes effect only when you are a host in a live streaming channel.
-   *  The relaying media streams across channels function needs to be enabled by contacting.
-   *  Agora does not support string user accounts in this API.
+   * 首次成功调用该方法将开始跨频道转发媒体流。如需将流转发到多个目标频道，或退出当前的转发频道，可以再次调用该方法添加或移除转发的目标频道。该功能最多支持将媒体流转发至 6 个目标频道。
+   * 成功调用该方法后，SDK 会触发 onChannelMediaRelayStateChanged 回调，报告当前的跨频道媒体流转发状态。常见状态如下：
+   *  如果 onChannelMediaRelayStateChanged 回调报告 RelayStateRunning (2) 和 RelayOk (0)， 则表示 SDK 开始在源频道和目标频道之间转发媒体流。
+   *  如果 onChannelMediaRelayStateChanged 回调报告 RelayStateFailure (3)， 则表示跨频道媒体流转发出现异常。
+   *  请在成功加入频道后调用该方法。
+   *  在直播场景中，只有角色为主播的用户才能调用该方法。
+   *  跨频道媒体流转发功能需要[联系技术支持](https://ticket.shengwang.cn/)开通。
+   *  该功能不支持 String 型 UID。
    *
-   * @param configuration The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-   * @param connection The connection information. See RtcConnection.
+   * @param configuration 跨频道媒体流转发参数配置。详见 ChannelMediaRelayConfiguration 。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -1: A general error occurs (no specified reason).
-   *  -2: The parameter is invalid.
-   *  -8: Internal state error. Probably because the user is not a broadcaster.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   *  -1: 一般性的错误（未明确归类）。
+   *  -2: 参数无效。
+   *  -8：内部状态错误。可能因为用户角色不是主播。
    */
   abstract startOrUpdateChannelMediaRelayEx(
     configuration: ChannelMediaRelayConfiguration,
@@ -769,44 +836,44 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops the media stream relay. Once the relay stops, the host quits all the target channels.
+   * 停止跨频道媒体流转发。一旦停止，主播会退出所有目标频道。
    *
-   * After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback. If the callback reports RelayStateIdle (0) and RelayOk (0), the host successfully stops the relay. If the method call fails, the SDK triggers the onChannelMediaRelayStateChanged callback with the RelayErrorServerNoResponse (2) or RelayErrorServerConnectionLost (8) status code. You can call the leaveChannel method to leave the channel, and the media stream relay automatically stops.
+   * 成功调用该方法后，SDK 会触发 onChannelMediaRelayStateChanged 回调。如果报告 RelayStateIdle (0) 和 RelayOk (0)，则表示已停止转发媒体流。 如果该方法调用不成功，SDK 会触发 onChannelMediaRelayStateChanged 回调，并报告状态码 RelayErrorServerNoResponse (2) 或 RelayErrorServerConnectionLost (8)。你可以调用 leaveChannel 方法离开频道，跨频道媒体流转发会自动停止。
    *
-   * @param connection The connection information. See RtcConnection.
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -5: The method call was rejected. There is no ongoing channel media relay.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   *  -5: 方法调用被拒绝。当前没有正在进行的跨频道媒体流转发。
    */
   abstract stopChannelMediaRelayEx(connection: RtcConnection): number;
 
   /**
-   * Pauses the media stream relay to all target channels.
+   * 暂停向所有目标频道转发媒体流。
    *
-   * After the cross-channel media stream relay starts, you can call this method to pause relaying media streams to all target channels; after the pause, if you want to resume the relay, call resumeAllChannelMediaRelay. Call this method after startOrUpdateChannelMediaRelayEx.
+   * 开始跨频道转发媒体流后，如果你需要暂停向所有频道转发媒体流，可以调用该方法；暂停后，如果要恢复跨频道媒体流转发，可以调用 resumeAllChannelMediaRelay 方法。 该方法需要在调用 startOrUpdateChannelMediaRelayEx 开始跨频道媒体流转发后调用。
    *
-   * @param connection The connection information. See RtcConnection.
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -5: The method call was rejected. There is no ongoing channel media relay.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   *  -5: 方法调用被拒绝。当前没有正在进行的跨频道媒体流转发。
    */
   abstract pauseAllChannelMediaRelayEx(connection: RtcConnection): number;
 
   /**
-   * Resumes the media stream relay to all target channels.
+   * 恢复向所有目标频道转发媒体流。
    *
-   * After calling the pauseAllChannelMediaRelayEx method, you can call this method to resume relaying media streams to all destination channels. Call this method after pauseAllChannelMediaRelayEx.
+   * 调用 pauseAllChannelMediaRelayEx 方法后，如果你需要恢复向所有目标频道转发媒体流，可以调用该方法。 该方法需要在 pauseAllChannelMediaRelayEx 后调用。
    *
-   * @param connection The connection information. See RtcConnection.
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -5: The method call was rejected. There is no paused channel media relay.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   *  -5: 方法调用被拒绝。当前没有暂停的跨频道媒体流转发。
    */
   abstract resumeAllChannelMediaRelayEx(connection: RtcConnection): number;
 
@@ -824,19 +891,19 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   abstract getUserInfoByUidEx(uid: number, connection: RtcConnection): UserInfo;
 
   /**
-   * Enables or disables dual-stream mode on the sender side.
+   * 在发送端开启或关闭双流模式。
    *
-   * After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side. You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream:
-   *  High-quality video stream: High bitrate, high resolution.
-   *  Low-quality video stream: Low bitrate, low resolution. Deprecated: This method is deprecated as of v4.2.0. Use setDualStreamModeEx instead. This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.
+   * 废弃 弃用： 从 v4.2.0 起废弃，请改用 setDualStreamModeEx 。 你可以在发流端调用该方法开启或关闭双流模式。双流指视频大流和视频小流：
+   *  视频大流：高分辨率、高帧率的视频流。
+   *  视频小流：低分辨率、低帧率的视频流。 开启双流模式后，你可以在收流端调用 setRemoteVideoStreamType 选择接收视频大流或视频小流。 该方法适用于发送端发送的所有类型的流，包括且不限于来自摄像头采集的视频流、屏幕共享流、自定义采集的视频流。
    *
-   * @param enabled Whether to enable dual-stream mode: true : Enable dual-stream mode. false : (Default) Disable dual-stream mode.
-   * @param streamConfig The configuration of the low-quality video stream. See SimulcastStreamConfig. When setting mode to DisableSimulcastStream, setting streamConfig will not take effect.
-   * @param connection The connection information. See RtcConnection.
+   * @param enabled 是否开启双流模式： true : 开启双流模式。 false : (默认) 关闭双流模式。
+   * @param streamConfig 视频小流的配置。详见 SimulcastStreamConfig 。 当设置 mode 为 DisableSimulcastStream 时，再设置 streamConfig 不会生效。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。 详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract enableDualStreamModeEx(
     enabled: boolean,
@@ -845,22 +912,22 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sets the dual-stream mode on the sender side.
+   * 在发送端设置双流模式。
    *
-   * The SDK defaults to enabling low-quality video stream adaptive mode (AutoSimulcastStream) on the sender side, which means the sender does not actively send low-quality video stream. The receiving end with the role of the host can initiate a low-quality video stream request by calling setRemoteVideoStreamTypeEx, and upon receiving the request, the sending end automatically starts sending low-quality stream.
-   *  If you want to modify this behavior, you can call this method and set mode to DisableSimulcastStream (never send low-quality video streams) or EnableSimulcastStream (always send low-quality video streams).
-   *  If you want to restore the default behavior after making changes, you can call this method again with mode set to AutoSimulcastStream. The difference and connection between this method and enableDualStreamModeEx is as follows:
-   *  When calling this method and setting mode to DisableSimulcastStream, it has the same effect as enableDualStreamModeEx (false).
-   *  When calling this method and setting mode to EnableSimulcastStream, it has the same effect as enableDualStreamModeEx (true).
-   *  Both methods can be called before and after joining a channel. If both methods are used, the settings in the method called later takes precedence.
+   * SDK 默认在发送端开启小流自适应模式 (AutoSimulcastStream)，即发送端不主动发送小流，主播身份的接收端可以调用 setRemoteVideoStreamTypeEx 发起小流申请，发送端收到申请后开始自动发送小流。
+   *  如果你想修改此行为，可以调用该方法并修改 mode 为 DisableSimulcastStream （始终不发送小流）或 EnableSimulcastStream （始终发送小流）。
+   *  如果你在进行修改后又想恢复该默认行为，可重新调用该方法，并将 mode 设置为 AutoSimulcastStream 。 该方法和 enableDualStreamModeEx 的区别与联系如下：
+   *  调用该方法并设置 mode 为 DisableSimulcastStream 时，跟 enableDualStreamModeEx(false) 的效果相同。
+   *  调用该方法并设置 mode 为 EnableSimulcastStream 时，跟 enableDualStreamModeEx(true) 的效果相同。
+   *  两种方法均可在加入频道前后调用，若同时使用，则以后调用的方法中的设置为准。
    *
-   * @param mode The mode in which the video stream is sent. See SimulcastStreamMode.
-   * @param streamConfig The configuration of the low-quality video stream. See SimulcastStreamConfig. When setting mode to DisableSimulcastStream, setting streamConfig will not take effect.
-   * @param connection The connection information. See RtcConnection.
+   * @param mode 发送视频流的模式。详见 SimulcastStreamMode 。
+   * @param streamConfig 视频小流的配置。详见 SimulcastStreamConfig 。 当设置 mode 为 DisableSimulcastStream 时，再设置 streamConfig 不会生效。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。 详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setDualStreamModeEx(
     mode: SimulcastStreamMode,
@@ -887,19 +954,22 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Takes a snapshot of a video stream using connection ID.
+   * 使用连接 ID 获取视频截图。
    *
-   * This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path.
+   * 该方法用于对指定用户的视频流进行截图，生成一张 JPG 格式的图片，并保存至指定的路径。
+   *  该方法是异步操作，调用返回时 SDK 并没有真正获取截图。
+   *  该方法用于本地视频截图时，是对 ChannelMediaOptions 中指定发布的视频流进行截图。
+   *  如果用户的视频经过前处理，例如，添加了水印或美颜，生成的截图会包含前处理效果。
    *
-   * @param connection The connection information. See RtcConnection.
-   * @param uid The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
-   * @param filePath The local path (including filename extensions) of the snapshot. For example:
+   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param uid 用户 ID。如果要对本地用户的视频截图，则设为 0。
+   * @param filePath 请确保目录存在且可写。 截图的本地保存路径，需精确到文件名及格式，例如：
    *  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg
-   *  macOS: ～/Library/Logs/example.jpg Ensure that the path you specify exists and is writable.
+   *  macOS: ～/Library/Logs/example.jpg
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract takeSnapshotEx(
     connection: RtcConnection,
@@ -908,17 +978,17 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Enables or disables video screenshot and upload.
+   * 开启/关闭本地截图上传。
    *
-   * This method can take screenshots for multiple video streams and upload them. When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.
+   * 该方法可以对多条视频流截图并上传。开启本地截图上传后，SDK 会根据你在 ContentInspectConfig 中设置的模块类型和频率对本地用户发送的视频进行截图和上传。截图完成后，声网服务器会以 HTTPS 请求的形式，向你的服务器发送回调通知，并将所有截图发送至你指定的第三方云存储。 调用该方法前，请确保已[联系技术支持](https://ticket.shengwang.cn/)开通本地截图上传服务。
    *
-   * @param enabled Whether to enalbe video screenshot and upload: true : Enables video screenshot and upload. false : Disables video screenshot and upload.
-   * @param config Screenshot and upload configuration. See ContentInspectConfig.
-   * @param connection The connection information. See RtcConnection.
+   * @param enabled 设置是否开启本地截图上传： true ：开启本地截图上传。 false ：关闭本地截图上传。
+   * @param config 本地截图上传配置。详见 ContentInspectConfig 。
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract enableContentInspectEx(
     enabled: boolean,
@@ -927,16 +997,17 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Enables tracing the video frame rendering process.
+   * 开启视频帧渲染数据打点。
    *
-   * By default, the SDK starts tracing the video rendering event automatically when the local user successfully joins the channel. You can call this method at an appropriate time according to the actual application scenario to customize the tracing process.
-   *  After the local user leaves the current channel, the SDK automatically resets the time point to the next time when the user successfully joins the channel. The SDK starts tracing the rendering status of the video frames in the channel from the moment this method is successfully called and reports information about the event through the onVideoRenderingTracingResult callback.
+   * 成功调用该方法后，SDK 会以调用该方法的时刻作为起点，并通过 onVideoRenderingTracingResult 回调报告视频帧渲染的相关信息。
+   *  如果你未调用该方法，SDK 默认以调用 joinChannel 加入频道的时刻为起始点开始打点，自动开始跟踪视频的渲染事件。你可以根据实际业务场景，在合适的时机调用该方法，进行自定义打点。
+   *  离开当前频道后，SDK 会自动重置该时间点为下一次加入频道的时刻。
    *
-   * @param connection The connection information. See RtcConnection.
+   * @param connection Connection 信息。详见 RtcConnection 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract startMediaRenderingTracingEx(connection: RtcConnection): number;
 
@@ -949,15 +1020,11 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Gets the call ID with the connection ID.
+   * 使用连接 ID 获取通话 ID。
    *
-   * When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get callId, and pass it in when calling methods such as rate and complain.
+   * 客户端在每次加入频道后会生成一个对应的 callId ，标识该客户端的此次通话。你可以调用该方法获取 callId 参数，然后在调用 rate 、 complain 等方法时填入。
    *
-   * @param connection The connection information. See RtcConnection.
-   *
-   * @returns
-   * The current call ID, if the method succeeds.
-   *  An empty string, if the method call fails.
+   * @param connection Connection 信息。详见 RtcConnection 。
    */
   abstract getCallIdEx(connection: RtcConnection): string;
 
@@ -971,21 +1038,101 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Gets a video screenshot of the specified observation point using the connection ID.
+   * 将指定音效预加载到频道中。
    *
-   * This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path.
+   * 自从 自 v4.6.2 版本新增。 每次调用该方法时，只能将一个音效文件预加载到内存中。如果需要预加载多个音效文件，请多次调用该方法。预加载完成后，可以调用 playEffect 播放预加载的音效，或调用 playAllEffects 播放所有预加载的音效。
+   *  为确保使用体验流畅，音效文件的大小不应超过限制。
+   *  声网建议在加入频道前调用该方法。
+   *  如果在调用 playEffectEx 前已调用 preloadEffectEx ，则 playEffectEx 执行后不会关闭文件资源。下次调用 playEffectEx 时会直接从头开始播放。
+   *  如果在调用 playEffectEx 前未调用 preloadEffectEx ，则 playEffectEx 执行后会销毁资源。下次调用 playEffectEx 时会尝试重新打开文件并从头开始播放。
    *
-   * @param connection The connection information. See RtcConnection.
-   * @param uid The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
-   * @param config The configuration of the snaptshot. See SnapshotConfig.
+   * @param connection 连接信息。详见 RtcConnection 。
+   * @param soundId 音效 ID。
+   * @param filePath 本地文件的绝对路径或在线文件的 URL。支持的音频格式包括：mp3、mp4、m4a、aac、3gp、mkv 和 wav。
+   * @param startPos 音效文件的播放起始位置（单位为毫秒）。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   */
+  abstract preloadEffectEx(
+    connection: RtcConnection,
+    soundId: number,
+    filePath: string,
+    startPos?: number
+  ): number;
+
+  /**
+   * 在频道中播放指定音效。
+   *
+   * 自从 自 v4.6.2 版本新增。 你可以调用该方法在频道内向所有用户播放指定音效。每次调用该方法只能播放一个音效。若需同时播放多个音效，请使用不同的 soundId 和 filePath 多次调用该方法。你还可以设置是否在频道中发布该音效。
+   *  声网建议不要同时播放超过三个音效。
+   *  该方法中的音效 ID 和文件路径必须与 preloadEffectEx 方法中的保持一致。
+   *  如果在调用 playEffectEx 之前调用了 preloadEffectEx ， playEffectEx 执行后不会关闭文件资源。下次调用 playEffectEx 时会直接从头开始播放。
+   *  如果在调用 playEffectEx 之前未调用 preloadEffectEx ， playEffectEx 执行后会销毁资源。下次调用 playEffectEx 时会尝试重新打开文件并从头播放。
+   *
+   * @param connection RtcConnection 对象，详见 RtcConnection 。
+   * @param soundId 音效 ID。
+   * @param filePath 本地文件的绝对路径或在线文件的 URL。支持的音频格式包括 mp3、mp4、m4a、aac、3gp、mkv 和 wav。
+   * @param loopCount 音效的循环播放次数： -1 ：无限循环，直到调用 stopEffect 或 stopAllEffects 。 0 ：播放一次。 1 ：播放两次。
+   * @param pitch 音效的音调。取值范围为 0.5 到 2.0，默认值为 1.0（原始音调）。数值越小，音调越低。
+   * @param pan 音效的空间位置。取值范围为 -1.0 到 1.0： -1.0 ：音效从用户左侧传来。 0.0 ：音效从用户正前方传来。 1.0 ：音效从用户右侧传来。
+   * @param gain 音效的音量。取值范围为 0 到 100，默认值为 100（原始音量）。数值越小，音量越低。
+   * @param publish 是否在频道中发布该音效： true ：在频道中发布该音效。 false ：（默认）不在频道中发布该音效。
+   * @param startPos 音效文件的播放起始位置，单位为毫秒。
+   *
+   * @returns
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   */
+  abstract playEffectEx(
+    connection: RtcConnection,
+    soundId: number,
+    filePath: string,
+    loopCount: number,
+    pitch: number,
+    pan: number,
+    gain: number,
+    publish?: boolean,
+    startPos?: number
+  ): number;
+
+  /**
+   * 使用连接 ID 获取指定观测位置的视频截图。
+   *
+   * 该方法用于对指定用户的视频流进行截图，生成一张 JPG 格式的图片，并保存至指定的路径。
+   *  该方法是异步操作，调用返回时 SDK 并没有真正获取截图。
+   *  该方法用于本地视频截图时，是对 ChannelMediaOptions 中指定发布的视频流进行截图。
+   *  如果用户的视频经过前处理，例如，添加了水印或美颜，生成的截图会包含前处理效果。
+   *
+   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param uid 用户 ID。如果要对本地用户的视频截图，则设为 0。
+   * @param config 截图设置，详见 SnapshotConfig 。
+   *
+   * @returns
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract takeSnapshotWithConfigEx(
     connection: RtcConnection,
     uid: number,
     config: SnapshotConfig
+  ): number;
+
+  /**
+   * 向本地视频添加水印图像。
+   *
+   * 自从 自 v4.6.2 版本新增。
+   *
+   * @param config 水印配置，详见 WatermarkConfig 。
+   * @param connection RtcConnection 对象，详见 RtcConnection 。
+   *
+   * @returns
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   */
+  abstract addVideoWatermarkWithConfigEx(
+    config: WatermarkConfig,
+    connection: RtcConnection
   ): number;
 }

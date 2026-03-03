@@ -1,11 +1,17 @@
 ﻿import { createCheckers } from 'ts-interface-checker';
 
-import { AgoraEnv, logError, parseIntPtr2Number } from '../../Utils';
+import { AgoraElectronBridge } from '../../Private/internal/IrisApiEngine';
+import { AgoraEnv, logDebug, logError, parseIntPtr2Number } from '../../Utils';
 let RendererManager: any;
-if (typeof window !== 'undefined') {
+let CapabilityManager: any;
+//@ts-ignore
+if (process.type === 'renderer') {
   RendererManager = require('../../Renderer/RendererManager').RendererManager;
+  CapabilityManager =
+    require('../../Renderer/CapabilityManager').CapabilityManager;
 } else {
   RendererManager = undefined;
+  CapabilityManager = undefined;
 }
 import {
   AudioEncodedFrameObserverConfig,
@@ -73,6 +79,14 @@ const checkers = createCheckers(
   IAgoraRtcEngineTI
 );
 
+interface PerformanceCounter {
+  counters: {
+    counterId: number;
+    value: number;
+  }[];
+  uid: number;
+}
+
 export class RtcEngineExInternal extends IRtcEngineExImpl {
   static _event_handlers: IRtcEngineEventHandler[] = [];
   static _direct_cdn_streaming_event_handler: IDirectCdnStreamingEventHandler[] =
@@ -91,23 +105,95 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     new LocalSpatialAudioEngineInternal();
   private _h265_transcoder: IH265Transcoder = new H265TranscoderInternal();
 
+  private performanceInterval: number = 6000;
+  private performanceIntervalFunc: any;
+  private VideoRemoteRenderMeanFpsCounterId: number = 537;
+  private VideoRemoteRenderDrawCostCounterId: number = 576;
+  private VideoLocalRenderMeanFpsCounterId: number = 526;
+  private VideoLocalRenderDrawCostCounterId: number = 577;
+
   override initialize(context: RtcEngineContext): number {
+    const ret = super.initialize(context);
+    callIrisApi.call(this, 'RtcEngine_setAppType', {
+      appType: 3,
+    });
     if (AgoraEnv.webEnvReady) {
       // @ts-ignore
       window.AgoraEnv = AgoraEnv;
       if (AgoraEnv.AgoraRendererManager === undefined && RendererManager) {
         AgoraEnv.AgoraRendererManager = new RendererManager();
       }
+      if (AgoraEnv.CapabilityManager === undefined && CapabilityManager) {
+        AgoraEnv.CapabilityManager = new CapabilityManager();
+      }
+      if (AgoraEnv.enableArgusCounters) {
+        try {
+          this.performanceIntervalFunc = setInterval(() => {
+            let rendererManager = AgoraEnv.AgoraRendererManager;
+            let counters: {
+              data: PerformanceCounter[];
+              connection: RtcConnection;
+            }[] = [];
+            if (rendererManager) {
+              rendererManager.getRendererCaches().forEach((cache) => {
+                const isRemote =
+                  cache.callbackContext.sourceType ===
+                  VideoSourceType.VideoSourceRemote;
+                if (
+                  cache.callbackContext.connection?.channelId &&
+                  (cache.callbackContext.connection?.localUid || isRemote)
+                ) {
+                  let counter = counters.find(
+                    (counter) =>
+                      counter.connection.channelId ===
+                        cache.callbackContext.connection.channelId &&
+                      counter.connection.localUid ===
+                        cache.callbackContext.connection.localUid
+                  );
+                  let data: PerformanceCounter = {
+                    counters: [
+                      {
+                        counterId: isRemote
+                          ? this.VideoRemoteRenderMeanFpsCounterId
+                          : this.VideoLocalRenderMeanFpsCounterId,
+                        value: Math.floor(cache.actualFps),
+                      },
+                      {
+                        counterId: isRemote
+                          ? this.VideoRemoteRenderDrawCostCounterId
+                          : this.VideoLocalRenderDrawCostCounterId,
+                        value: Math.floor(cache.avgFrameInterval),
+                      },
+                    ],
+                    uid: isRemote ? cache.cacheContext.uid! : 0,
+                  };
+                  if (!counter) {
+                    counters.push({
+                      data: [data],
+                      connection: cache.callbackContext.connection,
+                    });
+                  } else {
+                    counter.data.push(data);
+                  }
+                }
+              });
+            }
+            counters.forEach((counter) => {
+              this.setParameters(
+                JSON.stringify({ 'rtc.report.argus_counters': counter })
+              );
+            });
+          }, this.performanceInterval);
+        } catch (error) {
+          logDebug('argus counters report error', error);
+        }
+      }
     }
-    const ret = super.initialize(context);
-    callIrisApi.call(this, 'RtcEngine_setAppType', {
-      appType: 3,
-    });
     return ret;
   }
 
   override release(sync: boolean = false) {
-    AgoraEnv.AgoraElectronBridge.ReleaseRenderer();
+    AgoraElectronBridge.ReleaseRenderer();
     AgoraEnv.AgoraRendererManager?.release();
     AgoraEnv.AgoraRendererManager = undefined;
     this._media_engine.release();
@@ -127,6 +213,12 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     MediaRecorderInternal._observers.clear();
     this._h265_transcoder.release();
     this.removeAllListeners();
+    AgoraEnv.CapabilityManager?.release();
+    AgoraEnv.CapabilityManager = undefined;
+    if (this.performanceIntervalFunc) {
+      clearInterval(this.performanceIntervalFunc);
+      this.performanceIntervalFunc = undefined;
+    }
     super.release(sync);
   }
 
@@ -502,7 +594,7 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
         if (!value.thumbImage?.buffer || !value.thumbImage?.length) {
           value.thumbImage!.buffer = undefined;
         } else {
-          value.thumbImage!.buffer = AgoraEnv.AgoraElectronBridge.GetBuffer(
+          value.thumbImage!.buffer = AgoraElectronBridge.GetBuffer(
             value.thumbImage!.buffer as unknown as number,
             value.thumbImage.length!
           );
@@ -510,7 +602,7 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
         if (!value.iconImage?.buffer || !value.iconImage?.length) {
           value.iconImage!.buffer = undefined;
         } else {
-          value.iconImage.buffer = AgoraEnv.AgoraElectronBridge.GetBuffer(
+          value.iconImage.buffer = AgoraElectronBridge.GetBuffer(
             value.iconImage!.buffer as unknown as number,
             value.iconImage.length!
           );

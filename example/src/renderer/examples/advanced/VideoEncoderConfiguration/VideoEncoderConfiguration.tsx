@@ -1,3 +1,4 @@
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -12,10 +13,7 @@ import {
   VideoModulePosition,
   VideoSourceType,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import { Checkbox, List } from 'antd';
-import { CheckboxValueType } from 'antd/lib/checkbox/Group';
-import React, { ReactElement } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseComponent,
@@ -27,7 +25,6 @@ import {
   AgoraDropdown,
   AgoraList,
   AgoraStyle,
-  AgoraSwitch,
   AgoraTextInput,
   AgoraView,
 } from '../../../components/ui';
@@ -48,9 +45,7 @@ interface State extends BaseVideoComponentState {
   mirrorMode: VideoMirrorModeType;
   encodingPreference: EncodingPreference;
   compressionPreference: CompressionPreference;
-  encodeAlpha: boolean;
   video_module_position: VideoModulePosition;
-  checked_video_module_position_list: CheckboxValueType[];
 }
 
 export default class VideoEncoderConfiguration
@@ -79,11 +74,7 @@ export default class VideoEncoderConfiguration
       mirrorMode: VideoMirrorModeType.VideoMirrorModeDisabled,
       encodingPreference: EncodingPreference.PreferAuto,
       compressionPreference: CompressionPreference.PreferQuality,
-      encodeAlpha: false,
       video_module_position: VideoModulePosition.PositionPreEncoder,
-      checked_video_module_position_list: [
-        VideoModulePosition.PositionPreEncoder,
-      ],
     };
   }
 
@@ -161,7 +152,6 @@ export default class VideoEncoderConfiguration
       orientationMode,
       degradationPreference,
       mirrorMode,
-      encodeAlpha,
       encodingPreference,
       compressionPreference,
     } = this.state;
@@ -180,7 +170,6 @@ export default class VideoEncoderConfiguration
       advanceOptions: {
         encodingPreference,
         compressionPreference,
-        encodeAlpha,
       },
     });
   };
@@ -189,7 +178,10 @@ export default class VideoEncoderConfiguration
     this.engine?.startPreview();
     this.setState({ startPreview: true });
     console.log(
-      `startPreview with position:${this.state.video_module_position}`
+      `startPreview with position:${
+        this.state.video_module_position |
+        VideoModulePosition.PositionPreRenderer
+      }`
     );
   };
 
@@ -224,7 +216,8 @@ export default class VideoEncoderConfiguration
       <>
         {!!startPreview || joinChannelSuccess
           ? this.renderUser({
-              position: video_module_position,
+              position:
+                video_module_position | VideoModulePosition.PositionPreRenderer,
               sourceType: VideoSourceType.VideoSourceCamera,
             })
           : undefined}
@@ -234,6 +227,9 @@ export default class VideoEncoderConfiguration
             renderItem={(item) =>
               this.renderUser({
                 uid: item,
+                position:
+                  video_module_position |
+                  VideoModulePosition.PositionPreRenderer,
                 sourceType: VideoSourceType.VideoSourceRemote,
               })
             }
@@ -246,50 +242,32 @@ export default class VideoEncoderConfiguration
   protected renderConfiguration(): ReactElement | undefined {
     const {
       startPreview,
-      checked_video_module_position_list,
       codecType,
       orientationMode,
       renderMode,
       degradationPreference,
       mirrorMode,
       encodingPreference,
-      encodeAlpha,
       compressionPreference,
+      joinChannelSuccess,
+      video_module_position,
     } = this.state;
     return (
       <>
         <>
-          <p>local video module position</p>
-          <Checkbox.Group
-            style={{ width: '100%' }}
-            value={checked_video_module_position_list}
-            disabled={startPreview}
-            onChange={(checkedValues) => {
-              let result = 0;
-              checkedValues.forEach((value: CheckboxValueType) => {
-                result |= value as number;
-              });
+          <AgoraDropdown
+            enabled={!startPreview && !joinChannelSuccess}
+            title={'local video module position'}
+            items={enumToItems(VideoModulePosition).filter(
+              (item) => item.value !== VideoModulePosition.PositionPreRenderer
+            )}
+            value={video_module_position}
+            onValueChange={(checkedValues) => {
               this.setState({
-                checked_video_module_position_list: checkedValues,
-                video_module_position: result,
+                video_module_position: checkedValues,
               });
             }}
-          >
-            <List
-              itemLayout="horizontal"
-              dataSource={enumToItems(VideoModulePosition)}
-              renderItem={(item) =>
-                item.value !== VideoModulePosition.PositionPreRenderer ? (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={<Checkbox value={item.value} />}
-                      title={item.label}
-                    />
-                  </List.Item>
-                ) : undefined
-              }
-            />
-          </Checkbox.Group>
+          />
         </>
         <AgoraDropdown
           title={'codecType'}
@@ -404,13 +382,6 @@ export default class VideoEncoderConfiguration
           value={compressionPreference}
           onValueChange={(value) => {
             this.setState({ compressionPreference: value });
-          }}
-        />
-        <AgoraSwitch
-          title={'encodeAlpha'}
-          value={encodeAlpha}
-          onValueChange={(value) => {
-            this.setState({ encodeAlpha: value });
           }}
         />
         <AgoraButton

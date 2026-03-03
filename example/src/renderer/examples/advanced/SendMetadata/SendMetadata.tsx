@@ -1,5 +1,6 @@
 import { Buffer } from 'buffer';
 
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -9,8 +10,7 @@ import {
   MetadataType,
   VideoSourceType,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import React, { ReactElement } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseComponent,

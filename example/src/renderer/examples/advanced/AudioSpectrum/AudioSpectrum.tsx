@@ -1,12 +1,3 @@
-import {
-  AudioSpectrumData,
-  ChannelProfileType,
-  ClientRoleType,
-  IAudioSpectrumObserver,
-  IRtcEngineEventHandler,
-  UserAudioSpectrumInfo,
-  createAgoraRtcEngine,
-} from 'agora-electron-sdk';
 import React, { ReactElement } from 'react';
 import {
   CartesianGrid,
@@ -15,6 +6,15 @@ import {
   ResponsiveContainer,
   YAxis,
 } from 'recharts';
+import {
+  AudioSpectrumData,
+  ChannelProfileType,
+  ClientRoleType,
+  IAudioSpectrumObserver,
+  IRtcEngineEventHandler,
+  UserAudioSpectrumInfo,
+  createAgoraRtcEngine,
+} from 'shengwang-electron-sdk';
 
 import {
   BaseAudioComponentState,

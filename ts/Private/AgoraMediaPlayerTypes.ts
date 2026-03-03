@@ -1,39 +1,39 @@
 import './extension/AgoraMediaPlayerTypesExtension';
 
 /**
- * The playback state.
+ * 播放器的状态。
  */
 export enum MediaPlayerState {
   /**
-   * 0: The default state. The media player returns this state code before you open the media resource or after you stop the playback.
+   * 0: 默认状态。播放器会在你打开媒体文件之前和结束播放之后返回该状态码。
    */
   PlayerStateIdle = 0,
   /**
-   * 1: Opening the media resource.
+   * 1: 正在打开媒体文件。
    */
   PlayerStateOpening = 1,
   /**
-   * 2: Opens the media resource successfully.
+   * 2: 成功打开媒体文件。
    */
   PlayerStateOpenCompleted = 2,
   /**
-   * 3: The media resource is playing.
+   * 3: 正在播放。
    */
   PlayerStatePlaying = 3,
   /**
-   * 4: Pauses the playback.
+   * 4: 暂停播放。
    */
   PlayerStatePaused = 4,
   /**
-   * 5: The playback is complete.
+   * 5: 播放完毕。
    */
   PlayerStatePlaybackCompleted = 5,
   /**
-   * 6: The loop is complete.
+   * 6: 循环播放已结束。
    */
   PlayerStatePlaybackAllLoopsCompleted = 6,
   /**
-   * 7: The playback stops.
+   * 7: 播放已停止。
    */
   PlayerStateStopped = 7,
   /**
@@ -65,73 +65,73 @@ export enum MediaPlayerState {
    */
   PlayerStateSetTrackInternal = 56,
   /**
-   * 100: The media player fails to play the media resource.
+   * 100: 播放失败。
    */
   PlayerStateFailed = 100,
 }
 
 /**
- * Reasons for the changes in the media player status.
+ * 播放器状态改变的原因。
  */
 export enum MediaPlayerReason {
   /**
-   * 0: No error.
+   * 0: 没有错误。
    */
   PlayerReasonNone = 0,
   /**
-   * -1: Invalid arguments.
+   * -1: 不正确的参数。
    */
   PlayerReasonInvalidArguments = -1,
   /**
-   * -2: Internal error.
+   * -2: 内部错误。
    */
   PlayerReasonInternal = -2,
   /**
-   * -3: No resource.
+   * -3: 没有 resource。
    */
   PlayerReasonNoResource = -3,
   /**
-   * -4: Invalid media resource.
+   * -4: 无效的 resource。
    */
   PlayerReasonInvalidMediaSource = -4,
   /**
-   * -5: The media stream type is unknown.
+   * -5: 未知的媒体流类型。
    */
   PlayerReasonUnknownStreamType = -5,
   /**
-   * -6: The object is not initialized.
+   * -6: 对象没有初始化。
    */
   PlayerReasonObjNotInitialized = -6,
   /**
-   * -7: The codec is not supported.
+   * -7: 解码器不支持该 codec。
    */
   PlayerReasonCodecNotSupported = -7,
   /**
-   * -8: Invalid renderer.
+   * -8: 无效的 renderer。
    */
   PlayerReasonVideoRenderFailed = -8,
   /**
-   * -9: An error with the internal state of the player occurs.
+   * -9: 播放器内部状态错误。
    */
   PlayerReasonInvalidState = -9,
   /**
-   * -10: The URL of the media resource cannot be found.
+   * -10: 未找到该 URL。
    */
   PlayerReasonUrlNotFound = -10,
   /**
-   * -11: Invalid connection between the player and the Agora Server.
+   * -11: 播放器与声网服务器的连接无效。
    */
   PlayerReasonInvalidConnectionState = -11,
   /**
-   * -12: The playback buffer is insufficient.
+   * -12: 播放缓冲区数据不足。
    */
   PlayerReasonSrcBufferUnderflow = -12,
   /**
-   * -13: The playback is interrupted.
+   * -13: 播放被异常打断而结束。
    */
   PlayerReasonInterrupted = -13,
   /**
-   * -14: The SDK does not support the method being called.
+   * -14: SDK 不支持的接口调用。
    */
   PlayerReasonNotSupported = -14,
   /**
@@ -143,91 +143,91 @@ export enum MediaPlayerReason {
    */
   PlayerReasonIpExpired = -16,
   /**
-   * -17: An unknown error.
+   * -17：未知错误。
    */
   PlayerReasonUnknown = -17,
 }
 
 /**
- * The type of the media stream.
+ * 媒体流的类型。
  */
 export enum MediaStreamType {
   /**
-   * 0: The type is unknown.
+   * 0: 未知类型。
    */
   StreamTypeUnknown = 0,
   /**
-   * 1: The video stream.
+   * 1: 视频流。
    */
   StreamTypeVideo = 1,
   /**
-   * 2: The audio stream.
+   * 2: 音频流。
    */
   StreamTypeAudio = 2,
   /**
-   * 3: The subtitle stream.
+   * 3: 字幕流。
    */
   StreamTypeSubtitle = 3,
 }
 
 /**
- * Media player events.
+ * 播放器事件。
  */
 export enum MediaPlayerEvent {
   /**
-   * 0: The player begins to seek to a new playback position.
+   * 0: 开始定位。
    */
   PlayerEventSeekBegin = 0,
   /**
-   * 1: The player finishes seeking to a new playback position.
+   * 1: 完成定位。
    */
   PlayerEventSeekComplete = 1,
   /**
-   * 2: An error occurs when seeking to a new playback position.
+   * 2: 定位出错。
    */
   PlayerEventSeekError = 2,
   /**
-   * 5: The audio track used by the player has been changed.
+   * 5: 当前音轨发生改变。
    */
   PlayerEventAudioTrackChanged = 5,
   /**
-   * 6: The currently buffered data is not enough to support playback.
+   * 6: 当前缓冲的数据不足以支持播放。
    */
   PlayerEventBufferLow = 6,
   /**
-   * 7: The currently buffered data is just enough to support playback.
+   * 7: 当前缓冲的数据刚好能支持播放。
    */
   PlayerEventBufferRecover = 7,
   /**
-   * 8: The audio or video playback freezes.
+   * 8: 音频或视频出现卡顿。
    */
   PlayerEventFreezeStart = 8,
   /**
-   * 9: The audio or video playback resumes without freezing.
+   * 9: 音频和视频均停止卡顿。
    */
   PlayerEventFreezeStop = 9,
   /**
-   * 10: The player starts switching the media resource.
+   * 10: 开始切换媒体资源。
    */
   PlayerEventSwitchBegin = 10,
   /**
-   * 11: Media resource switching is complete.
+   * 11: 媒体资源切换完成。
    */
   PlayerEventSwitchComplete = 11,
   /**
-   * 12: Media resource switching error.
+   * 12: 媒体资源切换出错。
    */
   PlayerEventSwitchError = 12,
   /**
-   * 13: The first video frame is rendered.
+   * 13: 视频首帧出图。
    */
   PlayerEventFirstDisplayed = 13,
   /**
-   * 14: The cached media files reach the limit in number.
+   * 14：达到可缓存文件的数量上限。
    */
   PlayerEventReachCacheFileMaxCount = 14,
   /**
-   * 15: The cached media files reach the limit in aggregate storage space.
+   * 15：达到可缓存文件的大小上限。
    */
   PlayerEventReachCacheFileMaxSize = 15,
   /**
@@ -242,154 +242,158 @@ export enum MediaPlayerEvent {
    * @ignore
    */
   PlayerEventTryOpenFailed = 18,
+  /**
+   * @ignore
+   */
+  PlayerEventHttpRedirect = 19,
 }
 
 /**
- * Events that occur when media resources are preloaded.
+ * 预加载媒体资源时发生的事件。
  */
 export enum PlayerPreloadEvent {
   /**
-   * 0: Starts preloading media resources.
+   * 0: 开始预加载媒体资源。
    */
   PlayerPreloadEventBegin = 0,
   /**
-   * 1: Preloading media resources is complete.
+   * 1: 预加载媒体资源完成。
    */
   PlayerPreloadEventComplete = 1,
   /**
-   * 2: An error occurs when preloading media resources.
+   * 2: 预加载媒体资源出错。
    */
   PlayerPreloadEventError = 2,
 }
 
 /**
- * The detailed information of the media stream.
+ * 播放器媒体流的所有信息。
  */
 export class PlayerStreamInfo {
   /**
-   * The index of the media stream.
+   * 媒体流的索引值。
    */
   streamIndex?: number;
   /**
-   * The type of the media stream. See MediaStreamType.
+   * 此条媒体流的类型。详见 MediaStreamType 。
    */
   streamType?: MediaStreamType;
   /**
-   * The codec of the media stream.
+   * 此条媒体流的编码规格。
    */
   codecName?: string;
   /**
-   * The language of the media stream.
+   * 此条媒体流的语言。
    */
   language?: string;
   /**
-   * This parameter only takes effect for video streams, and indicates the video frame rate (fps).
+   * 该参数仅对视频流生效，表示视频帧率 (fps)。
    */
   videoFrameRate?: number;
   /**
-   * This parameter only takes effect for video streams, and indicates the video bitrate (bps).
+   * 该参数仅对视频流生效，表示视频码率 (bps)。
    */
   videoBitRate?: number;
   /**
-   * This parameter only takes effect for video streams, and indicates the video width (pixel).
+   * 该参数仅对视频流生效，表示视频宽度 (px)。
    */
   videoWidth?: number;
   /**
-   * This parameter only takes effect for video streams, and indicates the video height (pixel).
+   * 该参数仅对视频流生效，表示视频高度 (px)。
    */
   videoHeight?: number;
   /**
-   * This parameter only takes effect for video streams, and indicates the video rotation angle.
+   * 该参数仅对视频流生效，表示旋转角度。
    */
   videoRotation?: number;
   /**
-   * This parameter only takes effect for audio streams, and indicates the audio sample rate (Hz).
+   * 该参数仅对音频流生效，表示音频采样率 (Hz)。
    */
   audioSampleRate?: number;
   /**
-   * This parameter only takes effect for audio streams, and indicates the audio channel number.
+   * 该参数仅对音频流生效，表示声道数。
    */
   audioChannels?: number;
   /**
-   * This parameter only takes effect for audio streams, and indicates the bit number of each audio sample.
+   * 该参数仅对音频流生效，表示每个音频采样点的位数 (bit)。
    */
   audioBitsPerSample?: number;
   /**
-   * The total duration (ms) of the media stream.
+   * 媒体流的时长（毫秒）。
    */
   duration?: number;
 }
 
 /**
- * Information about the video bitrate of the media resource being played.
+ * 媒体资源播放时的视频码率相关信息。
  */
 export class SrcInfo {
   /**
-   * The video bitrate (Kbps) of the media resource being played.
+   * 媒体资源播放时的视频码率（Kbps）。
    */
   bitrateInKbps?: number;
   /**
-   * The name of the media resource.
+   * 媒体资源的名字。
    */
   name?: string;
 }
 
 /**
- * The type of media metadata.
+ * 媒体附属信息数据类型。
  */
 export enum MediaPlayerMetadataType {
   /**
-   * 0: The type is unknown.
+   * 0: 未知类型。
    */
   PlayerMetadataTypeUnknown = 0,
   /**
-   * 1: The type is SEI.
+   * 1: SEI （补充增强信息）类型。
    */
   PlayerMetadataTypeSei = 1,
 }
 
 /**
- * Statistics about the media files being cached.
+ * 缓存文件的统计数据。
  */
 export class CacheStatistics {
   /**
-   * The size (bytes) of the media file being played.
+   * 本次播放的媒体文件的大小，单位为字节。
    */
   fileSize?: number;
   /**
-   * The size (bytes) of the media file that you want to cache.
+   * 本次播放的媒体文件已缓存的数据大小，单位为字节。
    */
   cacheSize?: number;
   /**
-   * The size (bytes) of the media file that has been downloaded.
+   * 本次播放已下载的媒体文件大小，单位为字节。
    */
   downloadSize?: number;
 }
 
 /**
- * The information of the media file being played.
+ * 当前播放的媒体资源的相关信息。
  */
 export class PlayerPlaybackStats {
   /**
-   * The frame rate (fps) of the video.
+   * 视频帧率，单位为 fps。
    */
   videoFps?: number;
   /**
-   * The bitrate (kbps) of the video.
+   * 视频码率，单位为 kbps。
    */
   videoBitrateInKbps?: number;
   /**
-   * The bitrate (kbps) of the audio.
+   * 音频码率，单位为 kbps。
    */
   audioBitrateInKbps?: number;
   /**
-   * The total bitrate (kbps) of the media stream.
+   * 媒体流的总码率，单位为 kbps。
    */
   totalBitrateInKbps?: number;
 }
 
 /**
- * Information related to the media player.
+ * 媒体播放器相关信息。
  */
 export class PlayerUpdatedInfo {
   /**
@@ -397,68 +401,67 @@ export class PlayerUpdatedInfo {
    */
   internalPlayerUuid?: string;
   /**
-   * The ID of a deivce.
+   * 设备 ID，标识一个设备。
    */
   deviceId?: string;
   /**
-   * Height (pixel) of the video.
+   * 视频高度 (pixel)。
    */
   videoHeight?: number;
   /**
-   * Width (pixel) of the video.
+   * 视频宽度 (pixel)。
    */
   videoWidth?: number;
   /**
-   * Audio sample rate (Hz).
+   * 音频采样率 (Hz)。
    */
   audioSampleRate?: number;
   /**
-   * The number of audio channels.
+   * 声道数。
    */
   audioChannels?: number;
   /**
-   * The number of bits per audio sample point.
+   * 每个音频采样点的位数 (bit)。
    */
   audioBitsPerSample?: number;
 }
 
 /**
- * Information related to the media file to be played and the playback scenario configurations.
+ * 需播放的媒体文件的相关信息及播放设置。
  */
 export class MediaSource {
   /**
-   * The URL of the media file to be played.
+   * 需要播放的媒体资源的 URL。
    */
   url?: string;
   /**
-   * The URI (Uniform Resource Identifier) of the media file.
+   * 媒体文件的 URI（Uniform Resource Identifier），可用于标识媒体文件。
    */
   uri?: string;
   /**
-   * The starting position (ms) for playback. The default value is 0.
+   * 设置起始播放位置 (毫秒)，默认值为 0。
    */
   startPos?: number;
   /**
-   * Whether to enable autoplay once the media file is opened: true : (Default) Yes. false : No. If autoplay is disabled, you need to call the play method to play a media file after it is opened.
+   * 如果你设置关闭自动播放，打开媒体文件后，请调用 play 方法来播放媒体文件。 打开媒体文件后，是否开启自动播放： true ：（默认）开启自动播放。 false ：关闭自动播放。
    */
   autoPlay?: boolean;
   /**
-   * Whether to cache the media file when it is being played: true :Enables caching. false : (Default) Disables caching.
-   *  Agora only supports caching on-demand audio and video streams that are not transmitted in HLS protocol.
-   *  If you need to enable caching, pass in a value to uri; otherwise, caching is based on the url of the media file.
-   *  If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics.
+   * SDK 目前仅支持缓存点播流，但不支持缓存通过 HLS 协议传输的点播流。
+   *  缓存前，请向 uri 传值，否则播放器会以媒体文件的 url 作为缓存索引。
+   *  开启实时缓存后，播放器会预先缓存当前正在播放的媒体文件的部分数据到本地，当你下次播放该文件时播放器会直接从缓存中加载数据，可节省网络流量。当前缓存的媒体文件的相关统计数据会在媒体文件开始播放后每秒更新一次，详见 CacheStatistics 。 此次播放是否开启实时缓存功能： true ：开启实时缓存。 false ：（默认）关闭实时缓存。
    */
   enableCache?: boolean;
   /**
-   * Whether to allow the selection of different audio tracks when playing this media file: true : Allow to select different audio tracks. false : (Default) Do not allow to select different audio tracks. If you need to set different audio tracks for local playback and publishing to the channel, you need to set this parameter to true, and then call the selectMultiAudioTrack method to select the audio track.
+   * 此次播放是否允许选择不同音轨： true ：允许选择不同音轨。 false ：（默认）不允许选择不同音轨。 如果你在本地播放和发布音频至远端时，需要设置不同的音轨，你需要将该参数设为 true ，然后再调用 selectMultiAudioTrack 方法来设置音轨。
    */
   enableMultiAudioTrack?: boolean;
   /**
-   * Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service: true : The media resource to be played is a live or on-demand video distributed through Media Broadcast service. false : (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service. If you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as true; otherwise, you don't need to set the isAgoraSource parameter.
+   * 如果你需要打开的媒体资源为声网融合 CDN 分发的直播流或点播流，请向 url 传入直播或点播流的 URL 并将 isAgoraSource 设置为 true ，否则无需设置 isAgoraSource 。 打开的媒体资源是否为通过声网融合 CDN 分发的直播或点播流： true ：打开的媒体资源是声网融合 CDN 分发的直播或点播流。 false ：（默认）打开的媒体资源不是声网融合 CDN 分发的直播或点播流。
    */
   isAgoraSource?: boolean;
   /**
-   * Whether the media resource to be opened is a live stream: true : The media resource is a live stream. false : (Default) The media resource is not a live stream. If the media resource you want to open is a live stream, Agora recommends that you set this parameter as true so that the live stream can be loaded more quickly. If the media resource you open is not a live stream, but you set isLiveSource as true, the media resource is not to be loaded more quickly.
+   * 仅当打开的媒体资源为直播流时，将 isLiveSource 设置为 true 后才可加快媒体资源的打开速度。 打开的媒体资源是否为直播流： true ：直播流。 false ：（默认）非直播流。 如果你打开的媒体资源为直播流，建议你将该参数设置为 true ，可加快打开直播流的速度。
    */
   isLiveSource?: boolean;
 }

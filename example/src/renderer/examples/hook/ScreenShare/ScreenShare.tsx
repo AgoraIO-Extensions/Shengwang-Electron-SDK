@@ -1,3 +1,6 @@
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+
+import { SketchPicker } from 'react-color';
 import {
   ClientRoleType,
   LocalVideoStreamReason,
@@ -9,10 +12,7 @@ import {
   ScreenCaptureSourceType,
   UserOfflineReasonType,
   VideoSourceType,
-} from 'agora-electron-sdk';
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
-
-import { SketchPicker } from 'react-color';
+} from 'shengwang-electron-sdk';
 
 import {
   AgoraButton,

@@ -2,127 +2,127 @@ import './extension/AgoraMediaBaseExtension';
 import { EncodedVideoFrameInfo } from './AgoraBase';
 
 /**
- * The context information of the extension.
+ * 插件上下文信息。
  */
 export class ExtensionContext {
   /**
-   * Whether the uid in ExtensionContext is valid: true : The uid is valid. false : The uid is invalid.
+   * ExtensionContext 中报告的 uid 是否有效： true ： uid 有效。 false ： uid 无效。
    */
   isValid?: boolean;
   /**
-   * The user ID. 0 represents a local user, while greater than 0 represents a remote user.
+   * 用户 ID。0 代表本地用户，大于 0 代表远端用户。
    */
   uid?: number;
   /**
-   * The name of the extension provider.
+   * 提供插件的服务商名称。
    */
   providerName?: string;
   /**
-   * The name of the extension.
+   * 插件的名称。
    */
   extensionName?: string;
 }
 
 /**
- * The type of the video source.
+ * 视频源的类型。
  */
 export enum VideoSourceType {
   /**
-   * 0: (Default) The primary camera.
+   * 0：（默认）视频源为第一个摄像头。
    */
   VideoSourceCameraPrimary = 0,
   /**
-   * 0: (Default) The primary camera.
+   * 0：（默认）视频源为第一个摄像头。
    */
   VideoSourceCamera = 0,
   /**
-   * 1: The secondary camera.
+   * 1：视频源为第二个摄像头。
    */
   VideoSourceCameraSecondary = 1,
   /**
-   * 2: The primary screen.
+   * 2：视频源为第一个屏幕。
    */
   VideoSourceScreenPrimary = 2,
   /**
-   * 2: The primary screen.
+   * 2：视频源为第一个屏幕。
    */
   VideoSourceScreen = 2,
   /**
-   * 3: The secondary screen.
+   * 3：视频源为第二个屏幕。
    */
   VideoSourceScreenSecondary = 3,
   /**
-   * 4: A custom video source.
+   * 4：自定义的视频源。
    */
   VideoSourceCustom = 4,
   /**
-   * 5: The media player.
+   * 5：视频源为媒体播放器。
    */
   VideoSourceMediaPlayer = 5,
   /**
-   * 6: One PNG image.
+   * 6：视频源为 PNG 图片。
    */
   VideoSourceRtcImagePng = 6,
   /**
-   * 7: One JPEG image.
+   * 7：视频源为 JPEG 图片。
    */
   VideoSourceRtcImageJpeg = 7,
   /**
-   * 8: One GIF image.
+   * 8：视频源为 GIF 图片。
    */
   VideoSourceRtcImageGif = 8,
   /**
-   * 9: One remote video acquired by the network.
+   * 9：视频源为网络获取的远端视频。
    */
   VideoSourceRemote = 9,
   /**
-   * 10: One transcoded video source.
+   * 10：转码后的视频源。
    */
   VideoSourceTranscoded = 10,
   /**
-   * 11: The third camera.
+   * 11：视频源为第三个摄像头。
    */
   VideoSourceCameraThird = 11,
   /**
-   * 12: The fourth camera.
+   * 12：视频源为第四个摄像头。
    */
   VideoSourceCameraFourth = 12,
   /**
-   * 13: The third screen.
+   * 13：视频源为第三个屏幕。
    */
   VideoSourceScreenThird = 13,
   /**
-   * 14: The fourth screen.
+   * 14：视频源为第四个屏幕。
    */
   VideoSourceScreenFourth = 14,
   /**
-   * @ignore
+   * 15：视频源为语音驱动插件处理后的视频。
    */
   VideoSourceSpeechDriven = 15,
   /**
-   * 100: An unknown video source.
+   * 100：未知的视频源。
    */
   VideoSourceUnknown = 100,
 }
 
 /**
- * The audio source type.
+ * 音频源类型。
  */
 export enum AudioSourceType {
   /**
-   * 0: (Default) Microphone.
+   * 0：（默认）麦克风。
    */
   AudioSourceMicrophone = 0,
   /**
-   * 1: Custom audio stream.
+   * 1：自定义采集到的音频流。
    */
   AudioSourceCustom = 1,
   /**
-   * 2: Media player.
+   * 2：媒体播放器。
    */
   AudioSourceMediaPlayer = 2,
   /**
-   * 3: System audio stream captured during screen sharing.
+   * 3：在屏幕共享时采集的系统音频流。
    */
   AudioSourceLoopbackRecording = 3,
   /**
@@ -130,69 +130,69 @@ export enum AudioSourceType {
    */
   AudioSourceMixedStream = 4,
   /**
-   * 5: Audio stream from a specified remote user.
+   * 5：指定远端用户的音频流。
    */
   AudioSourceRemoteUser = 5,
   /**
-   * 6: Mixed audio streams from all users in the current channel.
+   * 6：当前频道内所有音频流的合流。
    */
   AudioSourceRemoteChannel = 6,
   /**
-   * 100: An unknown audio source.
+   * 100：未知的音频源。
    */
   AudioSourceUnknown = 100,
 }
 
 /**
- * The type of the audio route.
+ * 音频路由的类型。
  */
 export enum AudioRoute {
   /**
-   * -1: The default audio route.
+   * -1: 使用默认的音频路由。
    */
   RouteDefault = -1,
   /**
-   * 0: Audio output routing is a headset with microphone.
+   * 0: 音频路由为带麦克风的耳机。
    */
   RouteHeadset = 0,
   /**
-   * 1: The audio route is an earpiece.
+   * 1: 音频路由为听筒。
    */
   RouteEarpiece = 1,
   /**
-   * 2: The audio route is a headset without a microphone.
+   * 2: 音频路由为不带麦克风的耳机。
    */
   RouteHeadsetnomic = 2,
   /**
-   * 3: The audio route is the speaker that comes with the device.
+   * 3: 音频路由为设备自带的扬声器。
    */
   RouteSpeakerphone = 3,
   /**
-   * 4: The audio route is an external speaker. (macOS only)
+   * 4: 音频路由为外接的扬声器。（仅适用于 macOS）
    */
   RouteLoudspeaker = 4,
   /**
-   * 5: The audio route is a Bluetooth device using the HFP protocol.
+   * 5: 音频路由为使用 HFP 协议的蓝牙设备。
    */
   RouteBluetoothDeviceHfp = 5,
   /**
-   * 6: The audio route is a USB peripheral device. (For macOS only)
+   * 6: 音频路由为 USB 外围设备。（仅适用于 macOS）
    */
   RouteUsb = 6,
   /**
-   * 7: The audio route is an HDMI peripheral device. (For macOS only)
+   * 7: 音频路由为 HDMI 外围设备。（仅适用于 macOS）
    */
   RouteHdmi = 7,
   /**
-   * 8: The audio route is a DisplayPort peripheral device. (For macOS only)
+   * 8: 音频路由为 DisplayPort 外围设备。（仅适用于 macOS）
    */
   RouteDisplayport = 8,
   /**
-   * 9: The audio route is Apple AirPlay. (For macOS only)
+   * 9: 音频路由为 Apple AirPlay。（仅适用于 macOS）
    */
   RouteAirplay = 9,
   /**
-   * 10: The audio route is a Bluetooth device using the A2DP protocol.
+   * 10: 音频路由为使用 A2DP 协议的蓝牙设备。
    */
   RouteBluetoothDeviceA2dp = 10,
 }
@@ -226,37 +226,37 @@ export class AudioParameters {
 }
 
 /**
- * The use mode of the audio data.
+ * 音频数据的使用模式。
  */
 export enum RawAudioFrameOpModeType {
   /**
-   * 0: Read-only mode, Users only read the data returned by the SDK without modifying anything. For example, when users acquire the data with the Agora SDK, then start the media push.
+   * 0: (默认) 只读模式，用户仅获取 SDK 返回的原始数据，不作任何修改。例如: 若用户通过 SDK 采集数据，自己进行旁路推流，则可以选择该模式。
    */
   RawAudioFrameOpModeReadOnly = 0,
   /**
-   * 2: Read and write mode, Users read the data returned by the SDK, modify it, and then play it. For example, when users have their own audio-effect processing module and perform some voice preprocessing, such as a voice change.
+   * 2: 读写模式, 用户修改 SDK 返回的原始视频，并返回给 SDK 进行编码传输。例如: 若用户自己有音效处理模块，且想要根据实际需要对数据进行前处理(例如变声)，则可以选择该模式。
    */
   RawAudioFrameOpModeReadWrite = 2,
 }
 
 /**
- * Media source type.
+ * 媒体源类型。
  */
 export enum MediaSourceType {
   /**
-   * 0: Audio playback device.
+   * 0: 音频播放设备。
    */
   AudioPlayoutSource = 0,
   /**
-   * 1: Audio capturing device.
+   * 1: 音频采集设备。
    */
   AudioRecordingSource = 1,
   /**
-   * 2: The primary camera.
+   * 2: 第一个摄像头
    */
   PrimaryCameraSource = 2,
   /**
-   * 3: A secondary camera.
+   * 3: 第二个摄像头。
    */
   SecondaryCameraSource = 3,
   /**
@@ -268,7 +268,7 @@ export enum MediaSourceType {
    */
   SecondaryScreenSource = 5,
   /**
-   * 6: Custom video source.
+   * 6: 自定义采集的视频源。
    */
   CustomVideoSource = 6,
   /**
@@ -296,89 +296,13 @@ export enum MediaSourceType {
    */
   TranscodedVideoSource = 12,
   /**
-   * @ignore
+   * 13: 视频源为语音驱动插件处理后的视频。
    */
   SpeechDrivenVideoSource = 13,
   /**
-   * 100: Unknown media source.
+   * 100: 未知媒体源。
    */
   UnknownMediaSource = 100,
-}
-
-/**
- * @ignore
- */
-export enum ContentInspectResult {
-  /**
-   * @ignore
-   */
-  ContentInspectNeutral = 1,
-  /**
-   * @ignore
-   */
-  ContentInspectSexy = 2,
-  /**
-   * @ignore
-   */
-  ContentInspectPorn = 3,
-}
-
-/**
- * The type of video content moderation module.
- */
-export enum ContentInspectType {
-  /**
-   * 0: (Default) This module has no actual function. Do not set type to this value.
-   */
-  ContentInspectInvalid = 0,
-  /**
-   * @ignore
-   */
-  ContentInspectModeration = 1,
-  /**
-   * 2: Video screenshot and upload via Agora self-developed extension. SDK takes screenshots of the video stream in the channel and uploads them.
-   */
-  ContentInspectSupervision = 2,
-  /**
-   * 3: Video screenshot and upload via extensions from Agora Extensions Marketplace. SDK uses video moderation extensions from Agora Extensions Marketplace to take screenshots of the video stream in the channel and uploads them.
-   */
-  ContentInspectImageModeration = 3,
-}
-
-/**
- * ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
- */
-export class ContentInspectModule {
-  /**
-   * Types of functional module. See ContentInspectType.
-   */
-  type?: ContentInspectType;
-  /**
-   * The frequency (s) of video screenshot and upload. The value should be set as larger than 0. The default value is 0, the SDK does not take screenshots. Agora recommends that you set the value as 10; you can also adjust it according to your business needs.
-   */
-  interval?: number;
-}
-
-/**
- * Screenshot and upload configuration.
- */
-export class ContentInspectConfig {
-  /**
-   * Additional information on the video content (maximum length: 1024 Bytes). The SDK sends the screenshots and additional information on the video content to the Agora server. Once the video screenshot and upload process is completed, the Agora server sends the additional information and the callback notification to your server.
-   */
-  extraInfo?: string;
-  /**
-   * @ignore
-   */
-  serverConfig?: string;
-  /**
-   * Functional module. See ContentInspectModule. A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32]. A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
-   */
-  modules?: ContentInspectModule[];
-  /**
-   * The number of functional modules, that is,the number of configured ContentInspectModule instances, must be the same as the number of instances configured in modules. The maximum number is 32.
-   */
-  moduleCount?: number;
 }
 
 /**
@@ -410,31 +334,35 @@ export class AudioEncodedFrameInfo {
 }
 
 /**
- * The parameters of the audio frame in PCM format.
+ * 外部 PCM 格式音频帧的信息。
  */
 export class AudioPcmFrame {
   /**
-   * The timestamp (ms) of the audio frame.
+   * 音频帧的时间戳 (ms)。
    */
   capture_timestamp?: number;
   /**
-   * The number of samples per channel in the audio frame.
+   * 每个声道的采样点数。
    */
   samples_per_channel_?: number;
   /**
-   * Audio sample rate (Hz).
+   * 音频采样率 (Hz)。
    */
   sample_rate_hz_?: number;
   /**
-   * The number of audio channels.
+   * 音频声道数。
    */
   num_channels_?: number;
   /**
-   * The number of bytes per sample.
+   * @ignore
+   */
+  audio_track_number_?: number;
+  /**
+   * 音频数据的字节数。
    */
   bytes_per_sample?: BytesPerSample;
   /**
-   * The audio frame.
+   * 音频帧数据。
    */
   data_?: number[];
   /**
@@ -444,37 +372,37 @@ export class AudioPcmFrame {
 }
 
 /**
- * The channel mode.
+ * 声道模式。
  */
 export enum AudioDualMonoMode {
   /**
-   * 0: Original mode.
+   * 0: 原始模式。
    */
   AudioDualMonoStereo = 0,
   /**
-   * 1: Left channel mode. This mode replaces the audio of the right channel with the audio of the left channel, which means the user can only hear the audio of the left channel.
+   * 1: 左声道模式。该模式用左声道的音频替换右声道的音频，即用户只能听到左声道的音频。
    */
   AudioDualMonoL = 1,
   /**
-   * 2: Right channel mode. This mode replaces the audio of the left channel with the audio of the right channel, which means the user can only hear the audio of the right channel.
+   * 2: 右声道模式。该模式用右声道的音频替换左声道的音频，即用户只能听到右声道的音频。
    */
   AudioDualMonoR = 2,
   /**
-   * 3: Mixed channel mode. This mode mixes the audio of the left channel and the right channel, which means the user can hear the audio of the left channel and the right channel at the same time.
+   * 3: 混合模式。该模式将左右声道的数据叠加，即用户能同时听到左声道和右声道的音频。
    */
   AudioDualMonoMix = 3,
 }
 
 /**
- * The video pixel format.
+ * 视频像素格式。
  */
 export enum VideoPixelFormat {
   /**
-   * 0: Raw video pixel format.
+   * 0: 原始视频像素格式。
    */
   VideoPixelDefault = 0,
   /**
-   * 1: The format is I420.
+   * 1: I420 格式。
    */
   VideoPixelI420 = 1,
   /**
@@ -486,7 +414,7 @@ export enum VideoPixelFormat {
    */
   VideoPixelNv21 = 3,
   /**
-   * 4: The format is RGBA.
+   * 4: RGBA 格式。
    */
   VideoPixelRgba = 4,
   /**
@@ -518,7 +446,7 @@ export enum VideoPixelFormat {
    */
   VideoCvpixelP010 = 15,
   /**
-   * 16: The format is I422.
+   * 16: I422 格式。
    */
   VideoPixelI422 = 16,
   /**
@@ -532,15 +460,15 @@ export enum VideoPixelFormat {
 }
 
 /**
- * Video display modes.
+ * 视频显示模式。
  */
 export enum RenderModeType {
   /**
-   * 1: Hidden mode. The priority is to fill the window. Any excess video that does not match the window size will be cropped.
+   * 1: 视频尺寸等比缩放。优先保证视窗被填满。因视频尺寸与显示视窗尺寸不一致而多出的视频将被截掉。
    */
   RenderModeHidden = 1,
   /**
-   * 2: Fit mode. The priority is to ensure that all video content is displayed. Any areas of the window that are not filled due to the mismatch between video size and window size will be filled with black.
+   * 2: 视频尺寸等比缩放。优先保证视频内容全部显示。因视频尺寸与显示视窗尺寸不一致造成的视窗未被填满的区域填充黑色。
    */
   RenderModeFit = 2,
   /**
@@ -876,27 +804,27 @@ export class Hdr10MetadataInfo {
 }
 
 /**
- * The relative position of alphaBuffer and video frames.
+ * alphaBuffer 和视频帧的相对位置。
  */
 export enum AlphaStitchMode {
   /**
-   * 0: (Default) Only video frame, that is, alphaBuffer is not stitched with the video frame.
+   * 0：（默认）仅视频帧，即 alphaBuffer 不和视频帧拼接。
    */
   NoAlphaStitch = 0,
   /**
-   * 1: alphaBuffer is above the video frame.
+   * 1： alphaBuffer 位于视频帧的上方。
    */
   AlphaStitchUp = 1,
   /**
-   * 2: alphaBuffer is below the video frame.
+   * 2： alphaBuffer 位于视频帧的下方。
    */
   AlphaStitchBelow = 2,
   /**
-   * 3: alphaBuffer is to the left of the video frame.
+   * 3： alphaBuffer 位于视频帧的左侧。
    */
   AlphaStitchLeft = 3,
   /**
-   * 4: alphaBuffer is to the right of the video frame.
+   * 4： alphaBuffer 位于视频帧的右侧。
    */
   AlphaStitchRight = 4,
 }
@@ -916,77 +844,77 @@ export enum EglContextType {
 }
 
 /**
- * The video buffer type.
+ * 视频 buffer 类型。
  */
 export enum VideoBufferType {
   /**
-   * 1: The video buffer in the format of raw data.
+   * 1: 类型为原始数据。
    */
   VideoBufferRawData = 1,
   /**
-   * 2: The video buffer in the format of raw data.
+   * 2: 类型为原始数据。
    */
   VideoBufferArray = 2,
   /**
-   * 3: The video buffer in the format of Texture.
+   * 3: 类型为 Texture 。
    */
   VideoBufferTexture = 3,
 }
 
 /**
- * The external video frame.
+ * 外部视频帧。
  */
 export class ExternalVideoFrame {
   /**
-   * The video type. See VideoBufferType.
+   * 视频类型。详见 VideoBufferType 。
    */
   type?: VideoBufferType;
   /**
-   * The pixel format. See VideoPixelFormat.
+   * 像素格式。详见 VideoPixelFormat 。
    */
   format?: VideoPixelFormat;
   /**
-   * Video frame buffer.
+   * 视频缓冲区。
    */
   buffer?: Uint8Array;
   /**
-   * Line spacing of the incoming video frame, which must be in pixels instead of bytes. For textures, it is the width of the texture.
+   * 传入视频帧的行间距，单位为像素而不是字节。对于 Texture，该值指的是 Texture 的宽度。
    */
   stride?: number;
   /**
-   * Height of the incoming video frame.
+   * 传入视频帧的高度。
    */
   height?: number;
   /**
-   * Raw data related parameter. The number of pixels trimmed from the left. The default value is 0.
+   * 该参数仅适用于原始视频数据。
    */
   cropLeft?: number;
   /**
-   * Raw data related parameter. The number of pixels trimmed from the top. The default value is 0.
+   * 该参数仅适用于原始视频数据。
    */
   cropTop?: number;
   /**
-   * Raw data related parameter. The number of pixels trimmed from the right. The default value is 0.
+   * 该参数仅适用于原始视频数据。
    */
   cropRight?: number;
   /**
-   * Raw data related parameter. The number of pixels trimmed from the bottom. The default value is 0.
+   * 该参数仅适用于原始视频数据。
    */
   cropBottom?: number;
   /**
-   * Raw data related parameter. The clockwise rotation of the video frame. You can set the rotation angle as 0, 90, 180, or 270. The default value is 0.
+   * 原始数据相关字段。指定是否对传入的视频组做顺时针旋转操作，可选值为 0， 90， 180， 270。默认为 0。
    */
   rotation?: number;
   /**
-   * Timestamp (ms) of the incoming video frame. An incorrect timestamp results in frame loss or unsynchronized audio and video.
+   * 传入的视频帧的时间戳，以毫秒为单位。不正确的时间戳会导致丢帧或者音视频不同步。
    */
   timestamp?: number;
   /**
-   * This parameter only applies to video data in Texture format. Texture ID of the video frame.
+   * 该参数仅适用于 Texture 格式的视频数据。指该视频帧的 Texture ID。
    */
   eglType?: EglContextType;
   /**
-   * This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
+   * 该参数仅适用于 Texture 格式的视频数据。为一个输入的 4x4 变换矩阵，典型值为一个单位矩阵。
    */
   textureId?: number;
   /**
@@ -994,37 +922,38 @@ export class ExternalVideoFrame {
    */
   fenceObject?: number;
   /**
-   * This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
+   * 该参数仅适用于 Texture 格式的视频数据。为一个输入的 4x4 变换矩阵，典型值为一个单位矩阵。
    */
   matrix?: number[];
   /**
-   * This parameter only applies to video data in Texture format. The MetaData buffer. The default value is NULL.
+   * 该参数仅适用于 Texture 格式的视频数据。指 MetaData 的数据缓冲区，默认值为 NULL 。
    */
   metadataBuffer?: Uint8Array;
   /**
-   * This parameter only applies to video data in Texture format. The MetaData size. The default value is 0.
+   * 该参数仅适用于 Texture 格式的视频数据。指 MetaData 的大小，默认值为 0 。
    */
   metadataSize?: number;
   /**
-   * The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc. In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
+   * 采用人像分割算法输出的 Alpha 通道数据。该数据跟视频帧的尺寸一致，每个像素点的取值范围为 [0,255]，其中 0 代表背景；255 代表前景（人像）。
+   * 你可以通过设置该参数，实现将视频背景自渲染为各种效果，例如：透明、纯色、图片、视频等。 在自定义视频渲染场景下，需确保传入的视频帧和 alphaBuffer 均为 Full Range 类型；其他类型可能导致 Alpha 数据渲染不正常。
    */
   alphaBuffer?: Uint8Array;
   /**
-   * This parameter only applies to video data in BGRA or RGBA format. Whether to extract the alpha channel data from the video frame and automatically fill it into alphaBuffer : true ：Extract and fill the alpha channel data. false : (Default) Do not extract and fill the Alpha channel data. For video data in BGRA or RGBA format, you can set the Alpha channel data in either of the following ways:
-   *  Automatically by setting this parameter to true.
-   *  Manually through the alphaBuffer parameter.
+   * 对于 BGRA 或 RGBA 格式的视频数据，你可以任选一种方式设置 Alpha 通道数据：
+   *  通过将该参数设置为 true 自动填写。
+   *  通过 alphaBuffer 参数设置。 该参数仅适用于 BGRA 或 RGBA 格式的视频数据。设置是否提取视频帧中的 Alpha 通道数据并自动填入到 alphaBuffer 中： true ：提取并填充 Alpha 通道数据。 false ：（默认）不提取填充 Alpha 通道数据。
    */
   fillAlphaBuffer?: boolean;
   /**
-   * When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame. See AlphaStitchMode.
+   * 当视频帧中包含 Alpha 通道数据时，设置 alphaBuffer 和视频帧的相对位置。详见 AlphaStitchMode 。
    */
   alphaStitchMode?: AlphaStitchMode;
   /**
-   * This parameter only applies to video data in Windows Texture format. It represents a pointer to an object of type ID3D11Texture2D, which is used by a video frame.
+   * 该参数仅适用于 Windows Texture 格式的视频数据。表示一个指向 ID3D11Texture2D 类型对象的指针，该类型对象被视频帧所使用。
    */
   d3d11Texture2d?: any;
   /**
-   * This parameter only applies to video data in Windows Texture format. It represents an index of an ID3D11Texture2D texture object used by the video frame in the ID3D11Texture2D array.
+   * 该参数仅适用于 Windows Texture 格式的视频数据。表示在 ID3D11Texture2D 数组中，被视频帧使用的某一个 ID3D11Texture2D 纹理对象的索引。
    */
   textureSliceIndex?: number;
   /**
@@ -1032,89 +961,90 @@ export class ExternalVideoFrame {
    */
   hdr10MetadataInfo?: Hdr10MetadataInfo;
   /**
-   * By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
+   * 视频帧的色彩空间属性，默认情况下会应用 Full Range 和 BT.709 标准配置。你可以根据自定义采集、自定义渲染的业务需求进行自定义设置，详见 [VideoColorSpace](https://developer.mozilla.org/en-US/docs/Web/API/VideoColorSpace)。
    */
   colorSpace?: ColorSpace;
 }
 
 /**
- * Configurations of the video frame.
+ * 视频帧的属性设置。
  *
- * Note that the buffer provides a pointer to a pointer. This interface cannot modify the pointer of the buffer, but it can modify the content of the buffer.
+ * 缓冲区给出的是指向指针的指针，该接口不能修改缓冲区的指针，只能修改缓冲区的内容。
  */
 export class VideoFrame {
   /**
-   * The pixel format. See VideoPixelFormat.
+   * 像素格式。详见 VideoPixelFormat 。
    */
   type?: VideoPixelFormat;
   /**
-   * The width of the video, in pixels.
+   * 视频像素宽度。
    */
   width?: number;
   /**
-   * The height of the video, in pixels.
+   * 视频像素高度。
    */
   height?: number;
   /**
-   * For YUV data, the line span of the Y buffer; for RGBA data, the total data length. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
+   * 对 YUV 数据，表示 Y 缓冲区的行跨度；对 RGBA 数据，表示总的数据长度。 在处理视频数据时，需根据该参数处理每行像素数据之间的偏移量，否则可能导致图像失真。
    */
   yStride?: number;
   /**
-   * For YUV data, the line span of the U buffer; for RGBA data, the value is 0. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
+   * 对 YUV 数据，表示 U 缓冲区的行跨度；对 RGBA 数据，值为 0。 在处理视频数据时，需根据该参数处理每行像素数据之间的偏移量，否则可能导致图像失真。
    */
   uStride?: number;
   /**
-   * For YUV data, the line span of the V buffer; for RGBA data, the value is 0. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
+   * 对 YUV 数据，表示 V 缓冲区的行跨度；对 RGBA 数据，值为 0。 在处理视频数据时，需根据该参数处理每行像素数据之间的偏移量，否则可能导致图像失真。
    */
   vStride?: number;
   /**
-   * For YUV data, the pointer to the Y buffer; for RGBA data, the data buffer.
+   * 对 YUV 数据，表示 Y 缓冲区的指针；对 RGBA 数据，表示数据缓冲区。
    */
   yBuffer?: Uint8Array;
   /**
-   * For YUV data, the pointer to the U buffer; for RGBA data, the value is 0.
+   * 对 YUV 数据，表示 U 缓冲区的指针；对 RGBA 数据，值为空。
    */
   uBuffer?: Uint8Array;
   /**
-   * For YUV data, the pointer to the V buffer; for RGBA data, the value is 0.
+   * 对 YUV 数据，表示 V 缓冲区的指针；对 RGBA 数据，值为空。
    */
   vBuffer?: Uint8Array;
   /**
-   * The clockwise rotation of the video frame before rendering. Supported values include 0, 90, 180, and 270 degrees.
+   * 在渲染视频前设置该帧的顺时针旋转角度，目前支持 0 度、90 度、180 度，和 270 度。
    */
   rotation?: number;
   /**
-   * The Unix timestamp (ms) when the video frame is rendered. This timestamp can be used to guide the rendering of the video frame. This parameter is required.
+   * 视频帧被渲染时的 Unix 时间戳（毫秒）。该时间戳可用于指导渲染视频帧。该参数为必填。
    */
   renderTimeMs?: number;
   /**
-   * Reserved for future use.
+   * 保留参数。
    */
   avsync_type?: number;
   /**
-   * This parameter only applies to video data in Texture format. The MetaData buffer. The default value is NULL.
+   * 该参数仅适用于 Texture 格式的视频数据。指 MetaData 的数据缓冲区，默认值为 NULL 。
    */
   metadata_buffer?: Uint8Array;
   /**
-   * This parameter only applies to video data in Texture format. The MetaData size. The default value is 0.
+   * 该参数仅适用于 Texture 格式的视频数据。指 MetaData 的大小，默认值为 0 。
    */
   metadata_size?: number;
   /**
-   * This parameter only applies to video data in Texture format. Texture ID.
+   * 该参数仅适用于 Texture 格式的视频数据。Texture ID。
    */
   textureId?: number;
   /**
-   * This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
+   * 该参数仅适用于 Texture 格式的视频数据。为一个输入的 4x4 变换矩阵，典型值为一个单位矩阵。
    */
   matrix?: number[];
   /**
-   * The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc.
-   *  In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
-   *  Make sure that alphaBuffer is exactly the same size as the video frame (width × height), otherwise it may cause the app to crash.
+   * 采用人像分割算法输出的 Alpha 通道数据。该数据跟视频帧的尺寸一致，每个像素点的取值范围为 [0,255]，其中 0 代表背景；255 代表前景（人像）。
+   * 你可以通过设置该参数，实现将视频背景自渲染为各种效果，例如：透明、纯色、图片、视频等。
+   *  在自定义视频渲染场景下，需确保传入的视频帧和 alphaBuffer 均为 Full Range 类型；其他类型可能导致 Alpha 数据渲染不正常。
+   *  请务必确保 alphaBuffer 跟视频帧的尺寸 (width × height) 完全一致，否则可能会导致 App 崩溃。
    */
   alphaBuffer?: Uint8Array;
   /**
-   * When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame. See AlphaStitchMode.
+   * 当视频帧中包含 Alpha 通道数据时，设置 alphaBuffer 和视频帧的相对位置。详见 AlphaStitchMode 。
    */
   alphaStitchMode?: AlphaStitchMode;
   /**
@@ -1122,7 +1052,7 @@ export class VideoFrame {
    */
   pixelBuffer?: Uint8Array;
   /**
-   * The meta information in the video frame. To use this parameter, contact.
+   * 视频帧中的元信息。该参数需要[联系技术支持](https://ticket.shengwang.cn/)使用。
    */
   metaInfo?: IVideoFrameMetaInfo;
   /**
@@ -1130,7 +1060,7 @@ export class VideoFrame {
    */
   hdr10MetadataInfo?: Hdr10MetadataInfo;
   /**
-   * By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
+   * 视频帧的色彩空间属性，默认情况下会应用 Full Range 和 BT.709 标准配置。你可以根据自定义采集、自定义渲染的业务需求进行自定义设置，详见 [VideoColorSpace](https://developer.mozilla.org/en-US/docs/Web/API/VideoColorSpace)。
    */
   colorSpace?: ColorSpace;
 }
@@ -1154,63 +1084,145 @@ export enum MediaPlayerSourceType {
 }
 
 /**
- * The frame position of the video observer.
+ * 视频观测位置。
  */
 export enum VideoModulePosition {
   /**
-   * 1: The location of the locally collected video data after preprocessing corresponds to the onCaptureVideoFrame callback. The observed video here has the effect of video pre-processing, which can be verified by enabling image enhancement, virtual background, or watermark.
+   * 1: 本地采集视频数据并且经过前处理之后的位置，对应 onCaptureVideoFrame 回调。此处观测到的视频具备视频前处理的效果，可通过开启美颜、虚拟背景或水印等方式验证。
    */
   PositionPostCapturer = 1 << 0,
   /**
-   * 2: The pre-renderer position, which corresponds to the video data in the onRenderVideoFrame callback.
+   * 2: 接收远端发送的视频在渲染前的位置，对应 onRenderVideoFrame 回调。
    */
   PositionPreRenderer = 1 << 1,
   /**
-   * 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback. The observed video here has the effects of video pre-processing and encoding pre-processing.
-   *  To verify the pre-processing effects of the video, you can enable image enhancement, virtual background, or watermark.
-   *  To verify the pre-encoding processing effect, you can set a lower frame rate (for example, 5 fps).
+   * 4: 本地视频编码前的位置，对应 onPreEncodeVideoFrame 回调。此处观测到的视频具备视频前处理和编码前处理的效果：
+   *  对于视频前处理效果，可通过开启美颜、虚拟背景或水印等方式验证。
+   *  对于编码前处理效果，可通过设置一个较低的帧率（例如 5 fps）验证。
    */
   PositionPreEncoder = 1 << 2,
   /**
-   * 8: The position after local video capture and before pre-processing. The observed video here does not have pre-processing effects, which can be verified by enabling image enhancement, virtual background, or watermarks.
+   * 8: 本地采集视频之后、前处理之前的位置。此处观测到的视频不具备前处理的效果，可通过开启美颜、虚拟背景或设置水印等方式验证。
    */
   PositionPostCapturerOrigin = 1 << 3,
 }
 
 /**
- * The snapshot configuration.
+ * @ignore
  */
-export class SnapshotConfig {
+export enum ContentInspectResult {
   /**
-   * The local path (including filename extensions) of the snapshot. For example:
-   *  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg
-   *  macOS: ～/Library/Logs/example.jpg Ensure that the path you specify exists and is writable.
+   * @ignore
    */
-  filePath?: string;
+  ContentInspectNeutral = 1,
   /**
-   * The position of the snapshot video frame in the video pipeline. See VideoModulePosition.
+   * @ignore
+   */
+  ContentInspectSexy = 2,
+  /**
+   * @ignore
+   */
+  ContentInspectPorn = 3,
+}
+
+/**
+ * 视频内容审核模块的类型。
+ */
+export enum ContentInspectType {
+  /**
+   * 0：（默认）该功能模块无实际功能。请不要将 type 设为该值。
+   */
+  ContentInspectInvalid = 0,
+  /**
+   * @ignore
+   */
+  ContentInspectModeration = 1,
+  /**
+   * 2：使用声网自研插件截图上传。SDK 会对视频流进行截图并上传。
+   */
+  ContentInspectSupervision = 2,
+  /**
+   * 3：使用云市场插件截图上传。SDK 会使用云市场视频审核插件对视频流进行截图并上传。
+   */
+  ContentInspectImageModeration = 3,
+}
+
+/**
+ * ContentInspectModule 结构体，用于配置本地截图上传的频率。
+ */
+export class ContentInspectModule {
+  /**
+   * 功能模块的类型。详见 ContentInspectType 。
+   */
+  type?: ContentInspectType;
+  /**
+   * 本地截图上传的间隔，单位为秒，取值必须大于 0。默认值为 0，表示不进行截图上传。推荐值为 10 秒，你也可以根据业务需求自行调整。
+   */
+  interval?: number;
+  /**
+   * 视频观察器的位置。详见 VideoModulePosition 。
    */
   position?: VideoModulePosition;
 }
 
 /**
- * This class is used to get raw PCM audio.
+ * 本地截图上传配置。
+ */
+export class ContentInspectConfig {
+  /**
+   * 附加信息，最大长度为 1024 字节。
+   * SDK 会将附加信息和截图一起上传至声网服务器；截图完成后，声网服务器会将附加信息随回调通知一起发送给你的服务器。
+   */
+  extraInfo?: string;
+  /**
+   * @ignore
+   */
+  serverConfig?: string;
+  /**
+   * 功能模块。详见 ContentInspectModule 。
+   * 最多支持配置 32 个 ContentInspectModule 实例， MAX_CONTENT_INSPECT_MODULE_COUNT 的取值范围为 [1,32] 中的整数。 一个功能模块最多只能配置一个实例。目前仅支持截图上传功能。
+   */
+  modules?: ContentInspectModule[];
+  /**
+   * 功能模块数，即配置的 ContentInspectModule 实例的数量，必须与 modules 中配置的实例个数一致。最大值为 32。
+   */
+  moduleCount?: number;
+}
+
+/**
+ * 视频截图设置。
+ */
+export class SnapshotConfig {
+  /**
+   * 请确保目录存在且可写。 截图的本地保存路径，需精确到文件名及格式，例如：
+   *  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg
+   *  macOS: ～/Library/Logs/example.jpg
+   */
+  filePath?: string;
+  /**
+   * 截图的视频帧在视频链路中的位置。详见 VideoModulePosition 。
+   */
+  position?: VideoModulePosition;
+}
+
+/**
+ * 该类用于获取原始的 PCM 音频数据。
  *
- * You can inherit this class and implement the onFrame callback to get raw PCM audio.
+ * 你可以继承这个类，实现 onFrame 回调来获得 PCM 音频数据。
  */
 export interface IAudioPcmFrameSink {
   /**
-   * Occurs each time the player receives an audio frame.
+   * 已获取音频帧回调。
    *
-   * After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
+   * 注册音频数据观测器后，每次接收到一帧音频帧时，都会触发该回调，报告音频帧信息。
    *
-   * @param frame The audio frame information. See AudioPcmFrame.
+   * @param frame 音频帧信息。详见 AudioPcmFrame 。
    */
   onFrame?(frame: AudioPcmFrame): void;
 }
 
 /**
- * Audio frame type.
+ * 音频帧类型。
  */
 export enum AudioFrameType {
   /**
@@ -1220,41 +1232,43 @@ export enum AudioFrameType {
 }
 
 /**
- * Raw audio data.
+ * 原始音频数据。
  */
 export class AudioFrame {
   /**
-   * The type of the audio frame. See AudioFrameType.
+   * 音频帧类型，详见 AudioFrameType 。
    */
   type?: AudioFrameType;
   /**
-   * The number of samples per channel in the audio frame.
+   * 每个声道的采样点数。
    */
   samplesPerChannel?: number;
   /**
-   * The number of bytes per sample. For PCM, this parameter is generally set to 16 bits (2 bytes).
+   * 每个采样点的字节数。对于 PCM 来说，一般使用 16 bit，即两个字节。
    */
   bytesPerSample?: BytesPerSample;
   /**
-   * The number of audio channels (the data are interleaved if it is stereo).
-   *  1: Mono.
-   *  2: Stereo.
+   * 声道数量(如果是立体声，数据是交叉的)。
+   *  1: 单声道
+   *  2: 双声道
    */
   channels?: number;
   /**
-   * The number of samples per channel in the audio frame.
+   * 每声道每秒的采样点数。
    */
   samplesPerSec?: number;
   /**
-   * The data buffer of the audio frame. When the audio frame uses a stereo channel, the data buffer is interleaved. The size of the data buffer is as follows: buffer = samples × channels × bytesPerSample.
+   * 声音数据缓存区（如果是立体声，数据是交叉存储的）。
+   * 缓存区数据大小 buffer = samples × channels × bytesPerSample 。
    */
   buffer?: Uint8Array;
   /**
-   * The timestamp (ms) of the external audio frame. You can use this timestamp to restore the order of the captured audio frame, and synchronize audio and video frames in video scenarios, including scenarios where external video sources are used.
+   * 外部音频帧的渲染时间戳。
+   * 你可以使用该时间戳还原音频帧顺序；在有视频的场景中（包含使用外部视频源的场景），该参数可以用于实现音视频同步。
    */
   renderTimeMs?: number;
   /**
-   * Reserved for future use.
+   * 保留参数。
    */
   avsync_type?: number;
   /**
@@ -1302,94 +1316,99 @@ export enum AudioFramePosition {
 }
 
 /**
- * Audio data format.
+ * 音频数据格式。
  *
- * The SDK sets the audio data format in the following callbacks according to AudioParams. onRecordAudioFrame onPlaybackAudioFrame onMixedAudioFrame
- *  The SDK calculates the sampling interval through the samplesPerCall, sampleRate, and channel parameters in AudioParams, and triggers the onRecordAudioFrame, onPlaybackAudioFrame, onMixedAudioFrame, and onEarMonitoringAudioFrame callbacks according to the sampling interval. Sample interval (sec) = samplePerCall /(sampleRate × channel).
- *  Ensure that the sample interval ≥ 0.01 (s).
+ * SDK 会根据 AudioParams 设置以下回调中的音频数据格式： onRecordAudioFrame onPlaybackAudioFrame onMixedAudioFrame
+ *  SDK 会通过 AudioParams 中的 samplesPerCall 、 sampleRate 和 channel 参数计算采样间隔，并根据该采样间隔触发 onRecordAudioFrame 、 onPlaybackAudioFrame 、 onMixedAudioFrame 和 onEarMonitoringAudioFrame 回调。
+ *  采样间隔 = samplesPerCall /(sampleRate × channel)。
+ *  请确保采样间隔不得小于 0.01 (s)。
  */
 export class AudioParams {
   /**
-   * The audio sample rate (Hz), which can be set as one of the following values:
-   *  8000.
-   *  (Default) 16000.
-   *  32000.
+   * 数据的采样率，单位为 Hz，取值如下：
+   *  8000
+   *  16000（默认值）
+   *  32000
    *  44100
    *  48000
    */
   sample_rate?: number;
   /**
-   * The number of audio channels, which can be set as either of the following values:
-   *  1: (Default) Mono.
-   *  2: Stereo.
+   * 数据的声道数，取值如下：
+   *  1：单声道（默认值）
+   *  2：双声道
    */
   channels?: number;
   /**
-   * The use mode of the audio data. See RawAudioFrameOpModeType.
+   * 数据的使用模式。详见 RawAudioFrameOpModeType 。
    */
   mode?: RawAudioFrameOpModeType;
   /**
-   * The number of samples, such as 1024 for the media push.
+   * 数据的采样点数，如旁路推流应用中通常为 1024。
    */
   samples_per_call?: number;
 }
 
 /**
- * The audio frame observer.
+ * 音频观测器。
+ *
+ * 你可以调用 registerAudioFrameObserver 注册或取消注册 IAudioFrameObserverBase 音频观测器。
  */
 export interface IAudioFrameObserverBase {
   /**
-   * Gets the captured audio frame.
+   * 获得采集的原始音频数据。
    *
-   * To ensure that the data format of captured audio frame is as expected, Agora recommends that you set the audio data format as follows: After calling setRecordingAudioFrameParameters to set the audio data format, call registerAudioFrameObserver to register the audio observer object, the SDK will calculate the sampling interval according to the parameters set in this method, and triggers the onRecordAudioFrame callback according to the sampling interval.
+   * 为保证采集的音频数据格式符合预期，你可以在如下方法设置音频的数据格式：调用 setRecordingAudioFrameParameters 设置音频数据格式后，调用 registerAudioFrameObserver 注册音频观测器对象，SDK 会根据该方法中的参数计算采样间隔，并根据该采样间隔触发 onRecordAudioFrame 回调。
    *
-   * @param channelId The channel ID.
-   * @param audioFrame The raw audio data. See AudioFrame.
+   * @param channelId 频道 ID。
+   * @param audioFrame 音频原始数据。详见 AudioFrame 。
    */
   onRecordAudioFrame?(channelId: string, audioFrame: AudioFrame): void;
 
   /**
-   * Gets the raw audio frame for playback.
+   * 获得播放的原始音频数据。
    *
-   * To ensure that the data format of audio frame for playback is as expected, Agora recommends that you set the audio data format as follows: After calling setPlaybackAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onPlaybackAudioFrame callback according to the sampling interval.
+   * 为保证播放的音频数据格式符合预期，你可以在如下方法设置音频的数据格式：调用 setPlaybackAudioFrameParameters 设置音频数据格式后，调用 registerAudioFrameObserver 注册音频观测器对象，SDK 会根据该方法中的参数计算采样间隔，并根据该采样间隔触发 onPlaybackAudioFrame 回调。
    *
-   * @param channelId The channel ID.
-   * @param audioFrame The raw audio data. See AudioFrame.
+   * @param channelId 频道 ID。
+   * @param audioFrame 音频原始数据。详见 AudioFrame 。
    */
   onPlaybackAudioFrame?(channelId: string, audioFrame: AudioFrame): void;
 
   /**
-   * Retrieves the mixed captured and playback audio frame.
+   * 获取采集和播放音频混音后的数据。
    *
-   * To ensure that the data format of mixed captured and playback audio frame meets the expectations, Agora recommends that you set the data format as follows: After calling setMixedAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onMixedAudioFrame callback according to the sampling interval.
+   * 为保证采集和播放混音后的音频数据格式符合预期，你可以在如下方法设置音频的数据格式：调用 setMixedAudioFrameParameters 设置音频数据格式后，调用 registerAudioFrameObserver 注册音频观测器对象，SDK 会根据该方法中的参数计算采样间隔，并根据该采样间隔触发 onMixedAudioFrame 回调。
    *
-   * @param channelId The channel ID.
-   * @param audioFrame The raw audio data. See AudioFrame.
+   * @param channelId 频道 ID。
+   * @param audioFrame 音频原始数据。详见 AudioFrame 。
    */
   onMixedAudioFrame?(channelId: string, audioFrame: AudioFrame): void;
 
   /**
-   * Gets the in-ear monitoring audio frame.
+   * 获得耳返的原始音频数据。
    *
-   * In order to ensure that the obtained in-ear audio data meets the expectations, Agora recommends that you set the in-ear monitoring-ear audio data format as follows: After calling setEarMonitoringAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onEarMonitoringAudioFrame callback according to the sampling interval.
+   * 为保证耳返的音频数据格式符合预期，你可以使用如下方法设置耳返音频数据格式：调用 setEarMonitoringAudioFrameParameters 设置音频数据格式后，调用 registerAudioFrameObserver 注册音频观测器对象，SDK 会根据该方法中的参数计算采样间隔，并根据该采样间隔触发 onEarMonitoringAudioFrame 回调。
    *
-   * @param audioFrame The raw audio data. See AudioFrame.
+   * @param audioFrame 音频原始数据。详见 AudioFrame 。
    */
   onEarMonitoringAudioFrame?(audioFrame: AudioFrame): void;
 }
 
 /**
- * The audio frame observer.
+ * 音频观测器。
+ *
+ * 你可以调用 registerAudioFrameObserver 注册或取消注册 IAudioFrameObserver 音频观测器。
  */
 export interface IAudioFrameObserver extends IAudioFrameObserverBase {
   /**
-   * Retrieves the audio frame before mixing of subscribed remote users.
+   * 获取所订阅的远端用户混音前的声音。
    *
-   * Due to framework limitations, this callback does not support sending processed audio data back to the SDK.
+   * 由于框架的限制，该回调不支持将处理后的音频数据发送回 SDK。
    *
-   * @param channelId The channel ID.
-   * @param uid The ID of subscribed remote users.
-   * @param audioFrame The raw audio data. See AudioFrame.
+   * @param channelId 频道 ID。
+   * @param uid 订阅的远端用户的 ID。
+   * @param audioFrame 音频原始数据。详见 AudioFrame 。
    */
   onPlaybackAudioFrameBeforeMixing?(
     channelId: string,
@@ -1399,53 +1418,53 @@ export interface IAudioFrameObserver extends IAudioFrameObserverBase {
 }
 
 /**
- * The audio spectrum data.
+ * 音频频谱数据。
  */
 export class AudioSpectrumData {
   /**
-   * The audio spectrum data. Agora divides the audio frequency into 256 frequency domains, and reports the energy value of each frequency domain through this parameter. The value range of each energy type is [-300, 1] and the unit is dBFS.
+   * 音频频谱数据。声网将声音频率分为 256 个频域，通过该参数报告各频域的能量值，每个能量值的取值范围为 [-300,1]，单位为 dBFS。
    */
   audioSpectrumData?: number[];
   /**
-   * The audio spectrum data length is 256.
+   * 音频频谱数据长度为 256。
    */
   dataLength?: number;
 }
 
 /**
- * Audio spectrum information of the remote user.
+ * 远端用户的音频频谱信息。
  */
 export class UserAudioSpectrumInfo {
   /**
-   * The user ID of the remote user.
+   * 远端用户 ID。
    */
   uid?: number;
   /**
-   * Audio spectrum information of the remote user. See AudioSpectrumData.
+   * 远端用户的音频频谱数据。详见 AudioSpectrumData 。
    */
   spectrumData?: AudioSpectrumData;
 }
 
 /**
- * The audio spectrum observer.
+ * 音频频谱观测器。
  */
 export interface IAudioSpectrumObserver {
   /**
-   * Gets the statistics of a local audio spectrum.
+   * 获取本地音频频谱。
    *
-   * After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in IAudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK triggers this callback as the time interval you set to report the received remote audio data spectrum before encoding.
+   * 成功调用 registerAudioSpectrumObserver 实现 IAudioSpectrumObserver 中的 onLocalAudioSpectrum 回调并调用 enableAudioSpectrumMonitor 开启音频频谱监测后，SDK 会按照你设置的时间间隔触发该回调，报告编码前的本地音频数据的频谱。
    *
-   * @param data The audio spectrum data of the local user. See AudioSpectrumData.
+   * @param data 本地用户的音频频谱数据。详见 AudioSpectrumData 。
    */
   onLocalAudioSpectrum?(data: AudioSpectrumData): void;
 
   /**
-   * Gets the remote audio spectrum.
+   * 获取远端音频频谱。
    *
-   * After successfully calling registerAudioSpectrumObserver to implement the onRemoteAudioSpectrum callback in the IAudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
+   * 成功调用 registerAudioSpectrumObserver 实现 IAudioSpectrumObserver 中的 onRemoteAudioSpectrum 回调并调用 enableAudioSpectrumMonitor 开启音频频谱监测后，SDK 会按照你设置的时间间隔触发该回调，报告接收到的远端音频数据的频谱。
    *
-   * @param spectrums The audio spectrum information of the remote user. See UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
-   * @param spectrumNumber The number of remote users.
+   * @param spectrums 远端用户的音频频谱信息，详见 UserAudioSpectrumInfo 。 数组数量等于 SDK 监测到的远端用户数量，数组为空表示没有监测到远端用户的音频频谱。
+   * @param spectrumNumber 远端用户的数量。
    */
   onRemoteAudioSpectrum?(
     spectrums: UserAudioSpectrumInfo[],
@@ -1454,20 +1473,22 @@ export interface IAudioSpectrumObserver {
 }
 
 /**
- * Receives encoded video images.
+ * 用于接收编码后的视频图像的类。
  */
 export interface IVideoEncodedFrameObserver {
   /**
-   * Reports that the receiver has received the to-be-decoded video frame sent by the remote end.
+   * 报告接收端已收到远端发送的待解码视频帧。
    *
-   * If you call the setRemoteVideoSubscriptionOptions method and set encodedFrameOnly to true, the SDK triggers this callback locally to report the received encoded video frame information.
+   * 调用 setRemoteVideoSubscriptionOptions 方法并将 encodedFrameOnly 设置为 true 时，SDK 会在本地触发该回调，上报接收到的编码后视频帧信息。
    *
-   * @param uid The user ID of the remote user.
-   * @param imageBuffer The encoded video image buffer.
-   * @param length The data length of the video image.
-   * @param videoEncodedFrameInfo For the information of the encoded video frame, see EncodedVideoFrameInfo.
+   * @param channelId 频道名。
+   * @param uid 远端用户 ID。
+   * @param imageBuffer 视频图像 buffer。
+   * @param length 视频图像的数据长度。
+   * @param videoEncodedFrameInfo 编码后的视频帧信息，详见 EncodedVideoFrameInfo 。
    */
   onEncodedVideoFrameReceived?(
+    channelId: string,
     uid: number,
     imageBuffer: Uint8Array,
     length: number,
@@ -1476,32 +1497,40 @@ export interface IVideoEncodedFrameObserver {
 }
 
 /**
- * The process mode of the video frame:
+ * 视频帧处理模式。
  */
 export enum VideoFrameProcessMode {
   /**
-   * Read-only mode. In this mode, you do not modify the video frame. The video frame observer is a renderer.
+   * 只读模式。
+   * 只读模式下，你不修改视频帧，视频观测器相当于渲染器。
    */
   ProcessModeReadOnly = 0,
   /**
-   * Read and write mode. In this mode, you modify the video frame. The video frame observer is a video filter.
+   * 读写模式。
+   * 读写模式下，你会修改视频帧，视频观测器相当于视频 filter。
    */
   ProcessModeReadWrite = 1,
 }
 
 /**
- * The IVideoFrameObserver class.
+ * 视频观测器。
+ *
+ * 你可以调用 registerVideoFrameObserver 注册或取消注册 IVideoFrameObserver 视频观测器。
  */
 export interface IVideoFrameObserver {
   /**
-   * Occurs each time the SDK receives a video frame captured by local devices.
+   * 获取本地设备采集到的视频数据。
    *
-   * You can get raw video data collected by the local device through this callback.
+   * 你可以在回调中获取本地设备采集到的原始视频数据。
+   *  如果你获取到的视频数据类型为 RGBA，SDK 不支持对 Alpha 通道的值进行处理。
+   *  建议你在修改 videoFrame 中的参数时，需确保修改后的参数跟视频帧缓冲区中的视频帧实际情况保持一致，否则可能导致本地预览画面和对端的视频画面出现非预期的旋转、失真等问题。
+   *  建议你通过 C++ API 实现该回调。
+   *  由于框架的限制，该回调不支持将处理后的视频数据发送回 SDK。
    *
-   * @param sourceType Video source types, including cameras, screens, or media player. See VideoSourceType.
-   * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-   *  macOS: I420
-   *  Windows: YUV420
+   * @param sourceType 视频源类型，可能的视频源包括：摄像头、屏幕或媒体播放器。详见 VideoSourceType 。
+   * @param videoFrame 视频帧数据。详见 VideoFrame 。 通过该回调获取的视频帧数据格式默认值如下：
+   *  macOS：I420
+   *  Windows：YUV420
    */
   onCaptureVideoFrame?(
     sourceType: VideoSourceType,
@@ -1509,18 +1538,19 @@ export interface IVideoFrameObserver {
   ): void;
 
   /**
-   * Occurs each time the SDK receives a video frame before encoding.
+   * 获取本地视频编码前的视频数据。
    *
-   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios. After processing, you can send the processed video data back to the SDK in this callback.
-   *  It is recommended that you ensure the modified parameters in videoFrame are consistent with the actual situation of the video frames in the video frame buffer. Otherwise, it may cause unexpected rotation, distortion, and other issues in the local preview and remote video display.
-   *  It's recommended that you implement this callback through the C++ API.
-   *  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
-   *  The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
+   * 成功注册视频数据观测器后，SDK 会在捕捉到每个视频帧时触发该回调。你可以在回调中获取编码前的视频数据，然后根据场景需要，对视频数据进行处理。
+   * 完成处理后，你可以在该回调中，传入处理后的视频数据将其发送回 SDK。
+   *  建议你通过 C++ API 实现该回调。
+   *  由于框架的限制，该回调不支持将处理后的视频数据发送回 SDK。
+   *  此处获取的视频数据已经过前处理，如裁剪、旋转和美颜等。
+   *  建议你在修改 videoFrame 中的参数时，需确保修改后的参数跟视频帧缓冲区中的视频帧实际情况保持一致，否则可能导致本地预览画面和对端的视频画面出现非预期的旋转、失真等问题。
    *
-   * @param sourceType The type of the video source. See VideoSourceType.
-   * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-   *  macOS: I420
-   *  Windows: YUV420
+   * @param sourceType 视频源的类型。详见 VideoSourceType 。
+   * @param videoFrame 视频帧数据。详见 VideoFrame 。 通过该回调获取的视频帧数据格式默认值如下：
+   *  macOS：I420
+   *  Windows：YUV420
    */
   onPreEncodeVideoFrame?(
     sourceType: VideoSourceType,
@@ -1533,19 +1563,19 @@ export interface IVideoFrameObserver {
   onMediaPlayerVideoFrame?(videoFrame: VideoFrame, mediaPlayerId: number): void;
 
   /**
-   * Occurs each time the SDK receives a video frame sent by the remote user.
+   * 获取远端发送的视频数据。
    *
-   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data sent from the remote end before rendering, and then process it according to the particular scenarios.
-   *  It is recommended that you ensure the modified parameters in videoFrame are consistent with the actual situation of the video frames in the video frame buffer. Otherwise, it may cause unexpected rotation, distortion, and other issues in the local preview and remote video display.
-   *  If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
-   *  It's recommended that you implement this callback through the C++ API.
-   *  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
+   * 成功注册视频数据观测器后，SDK 会在捕捉到每个视频帧时触发该回调。你可以在回调中获取远端发送的渲染前的视频数据，然后根据场景需要，对视频数据进行处理。
+   *  如果你获取到的视频数据类型为 RGBA，SDK 不支持对 Alpha 通道的值进行处理。
+   *  建议你通过 C++ API 实现该回调。
+   *  由于框架的限制，该回调不支持将处理后的视频数据发送回 SDK。
+   *  建议你在修改 videoFrame 中的参数时，需确保修改后的参数跟视频帧缓冲区中的视频帧实际情况保持一致，否则可能导致本地预览画面和对端的视频画面出现非预期的旋转、失真等问题。
    *
-   * @param channelId The channel ID.
-   * @param remoteUid The user ID of the remote user who sends the current video frame.
-   * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-   *  macOS: I420
-   *  Windows: YUV420
+   * @param channelId 频道 ID。
+   * @param remoteUid 发送该帧视频的远端用户 ID。
+   * @param videoFrame 视频帧数据。详见 VideoFrame 。 通过该回调获取的视频帧数据格式默认值如下：
+   *  macOS：I420
+   *  Windows：YUV420
    */
   onRenderVideoFrame?(
     channelId: string,
@@ -1560,71 +1590,71 @@ export interface IVideoFrameObserver {
 }
 
 /**
- * The external video frame encoding type.
+ * 外部视频帧编码类型。
  */
 export enum ExternalVideoSourceType {
   /**
-   * 0: The video frame is not encoded.
+   * 0：未编码视频帧。
    */
   VideoFrame = 0,
   /**
-   * 1: The video frame is encoded.
+   * 1：已编码视频帧。
    */
   EncodedVideoFrame = 1,
 }
 
 /**
- * @ignore
+ * 录制文件的格式。
  */
 export enum MediaRecorderContainerFormat {
   /**
-   * @ignore
+   * 1:（默认）MP4。
    */
   FormatMp4 = 1,
 }
 
 /**
- * The recording content.
+ * 录制内容。
  */
 export enum MediaRecorderStreamType {
   /**
-   * Only audio.
+   * 1: 仅音频。
    */
   StreamTypeAudio = 0x01,
   /**
-   * Only video.
+   * 2: 仅视频。
    */
   StreamTypeVideo = 0x02,
   /**
-   * (Default) Audio and video.
+   * 3: （默认）音视频。
    */
   StreamTypeBoth = 0x01 | 0x02,
 }
 
 /**
- * The current recording state.
+ * 当前的录制状态。
  */
 export enum RecorderState {
   /**
-   * -1: An error occurs during the recording. See RecorderReasonCode for the reason.
+   * -1: 音视频流录制出错，错误原因详见 RecorderReasonCode 。
    */
   RecorderStateError = -1,
   /**
-   * 2: The audio and video recording starts.
+   * 2: 音视频流录制开始。
    */
   RecorderStateStart = 2,
   /**
-   * 3: The audio and video recording stops.
+   * 3: 音视频流录制停止。
    */
   RecorderStateStop = 3,
 }
 
 /**
- * The reason for the state change.
+ * 录制状态出错的原因。
  */
 export enum RecorderReasonCode {
   /**
-   * 0: No error.
+   * 0: 一切正常。
    */
   RecorderReasonNone = 0,
   /**
@@ -1646,105 +1676,119 @@ export enum RecorderReasonCode {
 }
 
 /**
- * @ignore
+ * 音视频流录制配置。
  */
 export class MediaRecorderConfiguration {
   /**
-   * @ignore
+   * 请确保你指定的路径存在并且可写。 录制文件在本地保存的绝对路径，需精确到文件名及格式。例如：
+   *  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.mp4
+   *  macOS: /Library/Logs/example.mp4
    */
   storagePath?: string;
   /**
-   * @ignore
+   * 录制文件的格式。详见 MediaRecorderContainerFormat 。
    */
   containerFormat?: MediaRecorderContainerFormat;
   /**
-   * @ignore
+   * 录制内容。详见 MediaRecorderStreamType 。
    */
   streamType?: MediaRecorderStreamType;
   /**
-   * @ignore
+   * 最大录制时长，单位为毫秒，默认值为 120000。
    */
   maxDurationMs?: number;
   /**
-   * @ignore
+   * 录制信息更新间隔，单位为毫秒，取值范围为 [1000,10000]。SDK 会根据该值的设置触发 onRecorderInfoUpdated 回调，报告更新后的录制信息。
    */
   recorderInfoUpdateInterval?: number;
   /**
-   * @ignore
+   * 录制视频的宽度 (px)，宽 × 高的最大值不应超过 3840 × 2160。
+   * 该参数仅在 调用 createMediaRecorder 且将 RecorderStreamInfo 中的 type 设置为 Preview 时需要传入。
    */
   width?: number;
   /**
-   * @ignore
+   * 录制视频的高度 (px)，宽 × 高的最大值不超过 3840 × 2160。
+   * 该参数仅在 调用 createMediaRecorder 且将 RecorderStreamInfo 中的 type 设置为 Preview 时需要传入。
    */
   height?: number;
   /**
-   * @ignore
+   * 录制视频的帧率，最高值不超过 30，如： 5、10、15、24、30 等。
+   * 该参数仅在 调用 createMediaRecorder 且将 RecorderStreamInfo 中的 type 设置为 Preview 时需要传入。
    */
   fps?: number;
   /**
-   * @ignore
+   * 录制音频的采样率 (Hz)，可设置为 16000，32000，44100 或 48000。
+   * 该参数仅在 调用 createMediaRecorder 且将 RecorderStreamInfo 中的 type 设置为 Preview 时需要传入。
    */
   sample_rate?: number;
   /**
-   * @ignore
+   * 录制音频的声道数:
+   *  1: 单声道
+   *  2: 双声道 该参数仅在 调用 createMediaRecorder 且将 RecorderStreamInfo 中的 type 设置为 Preview 时需要传入。
    */
   channel_num?: number;
   /**
-   * @ignore
+   * 录制视频源的类型。详见 VideoSourceType 。
+   * 该参数仅在 调用 createMediaRecorder 且将 RecorderStreamInfo 中的 type 设置为 Preview 时需要传入。
    */
   videoSourceType?: VideoSourceType;
 }
 
 /**
- * Facial information observer.
+ * 人脸信息观测器。
  *
- * You can call registerFaceInfoObserver to register one IFaceInfoObserver observer.
+ * 你可以调用 registerFaceInfoObserver 注册 IFaceInfoObserver 观测器。
  */
 export interface IFaceInfoObserver {
   /**
-   * Occurs when the facial information processed by speech driven extension is received.
+   * 报告已获取语音驱动插件处理后的人脸信息。
    *
-   * @param outFaceInfo Output parameter, the JSON string of the facial information processed by the voice driver plugin, including the following fields:
-   *  faces: Object sequence. The collection of facial information, with each face corresponding to an object.
-   *  blendshapes: Object. The collection of face capture coefficients, named according to ARkit standards, with each key-value pair representing a blendshape coefficient. The blendshape coefficient is a floating point number with a range of [0.0, 1.0].
-   *  rotation: Object sequence. The rotation of the head, which includes the following three key-value pairs, with values as floating point numbers ranging from -180.0 to 180.0:
-   *  pitch: Head pitch angle. A positve value means looking down, while a negative value means looking up.
-   *  yaw: Head yaw angle. A positve value means turning left, while a negative value means turning right.
-   *  roll: Head roll angle. A positve value means tilting to the right, while a negative value means tilting to the left.
-   *  timestamp: String. The timestamp of the output result, in milliseconds. Here is an example of JSON:
-   * { "faces":[{ "blendshapes":{ "eyeBlinkLeft":0.9, "eyeLookDownLeft":0.0, "eyeLookInLeft":0.0, "eyeLookOutLeft":0.0, "eyeLookUpLeft":0.0, "eyeSquintLeft":0.0, "eyeWideLeft":0.0, "eyeBlinkRight":0.0, "eyeLookDownRight":0.0, "eyeLookInRight":0.0, "eyeLookOutRight":0.0, "eyeLookUpRight":0.0, "eyeSquintRight":0.0, "eyeWideRight":0.0, "jawForward":0.0, "jawLeft":0.0, "jawRight":0.0, "jawOpen":0.0, "mouthClose":0.0, "mouthFunnel":0.0, "mouthPucker":0.0, "mouthLeft":0.0, "mouthRight":0.0, "mouthSmileLeft":0.0, "mouthSmileRight":0.0, "mouthFrownLeft":0.0, "mouthFrownRight":0.0, "mouthDimpleLeft":0.0, "mouthDimpleRight":0.0, "mouthStretchLeft":0.0, "mouthStretchRight":0.0, "mouthRollLower":0.0, "mouthRollUpper":0.0, "mouthShrugLower":0.0, "mouthShrugUpper":0.0, "mouthPressLeft":0.0, "mouthPressRight":0.0, "mouthLowerDownLeft":0.0, "mouthLowerDownRight":0.0, "mouthUpperUpLeft":0.0, "mouthUpperUpRight":0.0, "browDownLeft":0.0, "browDownRight":0.0, "browInnerUp":0.0, "browOuterUpLeft":0.0, "browOuterUpRight":0.0, "cheekPuff":0.0, "cheekSquintLeft":0.0, "cheekSquintRight":0.0, "noseSneerLeft":0.0, "noseSneerRight":0.0, "tongueOut":0.0 }, "rotation":{"pitch":30.0, "yaw":25.5, "roll":-15.5},
-   *  }], "timestamp":"654879876546" }
+   * @param outFaceInfo 输出参数，语音驱动插件处理后的人脸信息 JSON 字符串，包含以下字段：
+   *  faces：Object 序列。包含识别到的人脸信息，每一张人脸对应一个 Object。
+   *  blendshapes：Object。面捕系数集，命名符合 ARkit 标准，内部的键值对为每一个 blendshape 系数。blendshape 系数为浮点，取值范围为 [0.0,1.0]。
+   *  rotation：Object 序列。头部旋转量，包含以下三个键值对，取值为浮点数，范围为 [-180.0,180.0]：
+   *  pitch：头部俯仰角度。低头为正值，抬头为负值。
+   *  yaw：头部水平旋转角度。左转为正值，右转为负值。
+   *  roll：头部垂直旋转角度。右倾为正值，左倾为负值。
+   *  timestamp：String。输出结果的时间戳，单位为毫秒。 以下为 JSON 示例： { "faces":[{ "blendshapes":{ "eyeBlinkLeft":0.9, "eyeLookDownLeft":0.0, "eyeLookInLeft":0.0, "eyeLookOutLeft":0.0, "eyeLookUpLeft":0.0, "eyeSquintLeft":0.0, "eyeWideLeft":0.0, "eyeBlinkRight":0.0, "eyeLookDownRight":0.0, "eyeLookInRight":0.0, "eyeLookOutRight":0.0, "eyeLookUpRight":0.0, "eyeSquintRight":0.0, "eyeWideRight":0.0, "jawForward":0.0, "jawLeft":0.0, "jawRight":0.0, "jawOpen":0.0, "mouthClose":0.0, "mouthFunnel":0.0, "mouthPucker":0.0, "mouthLeft":0.0, "mouthRight":0.0, "mouthSmileLeft":0.0, "mouthSmileRight":0.0, "mouthFrownLeft":0.0, "mouthFrownRight":0.0, "mouthDimpleLeft":0.0, "mouthDimpleRight":0.0, "mouthStretchLeft":0.0, "mouthStretchRight":0.0, "mouthRollLower":0.0, "mouthRollUpper":0.0, "mouthShrugLower":0.0, "mouthShrugUpper":0.0, "mouthPressLeft":0.0, "mouthPressRight":0.0, "mouthLowerDownLeft":0.0, "mouthLowerDownRight":0.0, "mouthUpperUpLeft":0.0, "mouthUpperUpRight":0.0, "browDownLeft":0.0, "browDownRight":0.0, "browInnerUp":0.0, "browOuterUpLeft":0.0, "browOuterUpRight":0.0, "cheekPuff":0.0, "cheekSquintLeft":0.0, "cheekSquintRight":0.0, "noseSneerLeft":0.0, "noseSneerRight":0.0, "tongueOut":0.0 }, "rotation":{"pitch":30.0, "yaw":25.5, "roll":-15.5}, }], "timestamp":"654879876546" }
    *
    * @returns
-   * true : Facial information JSON parsing successful. false : Facial information JSON parsing failed.
+   * true : 人脸信息 JSON 解析成功。 false : 人脸信息 JSON 解析失败。
    */
   onFaceInfo?(outFaceInfo: string): void;
 }
 
 /**
- * @ignore
+ * 录制文件信息。
  */
 export class RecorderInfo {
   /**
-   * @ignore
+   * 录制文件的绝对存储路径。
    */
   fileName?: string;
   /**
-   * @ignore
+   * 录制文件的时长，单位为毫秒。
    */
   durationMs?: number;
   /**
-   * @ignore
+   * 录制文件的大小，单位为字节。
    */
   fileSize?: number;
 }
 
 /**
- * @ignore
+ * 包含音视频录制的事件。
  */
 export interface IMediaRecorderObserver {
   /**
-   * @ignore
+   * 录制状态发生改变回调。
+   *
+   * 音视频流录制状态发生改变时，SDK 会触发该回调，报告当前的录制状态和引起录制状态改变的原因。
+   *
+   * @param channelId 频道名称。
+   * @param uid 用户 ID。
+   * @param state 当前的录制状态。详见 RecorderState 。
+   * @param reason 录制状态出错的原因。详见 RecorderReasonCode 。
    */
   onRecorderStateChanged?(
     channelId: string,
@@ -1754,7 +1798,13 @@ export interface IMediaRecorderObserver {
   ): void;
 
   /**
-   * @ignore
+   * 录制信息更新回调。
+   *
+   * 成功注册该回调并开启音视频流录制后，SDK 会根据你在 MediaRecorderConfiguration 中设置的 recorderInfoUpdateInterval 的值周期性触发该回调，报告当前录制文件的文件名、时长和大小。
+   *
+   * @param channelId 频道名称。
+   * @param uid 用户 ID。
+   * @param info 录制文件信息。详见 RecorderInfo 。
    */
   onRecorderInfoUpdated?(
     channelId: string,

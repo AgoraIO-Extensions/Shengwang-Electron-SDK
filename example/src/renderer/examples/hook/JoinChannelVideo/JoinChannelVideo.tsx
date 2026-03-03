@@ -1,10 +1,10 @@
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ClientRoleType,
   LocalVideoStreamReason,
   LocalVideoStreamState,
   VideoSourceType,
-} from 'agora-electron-sdk';
-import React, { useCallback, useEffect, useState } from 'react';
+} from 'shengwang-electron-sdk';
 
 import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';

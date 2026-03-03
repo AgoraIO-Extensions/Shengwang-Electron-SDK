@@ -1,9 +1,10 @@
 const path = require('path');
 
-const download = require('download');
 const fs = require('fs-extra');
 
 const { cleanDir, buildDir } = require('./clean');
+const download = require('./download');
+
 const getConfig = require('./getConfig');
 const logger = require('./logger');
 const { getOS } = require('./util');
@@ -22,9 +23,9 @@ const workspaceDir = `${path.join(__dirname, '..')}`;
 const normalizePath = (filePath) => filePath.split(path.sep).join('/');
 
 const getDownloadURL = () => {
-  let downloadUrl = `https://download.agora.io/sdk/release/Electron-${getOS()}-${packageVersion}-napi.zip`;
+  let downloadUrl = `https://download.shengwang.cn/sdk/release/Electron-${getOS()}-${packageVersion}-napi.zip`;
   if (platform === 'win32' && arch === 'x64') {
-    downloadUrl = `https://download.agora.io/sdk/release/Electron-win64-${packageVersion}-napi.zip`;
+    downloadUrl = `https://download.shengwang.cn/sdk/release/Electron-win64-${packageVersion}-napi.zip`;
   }
   return downloadUrl;
 };

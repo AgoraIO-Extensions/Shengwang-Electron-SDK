@@ -1,5 +1,6 @@
 import os from 'os';
 
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -12,8 +13,7 @@ import {
   RecorderReasonCode,
   RecorderState,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import React, { ReactElement } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseComponent,
@@ -202,7 +202,7 @@ export default class MediaRecorder
     channelId: string,
     uid: number,
     state: RecorderState,
-    error: RecorderReasonCode
+    reason: RecorderReasonCode
   ) {
     this.info(
       'onRecorderStateChanged',
@@ -212,8 +212,8 @@ export default class MediaRecorder
       uid,
       'state',
       state,
-      'error',
-      error
+      'reason',
+      reason
     );
     switch (state) {
       case RecorderState.RecorderStateStart:

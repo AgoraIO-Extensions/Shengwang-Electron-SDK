@@ -1,3 +1,4 @@
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -16,8 +17,7 @@ import {
   VideoCanvas,
   VideoSourceType,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import React, { ReactElement } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseComponent,
@@ -213,7 +213,11 @@ export default class JoinChannelVideo
     });
   }
 
-  onLocalVideoStats(connection: RtcConnection, stats: LocalVideoStats): void {
+  onLocalVideoStats(
+    connection: RtcConnection,
+    source: VideoSourceType,
+    stats: LocalVideoStats
+  ): void {
     this.setState({
       videoSentBitrate: stats.sentBitrate,
       encodedFrameWidth: stats.encodedFrameWidth,

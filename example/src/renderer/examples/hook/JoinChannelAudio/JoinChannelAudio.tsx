@@ -1,11 +1,11 @@
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
   ClientRoleType,
   LocalAudioStreamReason,
   LocalAudioStreamState,
   MediaDeviceType,
   RtcConnection,
-} from 'agora-electron-sdk';
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+} from 'shengwang-electron-sdk';
 
 import { AgoraButton, AgoraDivider, AgoraSlider } from '../../../components/ui';
 import * as log from '../../../utils/log';

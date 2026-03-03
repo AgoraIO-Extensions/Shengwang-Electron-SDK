@@ -1,9 +1,9 @@
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
   AudioMixingReasonType,
   AudioMixingStateType,
   ClientRoleType,
-} from 'agora-electron-sdk';
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   AgoraButton,

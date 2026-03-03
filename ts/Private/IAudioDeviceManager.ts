@@ -2,341 +2,350 @@ import './extension/IAudioDeviceManagerExtension';
 import { AudioDeviceInfo } from './IAgoraRtcEngine';
 
 /**
- * The maximum length of the device ID.
+ * 设备 ID 的最大长度。
  */
 export enum MaxDeviceIdLengthType {
   /**
-   * The maximum length of the device ID is 512 bytes.
+   * 设备 ID 的最大长度为 512 个字符。
    */
   MaxDeviceIdLength = 512,
 }
 
 /**
- * Audio device management methods.
+ * 音频设备管理方法。
  */
 export abstract class IAudioDeviceManager {
   /**
-   * Enumerates the audio playback devices.
+   * 获取系统中所有的播放设备列表。
    *
    * @returns
-   * Success: Returns an AudioDeviceInfo array, which includes all the audio playback devices.
-   *  Failure: An empty array.
+   * 方法调用成功，返回 AudioDeviceInfo 数组，包含所有音频播放设备的设备 ID 和设备名称。
+   *  方法调用失败: 返回空列表。
    */
   abstract enumeratePlaybackDevices(): AudioDeviceInfo[];
 
   /**
-   * Enumerates the audio capture devices.
+   * 获取系统中所有的音频采集设备列表。
    *
    * @returns
-   * Success: An AudioDeviceInfo array, which includes all the audio capture devices.
-   *  Failure: An empty array.
+   * 方法调用成功，返回一个 AudioDeviceInfo 数组，包含所有音频采集设备的设备 ID 和设备名称。
+   *  方法调用失败: 返回空列表。
    */
   abstract enumerateRecordingDevices(): AudioDeviceInfo[];
 
   /**
-   * Sets the audio playback device.
+   * 指定播放设备。
    *
-   * You can call this method to change the audio route currently being used, but this does not change the default audio route. For example, if the default audio route is speaker 1, you call this method to set the audio route as speaker 2 before joinging a channel and then start a device test, the SDK conducts device test on speaker 2. After the device test is completed and you join a channel, the SDK still uses speaker 1, the default audio route.
+   * 该方法可以更改当前的音频路由，但不会改变系统默认的音频路由。假设系统默认的音频路由是扬声器 1，你在加入频道前调用该方法设置当前的音频路由为扬声器 2，如果在此时进行设备检测，SDK 会对扬声器 2 进行检测。检测结束后，当你加入频道时 SDK 依然会选择使用系统默认的音频路由，即扬声器 1。
    *
-   * @param deviceId The ID of the specified audio playback device. You can get the device ID by calling enumeratePlaybackDevices. Connecting or disconnecting the audio device does not change the value of deviceId. The maximum length is MaxDeviceIdLengthType.
+   * @param deviceId 指定播放设备。由 enumeratePlaybackDevices 获取。插拔设备不会影响 deviceId 。
+   * 最大长度为 MaxDeviceIdLengthType 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setPlaybackDevice(deviceId: string): number;
 
   /**
-   * Retrieves the audio playback device associated with the device ID.
+   * 获取当前音频播放设备。
    *
    * @returns
-   * The current audio playback device.
+   * 当前音频播放设备。
    */
   abstract getPlaybackDevice(): string;
 
   /**
-   * Retrieves the information of the audio playback device.
+   * 获取音频播放设备信息。
    *
    * @returns
-   * An AudioDeviceInfo object, which contains the ID and device name of the audio devices.
+   * AudioDeviceInfo 对象，包含音频播放设备的设备 ID 和设备名称。
    */
   abstract getPlaybackDeviceInfo(): AudioDeviceInfo;
 
   /**
-   * Sets the volume of the audio playback device.
+   * 设置播放设备音量。
    *
-   * This method applies to Windows only.
+   * 该方法仅适用于 Windows 平台。
    *
-   * @param volume The volume of the audio playback device. The value range is [0,255].
+   * @param volume 播放设备音量。取值范围为 [0,255]。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setPlaybackDeviceVolume(volume: number): number;
 
   /**
-   * Retrieves the volume of the audio playback device.
+   * 获取播放设备音量。
    *
    * @returns
-   * The volume of the audio playback device. The value range is [0,255].
+   * 播放设备音量。取值范围 [0,255]。
    */
   abstract getPlaybackDeviceVolume(): number;
 
   /**
-   * Sets the audio capture device.
+   * 指定音频采集设备。
    *
-   * You can call this method to change the audio route currently being used, but this does not change the default audio route. For example, if the default audio route is microphone, you call this method to set the audio route as bluetooth earphones before joinging a channel and then start a device test, the SDK conducts device test on the bluetooth earphones. After the device test is completed and you join a channel, the SDK still uses the microphone for audio capturing.
+   * 该方法可以更改当前的音频采集设备，但不改变系统默认的音频采集设备。假设系统默认的音频采集设备是麦克风 1，你在加入频道前调用该方法设置当前的音频路由为蓝牙耳机 1，如果在此时进行设备检测，SDK 会对蓝牙耳机 1 进行检测。检测结束后，当你加入频道时 SDK 依然会选择使用系统默认的音频采集设备，即麦克风 1。
    *
-   * @param deviceId The ID of the audio capture device. You can get the Device ID by calling enumerateRecordingDevices. Connecting or disconnecting the audio device does not change the value of deviceId. The maximum length is MaxDeviceIdLengthType.
+   * @param deviceId 音频采集设备的 Device ID。可通过 enumerateRecordingDevices 获取。插拔设备不会影响 deviceId 。
+   * 最大长度为 MaxDeviceIdLengthType 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setRecordingDevice(deviceId: string): number;
 
   /**
-   * Gets the current audio recording device.
+   * 获取当前音频采集设备。
    *
    * @returns
-   * The current audio recording device.
+   * 当前音频采集设备。
    */
   abstract getRecordingDevice(): string;
 
   /**
-   * Retrieves the information of the audio recording device.
+   * 获取音频采集设备信息。
    *
    * @returns
-   * An AudioDeviceInfo object, which includes the device ID and device name.
+   * AudioDeviceInfo 对象，包含音频采集设备的设备 ID 和设备名称。
    */
   abstract getRecordingDeviceInfo(): AudioDeviceInfo;
 
   /**
-   * Sets the volume of the audio capture device.
+   * 设置音频采集设备音量。
    *
-   * This method is for Windows and macOS only.
+   * 该方法仅适用于 Windows 和 macOS。
    *
-   * @param volume The volume of the audio recording device. The value range is [0,255]. 0 means no sound, 255 means maximum volume.
+   * @param volume 音频采集设备音量。取值范围 [0,255]。0 代表无声，255 代表最大音量。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setRecordingDeviceVolume(volume: number): number;
 
   /**
-   * Retrieves the volume of the audio recording device.
+   * 获取音频采集设备音量。
    *
-   * This method applies to Windows only.
+   * 该方法仅适用于 Windows 平台。
    *
    * @returns
-   * The volume of the audio recording device. The value range is [0,255].
+   * 音频采集设备音量。取值范围 [0,255]。
    */
   abstract getRecordingDeviceVolume(): number;
 
   /**
-   * Sets the loopback device.
+   * 指定声卡采集设备。
    *
-   * The SDK uses the current playback device as the loopback device by default. If you want to specify another audio device as the loopback device, call this method, and set deviceId to the loopback device you want to specify. You can call this method to change the audio route currently being used, but this does not change the default audio route. For example, if the default audio route is microphone, you call this method to set the audio route as a sound card before joinging a channel and then start a device test, the SDK conducts device test on the sound card. After the device test is completed and you join a channel, the SDK still uses the microphone for audio capturing. This method is for Windows and macOS only. The scenarios where this method is applicable are as follows: Use app A to play music through a Bluetooth headset; when using app B for a video conference, play through the speakers.
-   *  If the loopback device is set as the Bluetooth headset, the SDK publishes the music in app A to the remote end.
-   *  If the loopback device is set as the speaker, the SDK does not publish the music in app A to the remote end.
-   *  If you set the loopback device as the Bluetooth headset, and then use a wired headset to play the music in app A, you need to call this method again, set the loopback device as the wired headset, and the SDK continues to publish the music in app A to remote end.
+   * SDK 默认采用当前的播放设备作为声卡采集设备，如果想要指定其他音频设备作为声卡采集设备，则调用该方法并设置 deviceId 为你想要指定的声卡采集设备。
+   * 该方法可以更改当前的音频采集设备，但不改变系统默认的音频采集设备。假设系统默认的音频采集设备是麦克风 1，你在加入频道前调用该方法设置当前的音频路由为声卡 1，如果在此时进行设备检测，SDK 会对声卡 1 做设备检测。检测结束后，当你加入频道时 SDK 依然会选择使用系统默认的音频采集设备，即麦克风 1。 该方法仅适用于 Windows 和 macOS。
+   * 该方法适用的场景如下：
+   * 使用 App A 播放音乐，通过蓝牙耳机播放；同时使用 App B 进行视频会议，通过扬声器播放。
+   *  如果设置声卡采集设备为蓝牙耳机，则 SDK 会将 App A 中的音乐发布到远端。
+   *  如果设置声卡采集设备设置为扬声器，则 SDK 不会将 App A 中的音乐发布到远端。
+   *  如果设置声卡采集设备为蓝牙耳机后，又改用有线耳机播放 App A 中的音乐，则需要重新调用该方法，设置声卡采集设备为有线耳机，则 SDK 会继续将 App A 中的音乐发布到远端。
    *
-   * @param deviceId Specifies the loopback device of the SDK. You can get the device ID by calling enumeratePlaybackDevices. Connecting or disconnecting the audio device does not change the value of deviceId. The maximum length is MaxDeviceIdLengthType.
+   * @param deviceId 指定 SDK 的声卡采集设备。由 enumeratePlaybackDevices 获取。插拔设备不会影响 deviceId 。
+   * 最大长度为 MaxDeviceIdLengthType 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setLoopbackDevice(deviceId: string): number;
 
   /**
-   * Gets the current loopback device.
+   * 获取当前的声卡采集设备。
    *
-   * This method is for Windows and macOS only.
+   * 该方法仅适用于 Windows 和 macOS。
    *
    * @returns
-   * The ID of the current loopback device.
+   * 当前声卡采集设备的 ID。
    */
   abstract getLoopbackDevice(): string;
 
   /**
-   * Mutes the audio playback device.
+   * 设置播放设备静音。
    *
-   * @param mute Whether to mute the audio playback device: true : Mute the audio playback device. false : Unmute the audio playback device.
+   * @param mute 是否设置播放设备为静音： true : 播放设备设为静音。 false : 播放设备不设为静音。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setPlaybackDeviceMute(mute: boolean): number;
 
   /**
-   * Retrieves whether the audio playback device is muted.
+   * 获取当前播放设备静音状态。
    *
    * @returns
-   * true : The audio playback device is muted. false : The audio playback device is unmuted.
+   * true : 播放设备为静音状态。 false : 播放设备为非静音状态。
    */
   abstract getPlaybackDeviceMute(): boolean;
 
   /**
-   * Sets the mute status of the audio capture device.
+   * 设置当前音频采集设备静音。
    *
-   * @param mute Whether to mute the audio recording device: true : Mute the audio capture device. false : Unmute the audio capture device.
+   * @param mute 是否设置音频采集设备静音： true : 采集设备静音。 false : 采集设备为非静音。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setRecordingDeviceMute(mute: boolean): number;
 
   /**
-   * Gets whether the audio capture device is muted.
+   * 获取当前音频采集设备静音状态。
    *
    * @returns
-   * true : The microphone is muted. false : The microphone is unmuted.
+   * true : 采集设备为静音状态。 false : 采集设备为非静音状态。
    */
   abstract getRecordingDeviceMute(): boolean;
 
   /**
-   * Starts the audio playback device test.
+   * 启动音频播放设备测试。
    *
-   * This method tests whether the audio device for local playback works properly. Once a user starts the test, the SDK plays an audio file specified by the user. If the user can hear the audio, the playback device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback every 100 ms, reporting uid = 1 and the volume information of the playback device. The difference between this method and the startEchoTest method is that the former checks if the local audio playback device is working properly, while the latter can check the audio and video devices and network conditions. Call this method before joining a channel. After the test is completed, call stopPlaybackDeviceTest to stop the test before joining a channel.
+   * 该方法用于测试本地音频播放设备是否能正常工作。启动测试后，SDK 播放指定的音频文件，测试者如果能听到声音，说明播放设备能正常工作。
+   * 调用该方法后，SDK 会每隔 100 毫秒触发一次 onAudioVolumeIndication 回调，报告 uid = 1 及播放设备的音量信息。
+   * 该方法和 startEchoTest 的区别在于该方法检测本地的音频播放设备能否正常工作，后者可以检测音视频设备及网络是否正常。 该方法需要在加入频道前调用。测试完成后，如需加入频道，请确保先调用 stopPlaybackDeviceTest 停止设备测试。
    *
-   * @param testAudioFilePath The path of the audio file. The data format is string in UTF-8.
-   *  Supported file formats: wav, mp3, m4a, and aac.
-   *  Supported file sample rates: 8000, 16000, 32000, 44100, and 48000 Hz.
+   * @param testAudioFilePath 音频文件的绝对路径，路径字符串使用 UTF-8 编码格式。
+   *  支持文件格式: wav、mp3、m4a、aac。
+   *  支持文件采样率: 8000、16000、32000、44100、48000。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract startPlaybackDeviceTest(testAudioFilePath: string): number;
 
   /**
-   * Stops the audio playback device test.
+   * 停止音频播放设备测试。
    *
-   * This method stops the audio playback device test. You must call this method to stop the test after calling the startPlaybackDeviceTest method. Call this method before joining a channel.
+   * 该方法用于停止音频播放设备测试。调用 startPlaybackDeviceTest 后，必须调用该方法停止测试。 该方法需要在加入频道前调用。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract stopPlaybackDeviceTest(): number;
 
   /**
-   * Starts the audio capturing device test.
+   * 启动音频采集设备测试。
    *
-   * This method tests whether the audio capturing device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method, which reports uid = 0 and the volume information of the capturing device. The difference between this method and the startEchoTest method is that the former checks if the local audio capturing device is working properly, while the latter can check the audio and video devices and network conditions. Call this method before joining a channel. After the test is completed, call stopRecordingDeviceTest to stop the test before joining a channel.
+   * 该方法用于测试本地音频采集设备是否能正常工作。调用该方法后，SDK 会按设置的时间间隔触发 onAudioVolumeIndication 回调，报告 uid = 0 及采集设备的音量信息。
+   * 该方法和 startEchoTest 的区别在于该方法检测本地的音频采集设备能否正常工作，后者可以检测音视频设备及网络是否正常。 该方法需要在加入频道前调用。测试完成后，如需加入频道，请确保先调用 stopRecordingDeviceTest 停止设备测试。
    *
-   * @param indicationInterval The interval (ms) for triggering the onAudioVolumeIndication callback. This value should be set to greater than 10, otherwise, you will not receive the onAudioVolumeIndication callback and the SDK returns the error code -2. Agora recommends that you set this value to 100.
+   * @param indicationInterval SDK 触发 onAudioVolumeIndication 回调的时间间隔，单位为毫秒，最小取值为 10，否则会收不到 onAudioVolumeIndication 回调，SDK 会返回错误码 -2 。声网推荐你将该值设为 100。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: Invalid parameters. Check your parameter settings.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
+   *  -2: 参数设置错误，请重新设置参数。
    */
   abstract startRecordingDeviceTest(indicationInterval: number): number;
 
   /**
-   * Stops the audio capturing device test.
+   * 停止音频采集设备测试。
    *
-   * This method stops the audio capturing device test. You must call this method to stop the test after calling the startRecordingDeviceTest method. Call this method before joining a channel.
+   * 该方法用于停止音频采集设备测试。调用 startRecordingDeviceTest 后，必须调用该方法停止测试。 该方法需要在加入频道前调用。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract stopRecordingDeviceTest(): number;
 
   /**
-   * Starts an audio device loopback test.
+   * 开始音频设备回路测试。
    *
-   * This method tests whether the local audio capture device and playback device are working properly. After starting the test, the audio capture device records the local audio, and the audio playback device plays the captured audio. The SDK triggers two independent onAudioVolumeIndication callbacks at the time interval set in this method, which reports the volume information of the capture device (uid = 0) and the volume information of the playback device (uid = 1) respectively.
-   *  You can call this method either before or after joining a channel.
-   *  This method only takes effect when called by the host.
-   *  This method tests local audio devices and does not report the network conditions.
-   *  When you finished testing, call stopAudioDeviceLoopbackTest to stop the audio device loopback test.
+   * 该方法测试音频采集和播放设备是否能正常工作。一旦测试开始，音频采集设备会采集本地音频，然后使用音频播放设备播放出来。SDK 会按设置的时间间隔触发两个 onAudioVolumeIndication 回调，分别报告音频采集设备（ uid = 0）和音频播放设置（ uid = 1）的音量信息。
+   *  该方法在加入频道前后都可调用。
+   *  该方法仅支持主播角色调用。
+   *  该方法仅在本地进行音频设备测试，不涉及网络连接。
+   *  完成测试后，必须调用 stopAudioDeviceLoopbackTest 停止音频设备回路测试。
    *
-   * @param indicationInterval The time interval (ms) at which the SDK triggers the onAudioVolumeIndication callback. Agora recommends setting a value greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive the onAudioVolumeIndication callback.
+   * @param indicationInterval SDK 触发 onAudioVolumeIndication 回调的时间间隔，单位为毫秒。建议设置到大于 200 毫秒。不得少于 10 毫秒，否则会收不到 onAudioVolumeIndication 回调。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract startAudioDeviceLoopbackTest(indicationInterval: number): number;
 
   /**
-   * Stops the audio device loopback test.
+   * 停止音频设备回路测试。
    *
-   * You can call this method either before or after joining a channel.
-   *  This method only takes effect when called by the host.
-   *  Ensure that you call this method to stop the loopback test after calling the startAudioDeviceLoopbackTest method.
+   * 该方法在加入频道前后都可调用。
+   *  该方法仅支持主播角色调用。
+   *  在调用 startAudioDeviceLoopbackTest 后，必须调用该方法停止音频设备回路测试。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract stopAudioDeviceLoopbackTest(): number;
 
   /**
-   * Sets the audio playback device used by the SDK to follow the system default audio playback device.
+   * 设置 SDK 使用的音频播放设备跟随系统默认的音频播放设备。
    *
-   * @param enable Whether to follow the system default audio playback device: true : Follow the system default audio playback device. The SDK immediately switches the audio playback device when the system default audio playback device changes. false : Do not follow the system default audio playback device. The SDK switches the audio playback device to the system default audio playback device only when the currently used audio playback device is disconnected.
+   * @param enable 是否跟随系统默认的音频播放设备： true ：跟随。当系统默认音频播放设备发生改变时，SDK 立即切换音频播放设备。 false ：不跟随。只有当 SDK 使用的音频播放设备被移除后，SDK 才切换至系统默认的音频播放设备。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract followSystemPlaybackDevice(enable: boolean): number;
 
   /**
-   * Sets the audio recording device used by the SDK to follow the system default audio recording device.
+   * 设置 SDK 使用的音频采集设备跟随系统默认的音频采集设备。
    *
-   * @param enable Whether to follow the system default audio recording device: true : Follow the system default audio playback device. The SDK immediately switches the audio recording device when the system default audio recording device changes. false : Do not follow the system default audio playback device. The SDK switches the audio recording device to the system default audio recording device only when the currently used audio recording device is disconnected.
+   * @param enable 是否跟随系统默认的音频采集设备： true ：跟随。当系统默认的音频采集设备改变时，SDK 立即切换音频采集设备。 false ：不跟随。只有当 SDK 使用的音频采集设备被移除后，SDK 才切换至系统默认的音频采集设备。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract followSystemRecordingDevice(enable: boolean): number;
 
   /**
-   * Sets whether the loopback device follows the system default playback device.
+   * 设置声卡采集设备是否跟随系统默认的播放设备。
    *
-   * This method is for Windows and macOS only.
+   * 方法仅适用于 Windows 和 macOS。
    *
-   * @param enable Whether to follow the system default audio playback device: true : Follow the system default audio playback device. When the default playback device of the system is changed, the SDK immediately switches to the loopback device. false : Do not follow the system default audio playback device. The SDK switches the audio loopback device to the system default audio playback device only when the current audio playback device is disconnected.
+   * @param enable 是否跟随系统默认的播放设备： true ：跟随。当系统默认播放设备发生改变时，SDK 立即跟随切换声卡采集设备。 false ：不跟随。只有当 SDK 使用的声卡采集设备被移除后，SDK 才切换至系统默认的音频播放设备。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract followSystemLoopbackDevice(enable: boolean): number;
 
   /**
-   * Releases all the resources occupied by the IAudioDeviceManager object.
+   * 释放 IAudioDeviceManager 对象占用的所有资源。
    */
   abstract release(): void;
 
   /**
-   * Gets the default audio playback device.
+   * 获取系统默认的音频播放设备。
    *
-   * This method is for Windows and macOS only.
+   * 该方法仅适用于 Windows 和 macOS。
    *
    * @returns
-   * The details about the default audio playback device. See AudioDeviceInfo.
+   * 默认音频播放设备的信息。详见 AudioDeviceInfo 。
    */
   abstract getPlaybackDefaultDevice(): AudioDeviceInfo;
 
   /**
-   * Gets the default audio capture device.
+   * 获取系统默认的音频采集设备。
    *
-   * This method is for Windows and macOS only.
+   * 该方法仅适用于 Windows 和 macOS。
    *
    * @returns
-   * The details about the default audio capture device. See AudioDeviceInfo.
+   * 默认音频采集设备的信息。详见 AudioDeviceInfo 。
    */
   abstract getRecordingDefaultDevice(): AudioDeviceInfo;
 }

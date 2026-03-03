@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import createAgoraRtcEngine, {
   ChannelProfileType,
   ErrorCodeType,
@@ -5,8 +6,7 @@ import createAgoraRtcEngine, {
   RtcConnection,
   RtcStats,
   UserOfflineReasonType,
-} from 'agora-electron-sdk';
-import { useCallback, useEffect, useRef, useState } from 'react';
+} from 'shengwang-electron-sdk';
 
 import Config from '../../../config/agora.config';
 import * as log from '../../../utils/log';

@@ -1,3 +1,4 @@
+import React, { ReactElement } from 'react';
 import {
   AreaCode,
   ChannelProfileType,
@@ -8,8 +9,7 @@ import {
   RtcStats,
   UserOfflineReasonType,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import React, { ReactElement } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseAudioComponentState,

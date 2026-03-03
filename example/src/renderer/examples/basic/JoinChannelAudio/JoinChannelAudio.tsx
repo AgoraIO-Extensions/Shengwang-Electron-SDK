@@ -1,3 +1,4 @@
+import React, { ReactElement } from 'react';
 import {
   AudioVolumeInfo,
   ChannelProfileType,
@@ -15,8 +16,7 @@ import {
   UserOfflineReasonType,
   VideoCanvas,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import React, { ReactElement } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseAudioComponentState,

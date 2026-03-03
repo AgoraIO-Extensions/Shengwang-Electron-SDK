@@ -1,10 +1,10 @@
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
   IRtcEngineEventHandler,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import React, { ReactElement } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseAudioComponentState,

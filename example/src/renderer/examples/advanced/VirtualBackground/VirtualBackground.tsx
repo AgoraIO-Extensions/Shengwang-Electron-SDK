@@ -1,13 +1,15 @@
+import React, { ReactElement } from 'react';
+import { SketchPicker } from 'react-color';
 import {
   BackgroundBlurDegree,
   BackgroundSourceType,
   ChannelProfileType,
   ClientRoleType,
   IRtcEngineEventHandler,
+  RenderModeType,
+  VideoSourceType,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import React, { ReactElement } from 'react';
-import { SketchPicker } from 'react-color';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseComponent,
@@ -16,6 +18,8 @@ import {
 import {
   AgoraButton,
   AgoraDropdown,
+  AgoraList,
+  AgoraSwitch,
   AgoraTextInput,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
@@ -28,6 +32,7 @@ interface State extends BaseVideoComponentState {
   source: string;
   blur_degree: BackgroundBlurDegree;
   enableVirtualBackground?: boolean;
+  enableAlphaMask: boolean;
 }
 
 export default class VirtualBackground
@@ -44,10 +49,11 @@ export default class VirtualBackground
       joinChannelSuccess: false,
       remoteUsers: [],
       startPreview: false,
-      background_source_type: BackgroundSourceType.BackgroundColor,
-      color: 0xffffff,
+      background_source_type: BackgroundSourceType.BackgroundNone,
+      color: 0xff0000,
       source: getResourcePath('agora-logo.png'),
       blur_degree: BackgroundBlurDegree.BlurDegreeMedium,
+      enableAlphaMask: false,
     };
   }
 
@@ -76,10 +82,23 @@ export default class VirtualBackground
     // If you only call `enableAudio`, only relay the audio stream to the target channel
     this.engine.enableVideo();
 
-    // This case works if startPreview without joinChannel
-    this.engine.startPreview();
-    this.setState({ startPreview: true });
+    this.engine.setParameters(
+      JSON.stringify({ 'rtc.video.send_alpha_data': true })
+    );
+    this.engine.setParameters(
+      JSON.stringify({ 'rtc.video.alpha_data_codec_type': 3 })
+    );
   }
+
+  handleStartPreview = () => {
+    this.engine?.startPreview();
+    this.setState({ startPreview: true });
+  };
+
+  handleStopPreview = () => {
+    this.engine?.stopPreview();
+    this.setState({ startPreview: false });
+  };
 
   /**
    * Step 2: joinChannel
@@ -156,8 +175,42 @@ export default class VirtualBackground
     this.engine?.release();
   }
 
+  protected renderUsers(): ReactElement | undefined {
+    const { startPreview, joinChannelSuccess, remoteUsers, enableAlphaMask } =
+      this.state;
+    return (
+      <>
+        {!!startPreview || joinChannelSuccess
+          ? this.renderUser({
+              enableAlphaMask: enableAlphaMask,
+              sourceType: VideoSourceType.VideoSourceCamera,
+              renderMode: RenderModeType.RenderModeFit,
+            })
+          : undefined}
+        {!!startPreview || joinChannelSuccess ? (
+          <AgoraList
+            data={remoteUsers ?? []}
+            renderItem={(item) =>
+              this.renderUser({
+                enableAlphaMask: enableAlphaMask,
+                uid: item,
+                sourceType: VideoSourceType.VideoSourceRemote,
+              })
+            }
+          />
+        ) : undefined}
+      </>
+    );
+  }
+
   protected renderConfiguration(): ReactElement | undefined {
-    const { background_source_type, color, source, blur_degree } = this.state;
+    const {
+      background_source_type,
+      color,
+      source,
+      blur_degree,
+      enableAlphaMask,
+    } = this.state;
     return (
       <>
         <AgoraDropdown
@@ -165,6 +218,7 @@ export default class VirtualBackground
           items={enumToItems(BackgroundSourceType)}
           value={background_source_type}
           onValueChange={(value) => {
+            this.disableVirtualBackground();
             this.setState({ background_source_type: value });
           }}
         />
@@ -179,9 +233,6 @@ export default class VirtualBackground
           />
         ) : undefined}
         <AgoraTextInput
-          editable={
-            background_source_type === BackgroundSourceType.BackgroundImg
-          }
           onChangeText={(text) => {
             this.setState({
               source: text,
@@ -190,15 +241,21 @@ export default class VirtualBackground
           placeholder={'source'}
           value={source}
         />
-        <AgoraDropdown
-          enabled={
-            background_source_type === BackgroundSourceType.BackgroundBlur
-          }
-          title={'blurDegree'}
-          items={enumToItems(BackgroundBlurDegree)}
-          value={blur_degree}
+        {background_source_type === BackgroundSourceType.BackgroundBlur ? (
+          <AgoraDropdown
+            title={'blurDegree'}
+            items={enumToItems(BackgroundBlurDegree)}
+            value={blur_degree}
+            onValueChange={(value) => {
+              this.setState({ blur_degree: value });
+            }}
+          />
+        ) : null}
+        <AgoraSwitch
+          title={'enableAlphaMask'}
+          value={enableAlphaMask}
           onValueChange={(value) => {
-            this.setState({ blur_degree: value });
+            this.setState({ enableAlphaMask: value });
           }}
         />
       </>
@@ -210,6 +267,13 @@ export default class VirtualBackground
       this.state;
     return (
       <>
+        <AgoraButton
+          disabled={joinChannelSuccess}
+          title={`${startPreview ? 'stop' : 'start'} Preview`}
+          onPress={
+            startPreview ? this.handleStopPreview : this.handleStartPreview
+          }
+        />
         <AgoraButton
           disabled={!(startPreview || joinChannelSuccess)}
           title={`${

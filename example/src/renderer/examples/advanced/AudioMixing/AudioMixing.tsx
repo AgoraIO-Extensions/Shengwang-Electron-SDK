@@ -1,3 +1,4 @@
+import React, { ReactElement } from 'react';
 import {
   AudioMixingReasonType,
   AudioMixingStateType,
@@ -5,8 +6,7 @@ import {
   ClientRoleType,
   IRtcEngineEventHandler,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import React, { ReactElement } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseAudioComponentState,

@@ -2,15 +2,15 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
+import download from 'download';
+import ffi, { IKoffiLib } from 'koffi';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
   IRtcEngineEventHandler,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import download from 'download';
-import ffi, { IKoffiLib } from 'koffi';
-import React, { ReactElement } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseComponent,
@@ -20,7 +20,7 @@ import { AgoraButton } from '../../../components/ui';
 import Config from '../../../config/agora.config';
 import { askMediaAccess } from '../../../utils/permissions';
 
-const pluginVersion = 'v4.4.0';
+const pluginVersion = 'v4.6.2';
 let pluginName = 'VideoObserverPlugin';
 let postfix = `_${process.arch}`;
 if (process.platform === 'darwin') {

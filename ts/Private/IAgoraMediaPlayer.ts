@@ -16,203 +16,206 @@ import {
 import { IMediaPlayerSourceObserver } from './IAgoraMediaPlayerSource';
 
 /**
- * This class provides media player functions and supports multiple instances.
+ * 提供媒体播放器功能的类，支持多实例。
  */
 export abstract class IMediaPlayer {
   /**
-   * Gets the ID of the media player.
+   * 获取播放器 ID。
    *
    * @returns
-   * Success. The ID of the media player.
-   *  < 0: Failure.
+   * 方法调用成功，返回播放器 ID。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract getMediaPlayerId(): number;
 
   /**
-   * Opens the media resource.
+   * 打开媒体资源。
    *
-   * This method is called asynchronously.
+   * 该方法为异步调用。
    *
-   * @param url The path of the media file. Both local path and online path are supported.
-   * @param startPos The starting position (ms) for playback. Default value is 0.
+   * @param url 设置媒体文件的路径，支持本地和在线文件。
+   * @param startPos 设置起始播放位置（毫秒），默认值为 0。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract open(url: string, startPos: number): number;
 
   /**
-   * Opens a media file and configures the playback scenarios.
+   * 打开媒体资源并进行播放设置。
    *
-   * This method supports opening media files of different sources, including a custom media source, and allows you to configure the playback scenarios.
+   * 该方法支持你打开不同类型的媒体资源，包括自定义的媒体资源文件，并可进行播放设置。 该方法为异步调用。如需播放媒体文件，需要在收到 onPlayerSourceStateChanged 回调报告状态为 PlayerStateOpenCompleted 后再调用 play 方法播放媒体文件。
    *
-   * @param source Media resources. See MediaSource.
+   * @param source 媒体资源，详见 MediaSource 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract openWithMediaSource(source: MediaSource): number;
 
   /**
-   * Plays the media file.
+   * 播放媒体文件。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract play(): number;
 
   /**
-   * Pauses the playback.
+   * 暂停播放。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract pause(): number;
 
   /**
-   * Stops playing the media track.
+   * 停止播放。
    *
-   * After calling this method to stop playback, if you want to play again, you need to call open or openWithMediaSource to open the media resource.
+   * 调用该方法停止播放后，如需重新播放，需要调用 open 或 openWithMediaSource 再次打开媒体资源。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract stop(): number;
 
   /**
-   * Resumes playing the media file.
+   * 暂停后恢复播放。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract resume(): number;
 
   /**
-   * Seeks to a new playback position.
+   * 定位到媒体文件的指定播放位置。
    *
-   * If you call seek after the playback has completed (upon receiving callback onPlayerSourceStateChanged reporting playback status as PlayerStatePlaybackCompleted or PlayerStatePlaybackAllLoopsCompleted), the SDK will play the media file from the specified position. At this point, you will receive callback onPlayerSourceStateChanged reporting playback status as PlayerStatePlaying.
-   *  If you call seek while the playback is paused, upon successful call of this method, the SDK will seek to the specified position. To resume playback, call resume or play .
+   * 如果你在播放已经完成后（收到 onPlayerSourceStateChanged 回调报告播放状态为 PlayerStatePlaybackCompleted 或 PlayerStatePlaybackAllLoopsCompleted）再调用 seek ，方法调用成功后，SDK 会从你指定的位置开始自动播放，此时你会收到 onPlayerSourceStateChanged 回调报告播放状态为 PlayerStatePlaying。
+   *  如果你在播放暂停的情况下调用 seek ，调用成功后 SDK 会定位到你指定位置，如需播放，请调用 resume 或 play 。
    *
-   * @param newPos The new playback position (ms).
+   * @param newPos 指定的位置（毫秒）。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract seek(newPos: number): number;
 
   /**
-   * Sets the pitch of the current media resource.
+   * 调整当前播放的媒体资源的音调。
    *
-   * Call this method after calling open.
+   * 你需要在调用 open 后调用该方法。
    *
-   * @param pitch Sets the pitch of the local music file by the chromatic scale. The default value is 0, which means keeping the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
+   * @param pitch 按半音音阶调整本地播放的音乐文件的音调，默认值为 0，即不调整音调。取值范围为 [-12,12]，每相邻两个值的音高距离相差半音。取值的绝对值越大，音调升高或降低得越多。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setAudioPitch(pitch: number): number;
 
   /**
-   * Gets the duration of the media resource.
+   * 获取媒体文件总时长。
    *
    * @returns
-   * The total duration (ms) of the media file.
+   * 媒体文件总时长（毫秒）。
    */
   abstract getDuration(): number;
 
   /**
-   * Gets current local playback progress.
+   * 获取当前播放进度。
    *
    * @returns
-   * Returns the current playback progress (ms) if the call succeeds.
-   *  < 0: Failure. See MediaPlayerReason.
+   * 方法调用成功，返回当前播放进度（毫秒）。
+   *  < 0: 方法调用失败，详见 MediaPlayerReason 。
    */
   abstract getPlayPosition(): number;
 
   /**
-   * Gets the number of the media streams in the media resource.
+   * 获取当前媒体文件中媒体流的数量。
    *
-   * Call this method after you call open and receive the onPlayerSourceStateChanged callback reporting the state PlayerStateOpenCompleted.
+   * 请在 open 后并收到 onPlayerSourceStateChanged 回调报告播放状态为 PlayerStateOpenCompleted 后再调用该方法。
    *
    * @returns
-   * The number of the media streams in the media resource if the method call succeeds.
-   *  < 0: Failure. See MediaPlayerReason.
+   * 方法调用成功，返回该媒体文件中媒体流的数量。
+   *  < 0: 方法调用失败，详见 MediaPlayerReason 。
    */
   abstract getStreamCount(): number;
 
   /**
-   * Gets the detailed information of the media stream.
+   * 通过媒体流的索引值获取媒体流信息。
    *
-   * @param index The index of the media stream. This parameter must be less than the return value of getStreamCount.
+   * @param index 媒体流索引值。该参数的值需小于 getStreamCount 的返回值。
    *
    * @returns
-   * If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo. null, if the method call fails.
+   * 方法调用成功，返回媒体流信息，详见 PlayerStreamInfo 。
+   *  方法调用失败，返回 null 。
    */
   abstract getStreamInfo(index: number): PlayerStreamInfo;
 
   /**
-   * Sets the loop playback.
+   * 设置循环播放。
    *
-   * If you want to loop, call this method and set the number of the loops. When the loop finishes, the SDK triggers onPlayerSourceStateChanged and reports the playback state as PlayerStatePlaybackAllLoopsCompleted.
+   * 如果你希望循环播放，请调用该方法并设置循环播放次数。
+   * 循环播放结束时，SDK 会触发 onPlayerSourceStateChanged 回调，向你报告播放状态为 PlayerStatePlaybackAllLoopsCompleted。
    *
-   * @param loopCount The number of times the audio effect loops:
-   *  ≥0: Number of times for playing. For example, setting it to 0 means no loop playback, playing only once; setting it to 1 means loop playback once, playing a total of twice.
-   *  -1: Play the audio file in an infinite loop.
+   * @param loopCount 循环播放的次数。
+   *  ≥0：循环次数。例如，设为 0 表示不循环播放，一共播放一次；设为 1 表示循环播放一次，一共播放 2 次。
+   *  -1：无限循环播放。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setLoopCount(loopCount: number): number;
 
   /**
-   * Sets the channel mode of the current audio file.
+   * 设置当前音频文件的播放速度。
    *
-   * Call this method after calling open.
+   * 你需要在 open 后调用该方法。
    *
-   * @param speed The playback speed. Agora recommends that you set this to a value between 30 and 400, defined as follows:
-   *  30: 0.3 times the original speed.
-   *  100: The original speed.
-   *  400: 4 times the original speed.
+   * @param speed 播放速度。推荐取值范围为 [30,400]，其中：
+   *  30: 0.3 倍速。
+   *  100: 原始速度。
+   *  400: 4 倍速。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setPlaybackSpeed(speed: number): number;
 
   /**
-   * Selects the audio track used during playback.
+   * 指定当前音频文件的播放音轨。
    *
-   * After getting the track index of the audio file, you can call this method to specify any track to play. For example, if different tracks of a multi-track file store songs in different languages, you can call this method to set the playback language. You need to call this method after calling getStreamInfo to get the audio stream index value.
+   * 获取音频文件的音轨索引后，你可以调用该方法指定任一音轨进行播放。如果一个多音轨文件的不同音轨存放了不同语言的歌曲，你可以调用该方法设置播放语言。 你需要在调用 getStreamInfo 获取音频流索引值后调用该方法。
    *
-   * @param index The index of the audio track.
+   * @param index 音轨的索引值。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract selectAudioTrack(index: number): number;
 
   /**
-   * Selects the audio tracks that you want to play on your local device and publish to the channel respectively.
+   * 选择本地播放和发送至远端的音轨。
    *
-   * You can call this method to determine the audio track to be played on your local device and published to the channel. Before calling this method, you need to open the media file with the openWithMediaSource method and set enableMultiAudioTrack in MediaSource as true.
+   * 你可以调用该方法分别设置本地播放和发送到远端的音轨。
+   * 在调用该方法前，你需要通过 openWithMediaSource 来打开媒体文件，并通过 MediaSource 将 enableMultiAudioTrack 设为 true 。
    *
-   * @param playoutTrackIndex The index of audio tracks for local playback. You can obtain the index through getStreamInfo.
-   * @param publishTrackIndex The index of audio tracks to be published in the channel. You can obtain the index through getStreamInfo.
+   * @param playoutTrackIndex 用于本地播放的音轨索引。你可以通过 getStreamInfo 来获取索引值。
+   * @param publishTrackIndex 用于发送至远端的音轨索引。你可以通过 getStreamInfo 来获取索引值。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。
    */
   abstract selectMultiAudioTrack(
     playoutTrackIndex: number,
@@ -235,137 +238,137 @@ export abstract class IMediaPlayer {
   abstract setExternalSubtitle(url: string): number;
 
   /**
-   * Gets current playback state.
+   * 获取播放器当前状态。
    *
    * @returns
-   * The current playback state. See MediaPlayerState.
+   * 播放器当前状态，详见 MediaPlayerState 。
    */
   abstract getState(): MediaPlayerState;
 
   /**
-   * Sets whether to mute the media file.
+   * 设置是否静音。
    *
-   * @param muted Whether to mute the media file: true : Mute the media file. false : (Default) Unmute the media file.
+   * @param muted 静音选项。 true ：静音。 false ：（默认）不静音。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract mute(muted: boolean): number;
 
   /**
-   * Reports whether the media resource is muted.
+   * 获取当前播放的媒体文件是否静音。
    *
    * @returns
-   * true : Reports whether the media resource is muted. false : Reports whether the media resource is muted.
+   * true ：当前播放的媒体文件为静音。 false ：当前播放的媒体文件没有静音。
    */
   abstract getMute(): boolean;
 
   /**
-   * Adjusts the local playback volume.
+   * 调节本地播放音量。
    *
-   * @param volume The local playback volume, which ranges from 0 to 100:
-   *  0: Mute.
-   *  100: (Default) The original volume.
+   * @param volume 本地播放音量，取值范围从 0 到 100：
+   *  0: 无声。
+   *  100: （默认）媒体文件的原始播放音量。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract adjustPlayoutVolume(volume: number): number;
 
   /**
-   * Gets the local playback volume.
+   * 获取当前本地播放音量。
    *
    * @returns
-   * The local playback volume, which ranges from 0 to 100.
-   *  0: Mute.
-   *  100: (Default) The original volume.
+   * 返回当前本地播放音量，取值范围从 0 到 100：
+   *  0: 无声。
+   *  100: （默认）媒体文件的原始播放音量。
    */
   abstract getPlayoutVolume(): number;
 
   /**
-   * Adjusts the volume of the media file for publishing.
+   * 调节远端用户听到的音量。
    *
-   * After connected to the Agora server, you can call this method to adjust the volume of the media file heard by the remote user.
+   * 连接到声网服务器后，你可以调用该方法，调节远端用户听到的媒体文件的音量。
    *
-   * @param volume The volume, which ranges from 0 to 400:
-   *  0: Mute.
-   *  100: (Default) The original volume.
-   *  400: Four times the original volume (amplifying the audio signals by four times).
+   * @param volume 信号音量，取值范围从 0 到 400：
+   *  0: 无声。
+   *  100: （默认）媒体文件的原始音量。
+   *  400: 原始音量的四倍（自带溢出保护）。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract adjustPublishSignalVolume(volume: number): number;
 
   /**
-   * Gets the volume of the media file for publishing.
+   * 获取远端用户听到的音量。
    *
    * @returns
-   * ≥ 0: The remote playback volume.
-   *  < 0: Failure.
+   * ≥ 0: 播放文件的远端播放音量。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract getPublishSignalVolume(): number;
 
   /**
-   * Sets the view.
+   * 设置播放器渲染视图。
    *
-   * @param view The render view. On Windows, this parameter sets the window handle (HWND).
+   * @param view 渲染视图。Windows 平台为窗口句柄（HWND）。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setView(view: any): number;
 
   /**
-   * Sets the render mode of the media player.
+   * 设置播放器视图的渲染模式。
    *
-   * @param renderMode Sets the render mode of the view. See RenderModeType.
+   * @param renderMode 播放器视图的渲染模式。详见 RenderModeType 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setRenderMode(renderMode: RenderModeType): number;
 
   /**
-   * Registers a media player observer.
+   * 注册一个播放观测器。
    *
-   * @param observer The player observer, listening for events during the playback. See IMediaPlayerSourceObserver.
+   * @param observer 播放观测器，报告播放中的事件，详见 IMediaPlayerSourceObserver 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract registerPlayerSourceObserver(
     observer: IMediaPlayerSourceObserver
   ): number;
 
   /**
-   * Releases a media player observer.
+   * 取消注册播放观测器。
    *
-   * @param observer The player observer, listening for events during the playback. See IMediaPlayerSourceObserver.
+   * @param observer 播放观测器，报告播放中的事件，详见 IMediaPlayerSourceObserver 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract unregisterPlayerSourceObserver(
     observer: IMediaPlayerSourceObserver
   ): number;
 
   /**
-   * Registers an audio frame observer object.
+   * 注册音频帧观测器。
    *
-   * @param observer The audio frame observer, reporting the reception of each audio frame. See IAudioPcmFrameSink.
-   * @param mode The use mode of the audio frame. See RawAudioFrameOpModeType.
+   * @param observer 音频帧观测器，观测每帧音频的接收，详见 IAudioPcmFrameSink 。
+   * @param mode 音频帧的使用模式，详见 RawAudioFrameOpModeType 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract registerAudioFrameObserver(
     observer: IAudioPcmFrameSink,
@@ -373,39 +376,39 @@ export abstract class IMediaPlayer {
   ): number;
 
   /**
-   * Unregisters an audio frame observer.
+   * 取消注册音频帧观测器。
    *
-   * @param observer The audio observer. See IAudioPcmFrameSink.
+   * @param observer 音频帧观测器，详见 IAudioPcmFrameSink 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract unregisterAudioFrameObserver(observer: IAudioPcmFrameSink): number;
 
   /**
-   * Registers a video frame observer object.
+   * 注册视频帧观测器。
    *
-   * You need to implement the IMediaPlayerVideoFrameObserver class in this method and register callbacks according to your scenarios. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
+   * 你需要在该方法中实现一个 IMediaPlayerVideoFrameObserver 类，并根据场景需要，注册该类的回调。成功注册视频帧观测器后，SDK 会在捕捉到每个视频帧时，触发你所注册的回调。
    *
-   * @param observer The video observer, reporting the reception of each video frame. See IMediaPlayerVideoFrameObserver.
+   * @param observer 视频帧观测器，观测每帧视频的接收。详见 IMediaPlayerVideoFrameObserver 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract registerVideoFrameObserver(
     observer: IMediaPlayerVideoFrameObserver
   ): number;
 
   /**
-   * Unregisters the video frame observer.
+   * 取消注册视频帧观测器。
    *
-   * @param observer The video observer, reporting the reception of each video frame. See IMediaPlayerVideoFrameObserver.
+   * @param observer 视频帧观测器，观测每帧视频的接收，详见 IMediaPlayerVideoFrameObserver 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract unregisterVideoFrameObserver(
     observer: IMediaPlayerVideoFrameObserver
@@ -427,17 +430,17 @@ export abstract class IMediaPlayer {
   ): number;
 
   /**
-   * Sets the channel mode of the current audio file.
+   * 设置当前音频文件的声道模式。
    *
-   * In a stereo music file, the left and right channels can store different audio data. According to your needs, you can set the channel mode to original mode, left channel mode, right channel mode, or mixed channel mode. For example, in the KTV scenario, the left channel of the music file stores the musical accompaniment, and the right channel stores the singing voice. If you only need to listen to the accompaniment, call this method to set the channel mode of the music file to left channel mode; if you need to listen to the accompaniment and the singing voice at the same time, call this method to set the channel mode to mixed channel mode.
-   *  Call this method after calling open.
-   *  This method only applies to stereo audio files.
+   * 在双声道音频文件中，左声道和右声道可以存储不同的音频数据。根据实际需要，你可以设置声道模式为原始模式、左声道模式、右声道模式或混合模式。例如，在 KTV 场景中，音频文件的左声道存储了伴奏，右声道存储了原唱的歌声。如果你只需听伴奏，调用该方法设置音频文件的声道模式为左声道模式；如果你需要同时听伴奏和原唱，调用该方法设置声道模式为混合模式。
+   *  你需要在调用 open 后调用该方法。
+   *  该方法仅适用于双声道的音频文件。
    *
-   * @param mode The channel mode. See AudioDualMonoMode.
+   * @param mode 声道模式。详见 AudioDualMonoMode 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setAudioDualMonoMode(mode: AudioDualMonoMode): number;
 
@@ -447,10 +450,10 @@ export abstract class IMediaPlayer {
   abstract getPlayerSdkVersion(): string;
 
   /**
-   * Gets the path of the media resource being played.
+   * 获取播放的媒体资源的路径。
    *
    * @returns
-   * The path of the media resource being played.
+   * 播放的媒体资源的路径。
    */
   abstract getPlaySrc(): string;
 
@@ -490,76 +493,78 @@ export abstract class IMediaPlayer {
   abstract switchAgoraCDNSrc(src: string, syncPts?: boolean): number;
 
   /**
-   * Switches the media resource being played.
+   * 切换媒体资源。
    *
-   * You can call this method to switch the media resource to be played according to the current network status. For example:
-   *  When the network is poor, the media resource to be played is switched to a media resource address with a lower bitrate.
-   *  When the network is good, the media resource to be played is switched to a media resource address with a higher bitrate. After calling this method, if you receive the onPlayerEvent callback report the PlayerEventSwitchComplete event, the switching is successful. If the switching fails, the SDK will automatically retry 3 times. If it still fails, you will receive the onPlayerEvent callback reporting the PlayerEventSwitchError event indicating an error occurred during media resource switching.
-   *  Ensure that you call this method after open.
-   *  To ensure normal playback, pay attention to the following when calling this method:
-   *  Do not call this method when playback is paused.
-   *  Do not call the seek method during switching.
-   *  Before switching the media resource, make sure that the playback position does not exceed the total duration of the media resource to be switched.
+   * 你可以根据当前网络状态调用该方法切换播放的媒体资源的码率。例如：
+   *  在网络较差时，将播放的媒体资源切换为较低码率的媒体资源地址。
+   *  在网络较好时，将播放的媒体资源切换为较高码率的媒体资源地址。 调用该方法后，如果你收到 onPlayerEvent 回调报告事件 PlayerEventSwitchComplete ，则媒体资源切换成功。如果资源切换失败，SDK 会自动重试 3 次。如果仍然失败，你会收到 onPlayerEvent 回调，报告 PlayerEventSwitchError 事件，表示媒体资源切换时发生错误。
+   *  请确保在 open 之后调用该方法。
+   *  为保证播放正常，请在调用该方法时注意如下：
+   *  不要在播放暂停时调用该方法。
+   *  不要在切换码率过程中调用 seek 。
+   *  确保切换码率前的播放位置不大于待切换的媒体资源总时长。
    *
-   * @param src The URL of the media resource.
-   * @param syncPts Whether to synchronize the playback position (ms) before and after the switch: true : Synchronize the playback position before and after the switch. false : (Default) Do not synchronize the playback position before and after the switch.
+   * @param src 媒体资源的网络路径。
+   * @param syncPts 是否同步切换前后的起始播放位置: true ：同步。 false ：(默认) 不同步。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract switchSrc(src: string, syncPts?: boolean): number;
 
   /**
-   * Preloads a media resource.
+   * 预加载媒体资源。
    *
-   * You can call this method to preload a media resource into the playlist. If you need to preload multiple media resources, you can call this method multiple times. After calling this method, if you receive the PlayerPreloadEventComplete event in the onPreloadEvent callback, the preload is successful; If you receive the PlayerPreloadEventError event in the onPreloadEvent callback, the preload fails. If the preload is successful and you want to play the media resource, call playPreloadedSrc; if you want to clear the playlist, call stop.
-   *  Before calling this method, ensure that you have called open or openWithMediaSource to open the media resource successfully.
-   *  Agora does not support preloading duplicate media resources to the playlist. However, you can preload the media resources that are being played to the playlist again.
+   * 你可以调用该方法将一个媒体资源预加载到播放列表中。如果需要预加载多个媒体资源，你可以多次调用该方法。
+   * 调用该方法后，如果收到 onPreloadEvent 回调报告事件 PlayerPreloadEventComplete ，则预加载成功；如果你收到 onPreloadEvent 回调报告事件 PlayerPreloadEventError ，则预加载失败。
+   * 预加载成功后，如果你想播放媒体资源，请调用 playPreloadedSrc ；如果你想清空播放列表，请调用 stop 。
+   *  调用该方法前，请确保你已经调用 open 或 openWithMediaSource 成功打开媒体资源。
+   *  SDK 不支持你预加载重复的媒体资源到播放列表，但支持你将正在播放的媒体资源再次预加载到播放列表。
    *
-   * @param src The URL of the media resource.
-   * @param startPos The starting position (ms) for playing after the media resource is preloaded to the playlist. When preloading a live stream, set this parameter to 0.
+   * @param src 媒体资源的网络路径。
+   * @param startPos 预加载到播放列表后，开始播放时的起始位置（毫秒）。预加载直播流时，将该参数设置为 0。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract preloadSrc(src: string, startPos: number): number;
 
   /**
-   * Plays preloaded media resources.
+   * 播放预加载的媒体资源。
    *
-   * After calling the preloadSrc method to preload the media resource into the playlist, you can call this method to play the preloaded media resource. After calling this method, if you receive the onPlayerSourceStateChanged callback which reports the PlayerStatePlaying state, the playback is successful. If you want to change the preloaded media resource to be played, you can call this method again and specify the URL of the new media resource that you want to preload. If you want to replay the media resource, you need to call preloadSrc to preload the media resource to the playlist again before playing. If you want to clear the playlist, call the stop method. If you call this method when playback is paused, this method does not take effect until playback is resumed.
+   * 调用 preloadSrc 方法将媒体资源预加载到播放列表后，可以调用该方法播放已预加载的媒体资源。调用该方法后，如果你收到 onPlayerSourceStateChanged 回调报告状态 PlayerStatePlaying ，则表示播放成功。
+   * 如果你想更换播放的预加载媒体资源，你可以再次调用该方法并指定新的媒体资源路径。如果你想重新播放媒体资源，你需要在播放前调用 preloadSrc 重新将该媒体资源预加载到播放列表。如果你想清空播放列表，请调用 stop 。 如果你在播放暂停时调用该方法，该方法会在恢复播放后才生效。
    *
-   * @param src The URL of the media resource in the playlist must be consistent with the src set by the preloadSrc method; otherwise, the media resource cannot be played.
+   * @param src 播放列表中的媒体资源 URL 地址，必须与 preloadSrc 方法设置的 src 一致，否则无法播放。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract playPreloadedSrc(src: string): number;
 
   /**
-   * Unloads media resources that are preloaded.
+   * 释放预加载的媒体资源。
    *
-   * This method cannot release the media resource being played.
-   *
-   * @param src The URL of the media resource.
+   * @param src 媒体资源的网络路径。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract unloadSrc(src: string): number;
 
   /**
-   * Enables or disables the spatial audio effect for the media player.
+   * 开启或关闭媒体播放器的空间音频。
    *
-   * After successfully setting the spatial audio effect parameters of the media player, the SDK enables the spatial audio effect for the media player, and the local user can hear the media resources with a sense of space. If you need to disable the spatial audio effect for the media player, set the params parameter to null.
+   * 成功设置媒体播放器的空间音频参数后，SDK 会开启媒体播放器的空间音频，即本地用户听媒体资源会有空间感。
+   * 如果需关闭媒体播放器的空间音频，你需要将 params 参数设为空。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setSpatialAudioParams(params: SpatialAudioParams): number;
 
@@ -569,176 +574,186 @@ export abstract class IMediaPlayer {
   abstract setSoundPositionParams(pan: number, gain: number): number;
 
   /**
-   * Sets media player options.
+   * @ignore
+   */
+  abstract getAudioBufferDelay(): number;
+
+  /**
+   * 设置媒体播放器选项。
    *
-   * The media player supports setting options through key and value. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together.
+   * 媒体播放器支持通过 key 和 value 来设置选项。
+   * 该方法和 setPlayerOptionInString 的区别在于，该方法的 value 是 Int 型， setPlayerOptionInString 的 value 是 String 型。二者不可混用。
    *
-   * @param key The key of the option.
-   * @param value The value of the key.
+   * @param key key 值。
+   * @param value value 值。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setPlayerOptionInInt(key: string, value: number): number;
 
   /**
-   * Sets media player options.
+   * 设置媒体播放器选项。
    *
-   * The media player supports setting options through key and value. The difference between this method and setPlayerOptionInInt is that the value parameter of this method is of type String, while the value of setPlayerOptionInInt is of type String. These two methods cannot be used together.
+   * 媒体播放器支持通过 key 和 value 来设置选项。
+   * 该方法和 setPlayerOptionInInt 的区别在于，该方法的 value 是 String 型， setPlayerOptionInInt 的 value 是 Int 型。二者不可混用。
    *
-   * @param key The key of the option.
-   * @param value The value of the key.
+   * @param key key 值。
+   * @param value value 值。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setPlayerOptionInString(key: string, value: string): number;
 }
 
 /**
- * This class provides methods to manage cached media files.
+ * 该类提供管理媒体播放器中缓存媒体文件的方法。
  */
 export abstract class IMediaPlayerCacheManager {
   /**
-   * Deletes all cached media files in the media player.
+   * 删除媒体播放器中所有已缓存的媒体文件。
    *
-   * The cached media file currently being played will not be deleted.
+   * 该方法不会删除正在播放中的已缓存媒体文件。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerReason.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败，详见 MediaPlayerReason 。
    */
   abstract removeAllCaches(): number;
 
   /**
-   * Deletes a cached media file that is the least recently used.
+   * 删除媒体播放器中近期最少使用的一个缓存媒体文件。
    *
-   * You can call this method to delete a cached media file when the storage space for the cached files is about to reach its limit. After you call this method, the SDK deletes the cached media file that is least used. The cached media file currently being played will not be deleted.
+   * 缓存媒体文件占用过多空间时，你可以调用该方法清理缓存文件。调用该方法后，SDK 会删除最少使用的一个缓存媒体文件。 当你调用此方法删除缓存媒体文件时，当前正在播放的已缓存媒体文件不会被删除。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerReason.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败，详见 MediaPlayerReason 。
    */
   abstract removeOldCache(): number;
 
   /**
-   * Deletes a cached media file.
+   * 删除指定的已缓存媒体文件。
    *
-   * The cached media file currently being played will not be deleted.
+   * 该方法不会删除正在播放中的已缓存媒体文件。
    *
-   * @param uri The URI (Uniform Resource Identifier) of the media file to be deleted.
+   * @param uri 待删除的缓存文件的 URI（Uniform Resource Identifier），可用于标识媒体文件。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerReason.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败，详见 MediaPlayerReason 。
    */
   abstract removeCacheByUri(uri: string): number;
 
   /**
-   * Sets the storage path for the media files that you want to cache.
+   * 设置待缓存的媒体文件的储存路径。
    *
-   * Make sure IRtcEngine is initialized before you call this method.
+   * 该方法需在初始化 IRtcEngine 之后调用。
    *
-   * @param path The absolute path of the media files to be cached. Ensure that the directory for the media files exists and is writable.
+   * @param path 缓存文件储存的绝对路径。请确保指定的目录存在且可写。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerReason.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败，详见 MediaPlayerReason 。
    */
   abstract setCacheDir(path: string): number;
 
   /**
-   * Sets the maximum number of media files that can be cached.
+   * 设置缓存媒体文件数量的上限。
    *
-   * @param count The maximum number of media files that can be cached. The default value is 1,000.
+   * @param count 可缓存的媒体文件数量的上限，默认值为 1000。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerReason.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败，详见 MediaPlayerReason 。
    */
   abstract setMaxCacheFileCount(count: number): number;
 
   /**
-   * Sets the maximum size of the aggregate storage space for cached media files.
+   * 设置缓存媒体文件的总缓存大小的上限。
    *
-   * @param cacheSize The maximum size (bytes) of the aggregate storage space for cached media files. The default value is 1 GB.
+   * @param cacheSize 缓存媒体文件的总缓存上限，单位为字节。默认为 1 GB。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerReason.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败，详见 MediaPlayerReason 。
    */
   abstract setMaxCacheFileSize(cacheSize: number): number;
 
   /**
-   * Sets whether to delete cached media files automatically.
+   * 设置是否开启自动清除缓存文件功能。
    *
-   * If you enable this function to remove cached media files automatically, when the cached media files exceed either the number or size limit you set, the SDK automatically deletes the least recently used cache file.
+   * 开启自动清除缓存文件后，当播放器中缓存的媒体文件超过你设置的文件数量或总缓存大小的上限时，SDK 会自动清除近期最少使用的一个缓存文件。
    *
-   * @param enable Whether to enable the SDK to delete cached media files automatically: true : Delete cached media files automatically. false : (Default) Do not delete cached media files automatically.
+   * @param enable 是否自动清除缓存文件： true ：开启自动清除缓存文件功能。 false ：（默认）关闭自动清除缓存文件功能。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerReason.
+   * 0：方法调用成功。
+   *  < 0：方法调用失败，详见 MediaPlayerReason 。
    */
   abstract enableAutoRemoveCache(enable: boolean): number;
 
   /**
-   * Gets the storage path of the cached media files.
+   * 获取缓存文件的储存路径。
    *
-   * If you have not called the setCacheDir method to set the storage path for the media files to be cached before calling this method, you get the default storage path used by the SDK.
+   * 如果你在调用该方法前未曾调用 setCacheDir 方法自定义缓存文件的储存路径，该方法返回的为 SDK 默认的缓存文件储存路径。
    *
-   * @param length An input parameter; the maximum length of the cache file storage path string.
+   * @param length 输入参数，缓存文件储存路径字符串的最大长度。
    *
    * @returns
-   * The call succeeds, and the SDK returns the storage path of the cached media files.
-   *  < 0: Failure. See MediaPlayerReason.
+   * 方法调用成功时，返回缓存文件的储存路径。
+   *  < 0：方法调用失败，详见 MediaPlayerReason 。
    */
   abstract getCacheDir(length: number): string;
 
   /**
-   * Gets the maximum number of media files that can be cached.
+   * 获取所设置的缓存文件数量上限。
    *
-   * By default, the maximum number of media files that can be cached is 1,000.
+   * SDK 默认的缓存文件数量上限为 1000。
    *
    * @returns
-   * > 0: The call succeeds and returns the maximum number of media files that can be cached.
-   *  < 0: Failure. See MediaPlayerReason.
+   * > 0：方法调用成功，返回缓存文件数量的上限。
+   *  < 0：方法调用失败，详见 MediaPlayerReason 。
    */
   abstract getMaxCacheFileCount(): number;
 
   /**
-   * Gets the maximum size of the aggregate storage space for cached media files.
+   * 获取所设置的缓存文件总缓存的上限。
    *
-   * By default, the maximum size of the aggregate storage space for cached media files is 1 GB. You can call the setMaxCacheFileSize method to set the limit according to your scenarios.
+   * SDK 默认的缓存文件总缓存上限为 1GB。你可以调用 setMaxCacheFileSize 方法自定义总缓存大小的上限。
    *
    * @returns
-   * > 0: The call succeeds and returns the maximum size (in bytes) of the aggregate storage space for cached media files.
-   *  < 0: Failure. See MediaPlayerReason.
+   * > 0：方法调用成功，返回缓存文件的总缓存上限，单位为字节。
+   *  < 0：方法调用失败，详见 MediaPlayerReason 。
    */
   abstract getMaxCacheFileSize(): number;
 
   /**
-   * Gets the number of media files that are cached.
+   * 获取当前已缓存的媒体文件的总数量。
    *
    * @returns
-   * ≥ 0: The call succeeds and returns the number of media files that are cached.
-   *  < 0: Failure. See MediaPlayerReason.
+   * ≥ 0：方法调用成功，返回当前已缓存的媒体文件的总数量。
+   *  < 0：方法调用失败，详见 MediaPlayerReason 。
    */
   abstract getCacheFileCount(): number;
 }
 
 /**
- * The video frame observer for the media player.
+ * 媒体播放器的视频数据观测器。
+ *
+ * 你可以调用 registerVideoFrameObserver 注册或取消注册 IMediaPlayerVideoFrameObserver 观测器。
  */
 export interface IMediaPlayerVideoFrameObserver {
   /**
-   * Occurs each time the player receives a video frame.
+   * 已获取视频帧回调。
    *
-   * After registering the video frame observer, the callback occurs every time the player receives a video frame, reporting the detailed information of the video frame.
+   * 注册视频观测器后，每次接收到一帧视频时，都会触发该回调，报告视频帧信息。
+   * 建议你通过 C++ API 实现该回调。
    *
-   * @param frame Video frame information. See VideoFrame.
+   * @param frame 视频帧信息，详见 VideoFrame 。
    */
   onFrame?(frame: VideoFrame): void;
 }

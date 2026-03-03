@@ -1,3 +1,7 @@
+import { LeftOutlined } from '@ant-design/icons';
+// @ts-ignore
+import { ipcRenderer } from 'electron';
+import React, { Component, ReactElement } from 'react';
 import {
   ErrorCodeType,
   IRtcEngine,
@@ -7,8 +11,7 @@ import {
   UserOfflineReasonType,
   VideoCanvas,
   VideoSourceType,
-} from 'agora-electron-sdk';
-import React, { Component, ReactElement } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   AgoraButton,
@@ -31,6 +34,7 @@ export interface BaseComponentState {
   joinChannelSuccess?: boolean;
   remoteUsers?: number[];
   startPreview?: boolean;
+  hideRightBar?: boolean;
 }
 
 export interface BaseAudioComponentState extends BaseComponentState {
@@ -146,7 +150,19 @@ export abstract class BaseComponent<
         <AgoraView className={AgoraStyle.content}>
           {users ? this.renderUsers() : undefined}
         </AgoraView>
-        <AgoraView className={AgoraStyle.rightBar}>
+        <AgoraView
+          className={`${AgoraStyle.rightBar} ${
+            this.state.hideRightBar ? AgoraStyle.hide : ''
+          }`}
+        >
+          <LeftOutlined
+            className={AgoraStyle.rightBarIcon}
+            onClick={() => {
+              this.setState({
+                hideRightBar: !this.state.hideRightBar,
+              });
+            }}
+          />
           {this.renderChannel()}
           {configuration ? (
             <>
@@ -208,7 +224,10 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderUser(user: VideoCanvas): ReactElement | undefined {
+  protected renderUser(
+    user: VideoCanvas,
+    connection?: RtcConnection
+  ): ReactElement | undefined {
     const { enableVideo } = this.state;
     return (
       <AgoraCard
@@ -218,15 +237,18 @@ export abstract class BaseComponent<
         {enableVideo ? (
           <>
             <AgoraText>Click view to mirror</AgoraText>
-            {this.renderVideo(user)}
+            {this.renderVideo(user, connection)}
           </>
         ) : undefined}
       </AgoraCard>
     );
   }
 
-  protected renderVideo(user: VideoCanvas): ReactElement | undefined {
-    return <RtcSurfaceView canvas={user} />;
+  protected renderVideo(
+    user: VideoCanvas,
+    connection?: RtcConnection
+  ): ReactElement | undefined {
+    return <RtcSurfaceView canvas={user} connection={connection} />;
   }
 
   protected renderConfiguration(): ReactElement | undefined {
@@ -267,6 +289,22 @@ export abstract class BaseComponent<
   }
 
   protected alert(title: string, message?: string): void {
-    alert(`${title}: ${message}`);
+    try {
+      if (typeof ipcRenderer !== 'undefined') {
+        ipcRenderer
+          .invoke('IPC_SHOW_MESSAGE_BOX', {
+            type: 'info',
+            title: title,
+            message: message || '',
+          })
+          .catch((error: any) => {
+            console.log(`[ALERT] ${title}: ${message}`);
+          });
+      } else {
+        console.log(`[ALERT] ${title}: ${message}`);
+      }
+    } catch (error) {
+      console.log(`[ALERT] ${title}: ${message}`);
+    }
   }
 }

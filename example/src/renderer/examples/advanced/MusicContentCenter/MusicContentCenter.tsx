@@ -1,3 +1,4 @@
+import React, { ReactElement } from 'react';
 import {
   IMediaPlayerSourceObserver,
   IMusicContentCenter,
@@ -12,8 +13,7 @@ import {
   MusicContentCenterStateReason,
   PreloadState,
   createAgoraRtcEngine,
-} from 'agora-electron-sdk';
-import React, { ReactElement } from 'react';
+} from 'shengwang-electron-sdk';
 
 import {
   BaseComponent,

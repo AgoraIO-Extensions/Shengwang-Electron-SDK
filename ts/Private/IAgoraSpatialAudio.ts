@@ -2,69 +2,69 @@ import './extension/IAgoraSpatialAudioExtension';
 import { RtcConnection } from './IAgoraRtcEngineEx';
 
 /**
- * The spatial position of the remote user or the media player.
+ * 远端用户或媒体播放器的空间位置信息。
  */
 export class RemoteVoicePositionInfo {
   /**
-   * The coordinates in the world coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+   * 在世界坐标系中的坐标。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
    */
   position?: number[];
   /**
-   * The unit vector of the x axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+   * 在世界坐标系前轴的单位向量。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
    */
   forward?: number[];
 }
 
 /**
- * Sound insulation area settings.
+ * 隔声区域的设置。
  */
 export class SpatialAudioZone {
   /**
-   * The ID of the sound insulation area.
+   * 隔声区域的 ID。
    */
   zoneSetId?: number;
   /**
-   * The spatial center point of the sound insulation area. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+   * 隔声区域的空间中心点。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
    */
   position?: number[];
   /**
-   * Starting at position, the forward unit vector. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+   * 以 position 为起点，向前的单位向量。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
    */
   forward?: number[];
   /**
-   * Starting at position, the right unit vector. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+   * 以 position 为起点，向右的单位向量。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
    */
   right?: number[];
   /**
-   * Starting at position, the up unit vector. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+   * 以 position 为起点，向上的单位向量。该参数是长度为 3 的数组，三个值依次表示前、右、上的坐标值。
    */
   up?: number[];
   /**
-   * The entire sound insulation area is regarded as a cube; this represents the length of the forward side in the unit length of the game engine.
+   * 将整个隔声区域看做一个立方体，表示向前的边长，单位为游戏引擎的单位长度。
    */
   forwardLength?: number;
   /**
-   * The entire sound insulation area is regarded as a cube; this represents the length of the right side in the unit length of the game engine.
+   * 将整个隔声区域看做一个立方体，表示向右的边长，单位为游戏引擎的单位长度。
    */
   rightLength?: number;
   /**
-   * The entire sound insulation area is regarded as a cube; this represents the length of the up side in the unit length of the game engine.
+   * 将整个隔声区域看做一个立方体，表示向上的边长，单位为游戏引擎的单位长度。
    */
   upLength?: number;
   /**
-   * The sound attenuation coefficient when users within the sound insulation area communicate with external users. The value range is [0,1]. The values are as follows:
-   *  0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.
-   *  (0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.
-   *  0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the audioAttenuation parameter.
-   *  (0.5,1]: Strong attenuation mode (default value is 1), that is, the volume and timbre attenuate rapidly during propagation.
+   * 隔声区域以内的用户和外部用户互通时的声音衰减系数，取值范围为 [0,1]。其中：
+   *  0：广播模式，即音量和音色均不随距离衰减，无论距离远近，本地用户听到的音量和音色都无变化。
+   *  (0,0.5)：弱衰减模式，即音量和音色在传播过程中仅发生微弱衰减，跟真实环境相比，声音可以传播得更远。
+   *  0.5：模拟音量在真实环境下的衰减，效果等同于不设置 audioAttenuation 参数。
+   *  (0.5,1]：强衰减模式 (默认值为 1) ，即音量和音色在传播过程中发生迅速衰减。
    */
   audioAttenuation?: number;
 }
 
 /**
- * This class calculates user positions through the SDK to implement the spatial audio effect.
+ * 该类通过 SDK 计算用户坐标，实现空间音频。
  *
- * This class inherits from IBaseSpatialAudioEngine. Before calling other APIs in this class, you need to call the initialize method to initialize this class.
+ * 该类继承自 IBaseSpatialAudioEngine 。调用该类下其他 API 前，你需要调用 initialize 方法初始化该类。
  */
 export abstract class ILocalSpatialAudioEngine {
   /**
@@ -73,28 +73,28 @@ export abstract class ILocalSpatialAudioEngine {
   abstract release(): void;
 
   /**
-   * Initializes ILocalSpatialAudioEngine.
+   * 初始化 ILocalSpatialAudioEngine 。
    *
-   * Before calling other methods of the ILocalSpatialAudioEngine class, you need to call this method to initialize ILocalSpatialAudioEngine.
-   *  The SDK supports creating only one ILocalSpatialAudioEngine instance for an app.
+   * 在调用 ILocalSpatialAudioEngine 类的其他方法前，你需要先调用该方法初始化 ILocalSpatialAudioEngine 。
+   *  SDK 只支持每个 App 创建一个 ILocalSpatialAudioEngine 实例。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract initialize(): number;
 
   /**
-   * Updates the spatial position of the specified remote user.
+   * 更新远端用户的空间位置信息。
    *
-   * After successfully calling this method, the SDK calculates the spatial audio parameters based on the relative position of the local and remote user. Call this method after the or joinChannel method.
+   * 成功调用该方法后，SDK 会根据本地和远端用户的相对位置计算空间音频参数。 该方法需要在 joinChannel 后调用。
    *
-   * @param uid The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
-   * @param posInfo The spatial position of the remote user. See RemoteVoicePositionInfo.
+   * @param uid 用户 ID。需与用户加入频道时填写的用户 ID 一致。
+   * @param posInfo 远端用户的空间位置信息。详见 RemoteVoicePositionInfo 。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract updateRemotePosition(
     uid: number,
@@ -111,15 +111,16 @@ export abstract class ILocalSpatialAudioEngine {
   ): number;
 
   /**
-   * Removes the spatial position of the specified remote user.
+   * 删除指定远端用户的空间位置信息。
    *
-   * After successfully calling this method, the local user no longer hears the specified remote user. After leaving the channel, to avoid wasting computing resources, call this method to delete the spatial position information of the specified remote user. Otherwise, the user's spatial position information will be saved continuously. When the number of remote users exceeds the number of audio streams that can be received as set in setMaxAudioRecvCount, the system automatically unsubscribes from the audio stream of the user who is furthest away based on relative distance.
+   * 成功调用该方法后，本地用户将听不到指定的远端用户。
+   * 离开频道后，为避免计算资源的浪费，你需要调用该方法删除指定远端用户的空间位置信息。否则，该用户的空间位置信息会一直被保存。当远端用户人数大于 setMaxAudioRecvCount 中设定的可接收音频流数时，会按照相对距离依次自动取消订阅距离最远的用户的音频流。
    *
-   * @param uid The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
+   * @param uid 用户 ID。需与用户加入频道时填写的用户 ID 一致。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract removeRemotePosition(uid: number): number;
 
@@ -201,21 +202,17 @@ export abstract class ILocalSpatialAudioEngine {
   abstract muteRemoteAudioStream(uid: number, mute: boolean): number;
 
   /**
-   * Sets the sound attenuation effect for the specified user.
+   * 设置指定用户的声音衰减效果。
    *
-   * @param uid The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
-   * @param attenuation For the user's sound attenuation coefficient, the value range is [0,1]. The values are as follows:
-   *  0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.
-   *  (0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.
-   *  0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.
-   *  (0.5,1]: Strong attenuation mode, that is, the volume and timbre attenuate rapidly during the propagation process.
-   * @param forceSet Whether to force the user's sound attenuation effect: true : Force attenuation to set the sound attenuation of the user. At this time, the attenuation coefficient of the sound insulation area set in the audioAttenuation of the SpatialAudioZone does not take effect for the user.
-   *  If the sound source and listener are inside and outside the sound isolation area, the sound attenuation effect is determined by the audioAttenuation in SpatialAudioZone.
-   *  If the sound source and the listener are in the same sound insulation area or outside the same sound insulation area, the sound attenuation effect is determined by attenuation in this method. false : Do not force attenuation to set the user's sound attenuation effect, as shown in the following two cases.
+   * @param uid 用户 ID。需与用户加入频道时填写的用户 ID 一致。
+   * @param attenuation 针对该用户的声音衰减系数，取值范围为[0,1]。其中：
+   * @param forceSet 是否强制设定该用户的声音衰减效果： true ：强制使用 attenuation 设置该用户的声音衰减效果，此时 SpatialAudioZone 中的 audioAttenuation 中设置的隔声区域衰减系数对该用户不生效。 false ：不强制使用 attenuation 设置用户的声音衰减效果，分为以下两种情况。
+   *  如果音源和听声者分属于隔声区域内部和外部，则声音衰减效果由 SpatialAudioZone 中的 audioAttenuation 决定。
+   *  如果音源和听声者在同一个隔声区域内或同在隔声区域外，则声音衰减效果由该方法中的 attenuation 决定。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract setRemoteAudioAttenuation(
     uid: number,
@@ -238,13 +235,14 @@ export abstract class ILocalSpatialAudioEngine {
   ): number;
 
   /**
-   * Removes the spatial positions of all remote users.
+   * 删除所有远端用户的空间位置信息。
    *
-   * After successfully calling this method, the local user no longer hears any remote users. After leaving the channel, to avoid wasting resources, you can also call this method to delete the spatial positions of all remote users.
+   * 成功调用该方法后，本地用户将听不到所有远端用户。
+   * 离开频道后，为避免计算资源的浪费，你也可以调用该方法删除所有远端用户的空间位置信息。
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * 0: 方法调用成功。
+   *  < 0: 方法调用失败。详见[错误码](https://doc.shengwang.cn/api-ref/rtc/electron/error-code)了解详情和解决建议。
    */
   abstract clearRemotePositions(): number;
 }
