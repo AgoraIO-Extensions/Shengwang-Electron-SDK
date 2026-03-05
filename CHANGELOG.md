@@ -1,5 +1,7 @@
 
 
+## [4.6.2](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.2-rc.3...v4.6.2) (2026-03-05)
+
 ## 4.6.2-rc.3 (2026-03-03)
 
 
