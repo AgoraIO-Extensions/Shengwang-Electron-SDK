@@ -1785,40 +1785,6 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
-agora-electron-sdk@4.5.2-build.166-rc.1:
-  version "4.5.2-build.166-rc.1"
-  resolved "https://registry.npmjs.org/agora-electron-sdk/-/agora-electron-sdk-4.5.2-build.166-rc.1.tgz#b0a532058f57427be15da68c93d86c2ff661e2c3"
-  integrity sha512-UmVtJ8ikXsvqmtE3oLnuv/5eek5XcnYNFYVyzs/KRZ2ekRzMtMt1PaPGwovg495wseKYZB8Y6C/d0U2FxOM3pQ==
-  dependencies:
-    archive-type "^4.0.0"
-    buffer "^6.0.3"
-    content-disposition "^0.5.2"
-    cross-env "^7.0.3"
-    decompress "^4.2.1"
-    eventemitter3 "^5.0.1"
-    ext-name "^5.0.0"
-    extract-zip "^2.0.1"
-    file-type "^11.1.0"
-    filenamify "^3.0.0"
-    fs-extra "^11.1.1"
-    get-stream "^4.1.0"
-    got "^11.8.5"
-    gulp "^5.0.0"
-    json-bigint "^1.0.0"
-    jsonfile "^6.1.0"
-    lodash.isequal "^4.5.0"
-    make-dir "^4.0.0"
-    minimist "^1.2.8"
-    node-fetch "^2.7.0"
-    p-event "^2.1.0"
-    pify "^4.0.1"
-    semver "^7.6.0"
-    shelljs "^0.8.5"
-    ts-interface-checker "^1.0.2"
-    winston "^3.11.0"
-    yuv-buffer "1.0.0"
-    yuv-canvas "1.2.6"
-
 ajv-errors@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/ajv-errors/-/ajv-errors-1.0.1.tgz#f35986aceb91afadec4102fbd85014950cefa64d"
@@ -6430,9 +6396,9 @@ lodash.isequal@^4.5.0:
   integrity sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==
 
 lodash@^4.0.1, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.5, lodash@^4.2.0:
-  version "4.17.21"
-  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
-  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+  version "4.18.1"
+  resolved "https://registry.npmjs.org/lodash/-/lodash-4.18.1.tgz#ff2b66c1f6326d59513de2407bf881439812771c"
+  integrity sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==
 
 log-symbols@^4.1.0:
   version "4.1.0"
@@ -9024,6 +8990,40 @@ shelljs@^0.8.5:
     glob "^7.0.0"
     interpret "^1.0.0"
     rechoir "^0.6.2"
+
+shengwang-electron-sdk@4.6.2:
+  version "4.6.2"
+  resolved "https://registry.npmjs.org/shengwang-electron-sdk/-/shengwang-electron-sdk-4.6.2.tgz#cb0423448239b762dcb9cf184672b843f14f7173"
+  integrity sha512-pskQsLNXyXuGMbBvMMzWzIcrF/aiPz5YxTJi2gghRGp0ORXTnk5gR2HX/jjRAMdX7j9hLUoX9bdPyCdmGK0i8Q==
+  dependencies:
+    archive-type "^4.0.0"
+    buffer "^6.0.3"
+    content-disposition "^0.5.2"
+    cross-env "^7.0.3"
+    decompress "^4.2.1"
+    eventemitter3 "^5.0.1"
+    ext-name "^5.0.0"
+    extract-zip "^2.0.1"
+    file-type "^11.1.0"
+    filenamify "^3.0.0"
+    fs-extra "^11.1.1"
+    get-stream "^4.1.0"
+    got "^11.8.5"
+    gulp "^5.0.0"
+    json-bigint "^1.0.0"
+    jsonfile "^6.1.0"
+    lodash.isequal "^4.5.0"
+    make-dir "^4.0.0"
+    minimist "^1.2.8"
+    node-fetch "^2.7.0"
+    p-event "^2.1.0"
+    pify "^4.0.1"
+    semver "^7.6.0"
+    shelljs "^0.8.5"
+    ts-interface-checker "^1.0.2"
+    winston "^3.11.0"
+    yuv-buffer "1.0.0"
+    yuv-canvas "1.2.6"
 
 side-channel@^1.0.4, side-channel@^1.0.6:
   version "1.0.6"
