@@ -2,7 +2,7 @@ import {
   AudioEffectPreset,
   AudioReverbType,
   VoiceBeautifierPreset,
-} from 'agora-electron-sdk';
+} from 'shengwang-electron-sdk';
 
 export const VoiceBeautifierPresetParam1Limit: Map<
   VoiceBeautifierPreset,

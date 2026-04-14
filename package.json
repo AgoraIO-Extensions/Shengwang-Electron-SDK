@@ -1,7 +1,7 @@
 {
-  "name": "agora-electron-sdk",
+  "name": "shengwang-electron-sdk",
   "version": "4.6.3-build.133-rc.1",
-  "description": "agora-electron-sdk",
+  "description": "shengwang-electron-sdk",
   "main": "js/AgoraSdk",
   "types": "types/AgoraSdk.d.ts",
   "source": "ts/AgoraSdk",
@@ -42,7 +42,7 @@
     "release": "release-it",
     "example": "yarn --cwd example",
     "example:prepare": "yarn example && cross-env-shell gulp checkElectron \\\"--INIT_CWD=$INIT_CWD/example\\\" \"--electron_path=$INIT_CWD/example/node_modules/electron/dist\"",
-    "bootstrap": "yarn config set agora-electron-sdk-pre-built 0 && yarn example && yarn install && yarn patch-package && yarn build:ts-interface && yarn totalBuild && yarn link && yarn example link agora-electron-sdk && yarn config delete agora-electron-sdk-pre-built && yarn example:prepare",
+    "bootstrap": "yarn config set agora-electron-sdk-pre-built 0 && yarn example && yarn install && yarn patch-package && yarn build:ts-interface && yarn totalBuild && yarn link && yarn example link shengwang-electron-sdk && yarn config delete agora-electron-sdk-pre-built && yarn example:prepare",
     "build:ts-interface": "ts-interface-builder ts/Private/*.ts -o ts/Private/ti/"
   },
   "keywords": [
@@ -50,7 +50,7 @@
     "windows",
     "mac"
   ],
-  "repository": "https://github.com/AgoraIO-Extensions/Electron-SDK",
+  "repository": "https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK",
   "author": "Agora.io",
   "license": "MIT",
   "bugs": {
