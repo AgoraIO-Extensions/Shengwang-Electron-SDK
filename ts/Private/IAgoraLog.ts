@@ -1,27 +1,27 @@
 import './extension/IAgoraLogExtension';
 
 /**
- * Log output level.
+ * 日志输出等级。
  */
 export enum LogLevel {
   /**
-   * 0: Do not output any logs.
+   * 0: 不输出任何日志。
    */
   LogLevelNone = 0x0000,
   /**
-   * 0x0001: (Default) Outputs logs of FATAL, ERROR, WARN, and INFO levels. It is recommended to set the log level to this level.
+   * 0x0001:（默认）输出 FATAL 、 ERROR 、 WARN 、 INFO 级别的日志。建议你将日志级别设为该等级。
    */
   LogLevelInfo = 0x0001,
   /**
-   * 0x0002: Outputs only logs of FATAL, ERROR, and WARN levels.
+   * 0x0002: 仅输出 FATAL 、 ERROR 、 WARN 级别的日志。
    */
   LogLevelWarn = 0x0002,
   /**
-   * 0x0004: Outputs only logs of FATAL and ERROR levels.
+   * 0x0004: 仅输出 FATAL 、 ERROR 级别的日志。
    */
   LogLevelError = 0x0004,
   /**
-   * 0x0008: Outputs only logs of FATAL level.
+   * 0x0008: 仅输出 FATAL 级别的日志。
    */
   LogLevelFatal = 0x0008,
   /**
@@ -35,31 +35,31 @@ export enum LogLevel {
 }
 
 /**
- * Log filter level.
+ * 日志过滤等级。
  */
 export enum LogFilterType {
   /**
-   * 0: Do not output any log information.
+   * 0: 不输出日志信息。
    */
   LogFilterOff = 0,
   /**
-   * 0x080f: Outputs all API log information. Set the log level to this value to get the most complete logs.
+   * 0x080f: 输出所有 API 日志信息。如果你想获取最完整的日志，可以将日志级别设为该等级。
    */
   LogFilterDebug = 0x080f,
   /**
-   * 0x000f: Outputs logs at LogFilterCritical, LogFilterError, LogFilterWarn, and LogFilterInfo levels. It is recommended to set the log level to this value.
+   * 0x000f: 输出 LogFilterCritical 、 LogFilterError 、 LogFilterWarn 和 LogFilterInfo 级别的日志信息。建议你将日志级别设为该等级。
    */
   LogFilterInfo = 0x000f,
   /**
-   * 0x000e: Outputs logs at LogFilterCritical, LogFilterError, and LogFilterWarn levels.
+   * 0x000e: 输出 LogFilterCritical 、 LogFilterError 和 LogFilterWarn 级别的日志信息。
    */
   LogFilterWarn = 0x000e,
   /**
-   * 0x000c: Outputs logs at LogFilterCritical and LogFilterError levels.
+   * 0x000c: 输出 LogFilterCritical 和 LogFilterError 级别的日志信息。
    */
   LogFilterError = 0x000c,
   /**
-   * 0x0008: Outputs logs at LogFilterCritical level.
+   * 0x0008: 输出 LogFilterCritical 级别的日志信息。
    */
   LogFilterCritical = 0x0008,
   /**
@@ -69,25 +69,25 @@ export enum LogFilterType {
 }
 
 /**
- * Configuration for SDK log files.
+ * SDK 日志文件的配置。
  */
 export class LogConfig {
   /**
-   * Full path of the log file. Agora recommends using the default log path. If you need to modify the default log path, make sure the specified path exists and is writable.
-   * Default paths:
-   *  macOS:
-   *  Sandbox enabled: App Sandbox/Library/Logs/agorasdk.log, e.g., /Users/<username>/Library/Containers/<AppBundleIdentifier>/Data/Library/Logs/agorasdk.log.
-   *  Sandbox disabled: ~/Library/Logs/agorasdk.log
-   *  Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\agorasdk.log.
+   * 日志文件的完整路径。声网建议你使用默认的日志路径。如果你需要修改默认的日志路径，请确保你指定的路径存在且可写。
+   * 默认路径为：
+   *  macOS：
+   *  开启沙盒: App Sandbox/Library/Logs/agorasdk.log，例如 /Users/<username>/Library/Containers/<AppBundleIdentifier>/Data/Library/Logs/agorasdk.log。
+   *  关闭沙盒: ～/Library/Logs/agorasdk.log
+   *  Windows：C:\Users\<user_name>\AppData\Local\Agora\<process_name>\agorasdk.log。
    */
   filePath?: string;
   /**
-   * Size of a single agorasdk.log file in KB. Range: [128, 20480]. Default: 2,048 KB. If you set fileSizeInKByte to less than 128 KB, the SDK automatically adjusts it to 128 KB; if you set it to more than 20,480 KB, the SDK adjusts it to 20,480 KB.
+   * 单个 agorasdk.log 日志文件的大小，单位为 KB，取值范围为 [128,20480]，默认值为 2,048 KB。如果你将 fileSizeInKByte 设为小于 128 KB，SDK 会自动调整到 128 KB；如果你将 fileSizeInKByte 设为大于 20,480 KB，SDK 会自动调整到 20,480 KB。
    */
   fileSizeInKB?: number;
   /**
-   * Log output level of the SDK. See LogLevel.
-   * For example, if you choose WARN level, you will see all logs at FATAL, ERROR, and WARN levels.
+   * SDK 的日志输出等级，详见 LogLevel 。
+   * 例如，如果你选择 WARN 级别，就可以看到在 FATAL、ERROR 和 WARN 级别上的所有日志信息。
    */
   level?: LogLevel;
 }

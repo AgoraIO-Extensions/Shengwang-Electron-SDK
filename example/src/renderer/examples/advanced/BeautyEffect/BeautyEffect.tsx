@@ -1,3 +1,4 @@
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -5,7 +6,6 @@ import {
   LighteningContrastLevel,
   createAgoraRtcEngine,
 } from 'shengwang-electron-sdk';
-import React, { ReactElement } from 'react';
 
 import {
   BaseComponent,

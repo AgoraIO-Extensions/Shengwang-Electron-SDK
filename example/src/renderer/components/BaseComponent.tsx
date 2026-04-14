@@ -1,4 +1,7 @@
 import { LeftOutlined } from '@ant-design/icons';
+// @ts-ignore
+import { ipcRenderer } from 'electron';
+import React, { Component, ReactElement } from 'react';
 import {
   ErrorCodeType,
   IRtcEngine,
@@ -9,9 +12,6 @@ import {
   VideoCanvas,
   VideoSourceType,
 } from 'shengwang-electron-sdk';
-// @ts-ignore
-import { ipcRenderer } from 'electron';
-import React, { Component, ReactElement } from 'react';
 
 import {
   AgoraButton,
