@@ -32,6 +32,7 @@ timestamps {
       	string(name: 'package_version', value: params.package_version),
         string(name: 'example_sdk_mode', value: params.example_sdk_mode),
         string(name: 'example_electron_version', value: params.example_electron_version),
+        string(name: 'repository', value: params.repository),
         booleanParam(name: 'Package_Publish', value: true),
         booleanParam(name:'Clean_Clone', value: true),
         booleanParam(name:'isBuildSdk', value: params.Upload_CDN ? true : (params.isBuildDemo ? params.example_sdk_mode == "1" : false)),
