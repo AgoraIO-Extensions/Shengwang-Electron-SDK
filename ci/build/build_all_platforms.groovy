@@ -40,17 +40,17 @@ timestamps {
 
     def buildJobs = [
         "electron_mac_build": {
-            build job: 'ELECTRON/build_mac', parameters: commonBuildParams + [
+            build job: 'shengwang_electron/build_mac', parameters: commonBuildParams + [
                 string(name: 'arch', value: 'x64')
             ]
         },
         "electron_windows_x86_build": {
-            build job: 'ELECTRON/build_windows', parameters: commonBuildParams + [
+            build job: 'shengwang_electron/build_windows', parameters: commonBuildParams + [
                 string(name: 'arch', value: "ia32"),
             ]
         },
         "electron_windows_x64_build": {
-            build job: 'ELECTRON/build_windows', parameters: commonBuildParams + [
+            build job: 'shengwang_electron/build_windows', parameters: commonBuildParams + [
                 string(name: 'arch', value: "x64"),
             ]
         }
