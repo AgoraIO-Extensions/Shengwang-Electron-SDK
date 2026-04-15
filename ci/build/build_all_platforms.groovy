@@ -1,7 +1,7 @@
 properties([
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '7', numToKeepStr: '100')),
     parameters([
-        string(name: 'electron_sdk_branch', defaultValue: '', description: 'Electron branch', trim: true),
+        string(name: 'shengwang_electron_sdk_branch', defaultValue: '', description: 'Electron branch', trim: true),
       	booleanParam(name: 'is_tag_fetch', defaultValue: true),
         string(name: 'network_path', defaultValue: '', description: '', trim: true),
         string(name: 'package_version', defaultValue: 'package_version', trim: true),
@@ -26,7 +26,7 @@ timestamps {
           string(name: 'repos', value: 'shengwang-electron-sdk'),
       ], wait: true
     def commonBuildParams = [
-        string(name: 'electron_sdk_branch', value: params.electron_sdk_branch),
+        string(name: 'shengwang_electron_sdk_branch', value: params.shengwang_electron_sdk_branch),
       	booleanParam(name:'is_tag_fetch', value: params.is_tag_fetch),
         string(name: 'network_path', value: params.network_path),
       	string(name: 'package_version', value: params.package_version),

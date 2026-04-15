@@ -21,7 +21,7 @@ def doBuild(buildVariables) {
     gitCheckOut(getConfig(), params.repository, false, params.is_tag_fetch, [
       "./electron-sdk": [
           params.repository,
-          params.electron_sdk_branch,
+          params.shengwang_electron_sdk_branch,
           '',
           getConfig().CREDENTIAL_SSH
       ]
