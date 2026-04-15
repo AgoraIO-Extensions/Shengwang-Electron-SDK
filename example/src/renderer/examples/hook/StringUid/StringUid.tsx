@@ -1,5 +1,5 @@
-import { ClientRoleType } from 'shengwang-electron-sdk';
 import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import { ClientRoleType } from 'shengwang-electron-sdk';
 
 import { AgoraButton, AgoraTextInput } from '../../../components/ui';
 import * as log from '../../../utils/log';

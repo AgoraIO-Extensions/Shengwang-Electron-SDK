@@ -1,3 +1,5 @@
+import React, { ReactElement } from 'react';
+import { SketchPicker } from 'react-color';
 import {
   BackgroundBlurDegree,
   BackgroundSourceType,
@@ -21,8 +23,6 @@ import {
   VideoStreamType,
   createAgoraRtcEngine,
 } from 'shengwang-electron-sdk';
-import React, { ReactElement } from 'react';
-import { SketchPicker } from 'react-color';
 
 import {
   BaseComponent,

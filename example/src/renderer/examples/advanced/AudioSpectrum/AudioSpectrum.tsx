@@ -1,3 +1,11 @@
+import React, { ReactElement } from 'react';
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  YAxis,
+} from 'recharts';
 import {
   AudioSpectrumData,
   ChannelProfileType,
@@ -7,14 +15,6 @@ import {
   UserAudioSpectrumInfo,
   createAgoraRtcEngine,
 } from 'shengwang-electron-sdk';
-import React, { ReactElement } from 'react';
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  YAxis,
-} from 'recharts';
 
 import {
   BaseAudioComponentState,
