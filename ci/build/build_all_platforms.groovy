@@ -22,7 +22,7 @@ properties([
 
 timestamps {
     build job: 'AD/Sync_Github', propagate: false, parameters: [
-          string(name: 'repos', value: 'electron-sdk'),
+          string(name: 'repos', value: 'shengwang-electron-sdk'),
       ], wait: true
     def commonBuildParams = [
         string(name: 'electron_sdk_branch', value: params.electron_sdk_branch),
