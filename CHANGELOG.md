@@ -1,5 +1,70 @@
 
 
+## 4.6.3-build.133-rc.2 (2026-04-15)
+
+
+### Bug Fixes
+
+* `deviceCapabilityNumber` issue ([a8dbe22](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/a8dbe229b5adb057d5938992634a5eb524f37f4e))
+* `getPlaybackDeviceInfo` and `getRecordingDeviceInfo` issue ([e15fb6f](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/e15fb6fc4a35087cc89f6f1e1233fcfe658579f7))
+* `LocalTranscoderConfiguration` json parse issue #EP-172 ([4a86a48](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/4a86a48cb6ae58de53e101e7d40bbc1e59454500)), closes [#EP-172](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/EP-172)
+* `RendererManager` memory leak ([#952](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/952)) ([421f802](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/421f802a2c27102ba8ff3e165fafe1c65fe26077))
+* `setLocalRenderMode` `setRemoteRenderMode` `setRemoteRenderModeEx` `setLocalVideoMirrorMode` not working ([#951](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/951)) ([27897f2](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/27897f2efbaa1f2cde92b4c578d2d52956c46c82))
+* `setupRemoteVideo` not working ([#950](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/950)) ([1eb1877](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/1eb1877b6c91fba4a7a1f631521292368e4b8361))
+* add `setDualStreamMode` method ([479bdbd](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/479bdbdc255852ebbc2e56a1a1bd72e9b5d34c0f))
+* add memeset _result in the construct function ([#910](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/910)) ([967034c](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/967034c82193768ada5782b6c084f4a3f6bac29d))
+* add minus system version 10.10 for macOS ([#911](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/911)) ([1f6438b](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/1f6438b30bf17ee99c05b136d8711bcc00d89ec7))
+* build error on windows x64 ([a162dd2](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/a162dd2a710a59230d8dcc911530c0c605e470fa))
+* cross-env-shell error ([a9c4dae](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/a9c4dae8c9c1e3c47b2135be49a99eac34ae2673))
+* CSD-57615 render mode not working on software renderer ([1097ebc](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/1097ebcdf21cb6f5c66821174e8f46ec470976db))
+* CSD-57699 removeEventListener `webglcontextlost` while unbind ([2a280c8](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/2a280c87242fe3abecb61bc23ffb0996029d6fec))
+* download addon version issue ([145781d](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/145781d782627529010848aacf34d88a757289f9))
+* **fix localaccesspointconfiguration:** fix LocalAccessPointConfiguration ([5572495](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/55724950c6001032d45d33caee53b718c39e1b9e))
+* jira CSD-60920 render issue after ([#1110](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1110)) ([5730d86](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/5730d86d136539d79f50b1e92ba9ec5049196488))
+* jira CSD-61288 renderer issue ([#1114](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1114)) ([fe50880](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/fe50880466cf763dc5111bbff6cd5bcd2566ca21))
+* npm install failed ([a27706b](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/a27706ba34eb4018e80d0210fe7a3214ee2fd744))
+* set windows msvc link as MT ([a981a7c](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/a981a7c479e2de46936c60eacfa340e28b267a0c))
+* setPlayerOptionInInt setPlayerOptionInString this issue ([1f6aca9](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/1f6aca9b9317d644c9b06ac10b372a1c1fcffc5c))
+* setup renderer may show rotate frame ([#1190](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1190)) ([ad6400c](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/ad6400c18f08f316984e75eb49a48c0795951f2e))
+* some AudioFrameObserver & VideoFrameObserver issue ([14e69a9](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/14e69a9bfc1df242d2b8e3830471c1dc1d76e12e))
+* some issue about AgoraRendererManager ([c33f9f7](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/c33f9f7b761008ac7d84c4fee270d6c0dda44476))
+* the event which named contains `Ex` not triggered issue (such as `onTokenPrivilegeWillExpire`) ([#892](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/892)) ([7eae24f](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/7eae24faafc98a81f36a7ea58a2cf066319f8a73))
+* use `setTimeout` intead of `setInterval` ([#1097](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1097)) ([9df0579](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/9df057989846e5e7e5fb4a00c6a1208f5728b9d8))
+* yuv renderer issue ([#1136](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1136)) ([94c5ad1](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/94c5ad1bd1a8e2db09676b54d0b82c0751013dfb))
+
+
+### Features
+
+* 4.6 for atlas ([#1396](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1396)) ([5fcf9a5](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/5fcf9a51642ec3ce6e4e5d32059b2ab90bea3356))
+* **add ci for changelog:** use husky conventional-changelog-cli @commitlint/config-conventional ([3a5e624](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/3a5e6241b35ed008caf27a37fd3584c7bf803d96))
+* complete,hook ([#881](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/881)) ([1734767](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/173476751187dd1b7596cf86e93b2533bd03ee15))
+* optimize for renderer ([#1132](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1132)) ([d0098c1](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/d0098c1c9f6d44dbfa6b790cf127b070d2201ac8))
+* support 4.1.0 ([03fd8f8](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/03fd8f893969304d8f39b495d85cb0e3846a1807)), closes [#885](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/885) [#893](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/893) [#897](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/897) [#903](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/903) [#904](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/904) [#907](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/907) [#912](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/912) [#926](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/926) [#931](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/931) [#934](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/934)
+* support 4.2.0 ([#995](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/995)) ([459bf51](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/459bf51858cc4704a0783f5784fb9178fddd6803)), closes [#967](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/967) [#972](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/972) [#973](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/973) [#974](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/974) [#980](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/980) [#982](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/982) [#1001](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1001) [#1005](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1005) [#1010](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1010)
+* support 4.3.0 ([#1130](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1130)) ([2ab7994](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/2ab79943338f27e454f173f67d5fb1749a39d98e))
+* support 4.4.0 ([#1197](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1197)) ([490192f](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/490192ff7c2a6120ff56838191b8788b1a5599f1))
+* support 4.5.0 ([#1228](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1228)) ([d1a6d9c](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/d1a6d9cc2aa361e7b96ad158debe791f4accc6a7)), closes [#1224](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1224)
+* support 4.6.2 ([#1369](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1369)) ([1b9be80](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/1b9be800cd088c3edba06c335a08eaddd6cab9a7)), closes [#1287](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1287) [#1285](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1285) [#1286](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1286)
+* support native 4.0.0-rc.1 ([a100b2b](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/a100b2b886a0fdbc5971e415d4e54c0e396493b2))
+* support native 4.2.1 ([#1029](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1029)) ([31ca560](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/31ca560bcd6434c4d3badad1b2e8d40eaae8be36))
+* support native 4.2.2 ([#1033](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1033)) ([f151e69](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/f151e69abf22286eb5fbec3bcee8f703188c7515))
+* support native 4.2.3 ([#1081](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1081)) ([29dea9c](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/29dea9cc94332cfe5fb7f35da2df79210ad36343)), closes [#1067](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1067) [#1074](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1074) [#1076](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1076) [#1079](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1079) [#1080](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1080)
+* support native 4.3.1 ([#1168](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1168)) ([e78f864](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/e78f864045a6d68ac69585abbcd24cec328cd5ce)), closes [#1183](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1183) [#1181](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1181) [#1177](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1177)
+* support native 4.3.2 ([#1194](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1194)) ([d7a83e6](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/d7a83e6bc72651ababe01e448b662a6c39c154c5))
+* support native 4.5.2 ([#1265](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1265)) ([bb9ed89](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/bb9ed89234a4c732998a67cb2022032afcbcd06b)), closes [#1257](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1257) [#1261](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1261) [#1262](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1262) [#1269](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1269) [#1270](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1270) [#1273](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1273) [#1274](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1274)
+* suppot native 4.2.6 ([#1104](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1104)) ([e8be60b](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/e8be60bc762db3aac50d025a674664fb9e21c0bd)), closes [#1102](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1102)
+* upgrade iris to 4.2.3-build.4 ([#1091](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1091)) ([e4a42ac](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/e4a42acf097c1b87c277a7c0da331bba3968e5d0))
+
+
+### Performance Improvements
+
+* remove useless lib after isynclib ([#1150](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/issues/1150)) ([cb81a8c](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/cb81a8ce48708755cc4600b218e8046d1f85bb35))
+
+
+### Reverts
+
+* iris url ([20a703d](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/20a703d3a3165fc9adb24fb26391fac936405644))
+
 ## [4.6.3-build.133-rc.1](https://github.com/AgoraIO-Extensions/Electron-SDK/compare/v4.6.2-build.27969-rc.2...v4.6.3-build.133-rc.1) (2026-04-10)
 
 ## [4.6.2-build.27969-rc.2](https://github.com/AgoraIO-Extensions/Electron-SDK/compare/v4.6.2-build.27969-rc.1...v4.6.2-build.27969-rc.2) (2026-03-13)
