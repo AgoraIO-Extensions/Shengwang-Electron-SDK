@@ -7,7 +7,7 @@ properties([
         string(name: 'package_version', defaultValue: 'package_version', trim: true),
         string(name: 'example_sdk_mode', defaultValue: '', description: '', trim: true),
         string(name: 'example_electron_version', defaultValue: '', description: '', trim: true),
-        string(name: 'respository', defaultValue: '', description: '', trim: true),
+        string(name: 'repository', defaultValue: '', description: '', trim: true),
         booleanParam(name: 'Upload_CDN', defaultValue: false),
         booleanParam(name: 'isBuildDemo', defaultValue: false),
         ]),
