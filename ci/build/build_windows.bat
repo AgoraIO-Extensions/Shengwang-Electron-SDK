@@ -105,10 +105,10 @@ set http_proxy=
 set all_proxy=
 
 del /a /f /s *.zip
-del /a /f /s Electron-SDK
+del /a /f /s shengwang-electron-sdk
 del /a /f /s example\dist
 
-pushd ..\Electron-SDK
+pushd ..\shengwang-electron-sdk
 
 if %isBuildSdk% == true (
   call ci\electron-sdk-build-windows-release.bat %arch%
@@ -124,7 +124,7 @@ if %isBuildSdk% == true (
 )
 
 if %example_sdk_mode% == 1 (
-  7z x electron.zip -o.\Electron-SDK\ -y
+  7z x electron.zip -o.\shengwang-electron-sdk\ -y
 )
 
 if %isBuildDemo% == true (

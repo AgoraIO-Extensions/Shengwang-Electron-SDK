@@ -6,7 +6,7 @@ import groovy.transform.Field
 buildUtils = new agora.build.BuildUtils()
 
 compileConfig = [
-    "sourceDir": "electron-sdk",
+    "sourceDir": "shengwang-electron-sdk",
     "non-publish": [
         "command": "./ci/build/build_mac.sh",
         "extraArgs": "",
@@ -18,14 +18,6 @@ compileConfig = [
 ]
 
 def doBuild(buildVariables) {
-    // gitCheckOut(getConfig(), params.repository, false, params.is_tag_fetch, [
-    //   "./electron-sdk": [
-    //       params.repository,
-    //       params.shengwang_electron_sdk_branch,
-    //       '',
-    //       getConfig().CREDENTIAL_SSH
-    //   ]
-    // ])
     type = params.Package_Publish ? "publish" : "non-publish"
     command = compileConfig.get(type).command
     preCommand = compileConfig.get(type).get("preCommand", "")
@@ -50,7 +42,7 @@ def doPublish(buildVariables) {
         [
           'type': 'ARTIFACTORY',
           'archivePattern': '*.zip',
-          'serverPath': "ELECTRON/${params.network_path}/${env.platform}",
+          'serverPath': "shengwang_electron/${params.network_path}/${env.platform}",
           'serverRepo': 'CSDC_repo' // ATTENTIONS: Update the artifactoryRepo if needed.
         ]
     ]
@@ -92,4 +84,4 @@ def doUploadCDN(artifactoryUrls) {
     ], wait: true
 }
 
-pipelineLoad(this, 'ELECTRON', 'build', 'mac', 'electron_mac')
+pipelineLoad(this, 'shengwang_electron', 'build', 'mac', 'electron_mac')
