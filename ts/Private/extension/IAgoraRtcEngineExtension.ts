@@ -1,8 +1,7 @@
 import { IAudioEncodedFrameObserver } from '../AgoraBase';
-import { IAudioSpectrumObserver } from '../AgoraMediaBase';
+import { IAudioSpectrumObserver, IMetadataObserver } from '../AgoraMediaBase';
 import {
   IDirectCdnStreamingEventHandler,
-  IMetadataObserver,
   IRtcEngineEventHandler,
 } from '../IAgoraRtcEngine';
 
