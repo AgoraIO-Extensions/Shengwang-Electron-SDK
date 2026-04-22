@@ -1,4 +1,4 @@
-﻿import { createCheckers } from 'ts-interface-checker';
+import { createCheckers } from 'ts-interface-checker';
 
 import { AgoraElectronBridge } from '../../Private/internal/IrisApiEngine';
 import { AgoraEnv, logDebug, logError, parseIntPtr2Number } from '../../Utils';
@@ -31,6 +31,7 @@ import {
   RenderModeType,
   VideoSourceType,
 } from '../AgoraMediaBase';
+import { IMetadataObserver, MetadataType } from '../AgoraMediaBase';
 import { IH265Transcoder } from '../IAgoraH265Transcoder';
 import { IMediaEngine } from '../IAgoraMediaEngine';
 import { IMediaPlayer } from '../IAgoraMediaPlayer';
@@ -40,17 +41,16 @@ import {
   ChannelMediaOptions,
   DirectCdnStreamingMediaOptions,
   IDirectCdnStreamingEventHandler,
-  IMetadataObserver,
   IRtcEngineEventHandler,
   IVideoDeviceManager,
   IVideoEffectObject,
   LeaveChannelOptions,
-  MetadataType,
   RtcEngineContext,
   SDKBuildInfo,
   ScreenCaptureSourceInfo,
   Size,
 } from '../IAgoraRtcEngine';
+
 import { RtcConnection } from '../IAgoraRtcEngineEx';
 import { ILocalSpatialAudioEngine } from '../IAgoraSpatialAudio';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';

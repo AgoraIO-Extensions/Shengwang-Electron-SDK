@@ -226,6 +226,40 @@ export class AudioParameters {
 }
 
 /**
+ * AudioDeviceInfo 类，包含音频设备的 ID 和设备名称。
+ */
+export class AudioDeviceInfo {
+  /**
+   * 设备名称。
+   */
+  deviceName?: string;
+  /**
+   * 音频设备类型，如：built-in、USB、HDMI 等。
+   */
+  deviceTypeName?: string;
+  /**
+   * 设备 ID。
+   */
+  deviceId?: string;
+  /**
+   * @ignore
+   */
+  vendorId?: string;
+  /**
+   * @ignore
+   */
+  productId?: string;
+  /**
+   * @ignore
+   */
+  isCurrentSelected?: boolean;
+  /**
+   * @ignore
+   */
+  isPlayoutDevice?: boolean;
+}
+
+/**
  * 音频数据的使用模式。
  */
 export enum RawAudioFrameOpModeType {
@@ -237,6 +271,78 @@ export enum RawAudioFrameOpModeType {
    * 2: 读写模式, 用户修改 SDK 返回的原始视频，并返回给 SDK 进行编码传输。例如: 若用户自己有音效处理模块，且想要根据实际需要对数据进行前处理(例如变声)，则可以选择该模式。
    */
   RawAudioFrameOpModeReadWrite = 2,
+}
+
+/**
+ * 观测器的 Metadata 类型。当前仅支持视频类型的 Metadata 。
+ */
+export enum MetadataType {
+  /**
+   * -1: Metadata 类型未知。
+   */
+  UnknownMetadata = -1,
+  /**
+   * 0: Metadata 类型为视频。
+   */
+  VideoMetadata = 0,
+}
+
+/**
+ * @ignore
+ */
+export enum MaxMetadataSizeType {
+  /**
+   * @ignore
+   */
+  InvalidMetadataSizeInByte = -1,
+  /**
+   * @ignore
+   */
+  DefaultMetadataSizeInByte = 512,
+  /**
+   * @ignore
+   */
+  MaxMetadataSizeInByte = 1024,
+}
+
+/**
+ * 媒体附属信息。
+ */
+export class Metadata {
+  /**
+   * 频道名称。
+   */
+  channelId?: string;
+  /**
+   * 用户 ID。
+   *  对于接收者：发送该 Metadata 的远端用户的 ID。
+   *  对于发送者：请忽略。
+   */
+  uid?: number;
+  /**
+   * 接收到的或发送的 Metadata 的缓存大小。
+   */
+  size?: number;
+  /**
+   * 接收到的 Metadata 的缓存地址。
+   */
+  buffer?: Uint8Array;
+  /**
+   * 发送 Metadata 的时间戳，单位为毫秒。
+   */
+  timeStampMs?: number;
+}
+
+/**
+ * Metadata 观测器。
+ */
+export interface IMetadataObserver {
+  /**
+   * 接收端已收到 metadata。
+   *
+   * @param metadata 接收到的 metadata，详见 Metadata 。
+   */
+  onMetadataReceived?(metadata: Metadata): void;
 }
 
 /**
@@ -1489,7 +1595,7 @@ export interface IVideoEncodedFrameObserver {
    */
   onEncodedVideoFrameReceived?(
     channelId: string,
-    uid: number,
+    uid: string,
     imageBuffer: Uint8Array,
     length: number,
     videoEncodedFrameInfo: EncodedVideoFrameInfo

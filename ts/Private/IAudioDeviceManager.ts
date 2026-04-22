@@ -1,5 +1,5 @@
 import './extension/IAudioDeviceManagerExtension';
-import { AudioDeviceInfo } from './IAgoraRtcEngine';
+import { AudioDeviceInfo } from './AgoraMediaBase';
 
 /**
  * 设备 ID 的最大长度。
