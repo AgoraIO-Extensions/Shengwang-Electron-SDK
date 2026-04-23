@@ -1,6 +1,6 @@
 {
   "name": "shengwang-electron-sdk",
-  "version": "4.6.3-build.133-rc.3",
+  "version": "4.6.3-build.133-rc.4",
   "description": "shengwang-electron-sdk",
   "main": "js/AgoraSdk",
   "types": "types/AgoraSdk.d.ts",

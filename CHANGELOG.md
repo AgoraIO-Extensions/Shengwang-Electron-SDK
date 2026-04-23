@@ -1,5 +1,12 @@
 
 
+## [4.6.3-build.133-rc.4](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.133-rc.3...v4.6.3-build.133-rc.4) (2026-04-23)
+
+
+### Bug Fixes
+
+* isolate internal event listeners ([13c5d03](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/13c5d03c49ebb5362bb5845467dce7b20d1ca3f7))
+
 ## [4.6.3-build.133-rc.3](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.133-rc.2...v4.6.3-build.133-rc.3) (2026-04-22)
 
 ## 4.6.3-build.133-rc.2 (2026-04-15)
