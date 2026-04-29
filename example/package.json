@@ -76,7 +76,7 @@
     ]
   },
   "dependencies": {
-    "shengwang-electron-sdk": "4.6.3-build.133-rc.5",
+    "shengwang-electron-sdk": "4.6.3-build.133-rc.6",
     "antd": "^4.20.3",
     "download": "^8.0.0",
     "koffi": "2.8.11",
