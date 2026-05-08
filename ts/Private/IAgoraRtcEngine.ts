@@ -7775,3 +7775,21 @@ export class VideoDeviceInfo {
    */
   deviceName?: string;
 }
+
+/**
+ * AudioDeviceInfo 类，包含音频设备的 ID 和设备名称。
+ */
+export class AudioDeviceInfo {
+  /**
+   * 设备 ID。
+   */
+  deviceId?: string;
+  /**
+   * 音频设备类型，如：built-in、USB、HDMI 等。
+   */
+  deviceTypeName?: string;
+  /**
+   * 设备名称。
+   */
+  deviceName?: string;
+}
