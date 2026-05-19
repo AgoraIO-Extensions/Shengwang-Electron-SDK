@@ -23,6 +23,15 @@ const build = async (cb) => {
           : 'build_windows_win32_release';
       }
       break;
+    case 'linux':
+      if (arch === 'x64') {
+        scriptStr = debug ? 'build_linux_x64_debug' : 'build_linux_x64_release';
+      } else {
+        scriptStr = debug
+          ? 'build_linux_arm64_debug'
+          : 'build_linux_arm64_release';
+      }
+      break;
     default:
       break;
   }

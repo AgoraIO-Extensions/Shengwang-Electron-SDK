@@ -55,6 +55,16 @@ timestamps {
             build job: 'shengwang_electron/build_windows', parameters: commonBuildParams + [
                 string(name: 'arch', value: "x64"),
             ]
+        },
+        "electron_linux_x64_build": {
+          build job: 'ELECTRON/build_linux', parameters: commonBuildParams + [
+              string(name: 'arch', value: "x64")
+          ]
+        },
+        "electron_linux_arm64_build": {
+            build job: 'ELECTRON/build_linux', parameters: commonBuildParams + [
+                string(name: 'arch', value: "arm64")
+            ]
         }
     ]
     parallel buildJobs

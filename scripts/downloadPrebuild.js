@@ -16,6 +16,7 @@ const {
   no_symbol,
   native_sdk_mac,
   native_sdk_win,
+  native_sdk_linux,
 } = getConfig();
 
 const workspaceDir = `${path.join(__dirname, '..')}`;
@@ -26,6 +27,12 @@ const getDownloadURL = () => {
   let downloadUrl = `https://download.shengwang.cn/sdk/release/Electron-${getOS()}-${packageVersion}-napi.zip`;
   if (platform === 'win32' && arch === 'x64') {
     downloadUrl = `https://download.shengwang.cn/sdk/release/Electron-win64-${packageVersion}-napi.zip`;
+  }
+  if (platform === 'linux' && arch === 'x64') {
+    downloadUrl = `https://download.shengwang.cn/sdk/release/Electron-linux_x64-${packageVersion}-napi.zip`;
+  }
+  if (platform === 'linux' && arch === 'arm64') {
+    downloadUrl = `https://download.shengwang.cn/sdk/release/Electron-linux_arm64-${packageVersion}-napi.zip`;
   }
   return downloadUrl;
 };
@@ -38,16 +45,20 @@ const getNativeDownloadURL = () => {
     downloadUrl = native_sdk_win;
   } else if (platform === 'darwin') {
     downloadUrl = native_sdk_mac;
+  } else if (platform === 'linux') {
+    downloadUrl = native_sdk_linux;
   }
 
   if (!downloadUrl) {
     const {
-      agora_electron: { native_sdk_win, native_sdk_mac },
+      agora_electron: { native_sdk_win, native_sdk_mac, native_sdk_linux },
     } = require('../package.json');
     if (platform === 'win32') {
       downloadUrl = native_sdk_win;
     } else if (platform === 'darwin') {
       downloadUrl = native_sdk_mac;
+    } else if (platform === 'linux') {
+      downloadUrl = native_sdk_linux;
     }
   }
 
@@ -71,6 +82,17 @@ const matchNativeFile = (path) => {
       result =
         path.startsWith('libs') &&
         /^libs\/.*\.xcframework\/macos-arm64_x86_64\//.test(path);
+      break;
+    case 'linux':
+      switch (arch) {
+        case 'x64':
+          result = path.startsWith('rtc/sdk/x86_64/') && path.endsWith('.so');
+          break;
+        case 'arm64':
+          result =
+            path.startsWith('rtc/sdk/arm64-v8a/') && path.endsWith('.so');
+          break;
+      }
       break;
   }
   return result;
@@ -115,8 +137,27 @@ const winNoSymbolList = [
   './build/Release/VideoSource.ilk',
 ];
 
+const linuxNoSymbolList = [
+  './build/Release/obj.target',
+  './build/Api',
+  './build/Renderer',
+  './build/Utils',
+  './build/agora_node_ext.target.mk',
+  './build/AgoraSdk.js',
+  './build/binding.Makefile',
+  './build/config.gypi',
+  './build/gyp-mac-tool',
+  './build/Makefile',
+  './build/VideoSource.target.mk',
+];
+
 const removeFileByFilter = async () => {
-  const filterList = platform === 'darwin' ? macNoSymbolList : winNoSymbolList;
+  let filterList = winNoSymbolList;
+  if (platform === 'darwin') {
+    filterList = macNoSymbolList;
+  } else if (platform === 'linux') {
+    filterList = linuxNoSymbolList;
+  }
 
   for (const iterator of filterList) {
     const filePath = `${path.join(workspaceDir, iterator)}`;
@@ -179,6 +220,19 @@ module.exports = async () => {
                 /^libs\/.*\.xcframework\/macos-arm64_x86_64\//,
                 ''
               );
+              if (fs.exists(`${nativeLibDir}/${file.path}`)) {
+                fs.remove(`${nativeLibDir}/${file.path}`);
+              }
+              break;
+            case 'linux':
+              switch (arch) {
+                case 'x64':
+                  file.path = file.path.replace(/^rtc\/sdk\/x86_64\//, '');
+                  break;
+                case 'arm64':
+                  file.path = file.path.replace(/^rtc\/sdk\/arm64-v8a\//, '');
+                  break;
+              }
               if (fs.exists(`${nativeLibDir}/${file.path}`)) {
                 fs.remove(`${nativeLibDir}/${file.path}`);
               }

@@ -33,8 +33,10 @@
     "build_windows_win32_release": "cmake-js rebuild --arch=ia32 --CDCMAKE_OSX_ARCHITECTURES=\"i386\" --CDCMAKE_BUILD_TYPE=Release",
     "build_windows_x64_debug": "cmake-js rebuild --arch=x64 --CDCMAKE_OSX_ARCHITECTURES=\"x86_64\" --CDCMAKE_BUILD_TYPE=Debug -G \"Visual Studio 16 2019\"",
     "build_windows_x64_release": "cmake-js rebuild --arch=x64 --CDCMAKE_OSX_ARCHITECTURES=\"x86_64\" --CDCMAKE_BUILD_TYPE=Release",
-    "build_linux_debug": "cmake-js rebuild --arch=x64 --CDCMAKE_BUILD_TYPE=Debug -G \"Unix Makefiles\"",
-    "build_linux_release": "cmake-js rebuild --arch=x64 --CDCMAKE_BUILD_TYPE=Release -G \"Unix Makefiles\"",
+    "build_linux_x64_debug": "cmake-js rebuild --arch=x64 --CDCMAKE_OSX_ARCHITECTURES=\"x86_64\" --CDCMAKE_BUILD_TYPE=Debug -G \"Unix Makefiles\"",
+    "build_linux_x64_release": "cmake-js rebuild --arch=x64 --CDCMAKE_OSX_ARCHITECTURES=\"x86_64\" --CDCMAKE_BUILD_TYPE=Release -G \"Unix Makefiles\"",
+    "build_linux_arm64_debug": "cmake-js rebuild --arch=arm64 --CDCMAKE_OSX_ARCHITECTURES=\"arm64\" --CDCMAKE_BUILD_TYPE=Debug -G \"Unix Makefiles\"",
+    "build_linux_arm64_release": "cmake-js rebuild --arch=arm64 --CDCMAKE_OSX_ARCHITECTURES=\"arm64\" --CDCMAKE_BUILD_TYPE=Release -G \"Unix Makefiles\"",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
@@ -163,6 +165,8 @@
     "iris_sdk_win": "https://download.agora.io/sdk/release/iris_4.6.3.133-build.7_DCG_Windows_Video_Standalone_20260508_0341_31967.zip",
     "iris_sdk_mac": "https://download.agora.io/sdk/release/iris_4.6.3.133-build.7_DCG_Mac_Video_Standalone_20260508_0333_32904.zip",
     "native_sdk_win": "https://download.shengwang.cn/sdk/release/Shengwang_Native_SDK_for_Windows_rel.v4.6.3.133_32229_FULL_20260507_2022_1106902.zip",
-    "native_sdk_mac": "https://download.shengwang.cn/sdk/release/Shengwang_Native_SDK_for_Mac_rel.v4.6.3.133_27595_FULL_20260507_2022_1106904.zip"
+    "native_sdk_mac": "https://download.shengwang.cn/sdk/release/Shengwang_Native_SDK_for_Mac_rel.v4.6.3.133_27595_FULL_20260507_2022_1106904.zip",
+    "iris_sdk_linux": "https://download.agora.io/sdk/release/iris_4.5.40-build.4_DCG_Linux_Video_Standalone_20260128_0538_3538.zip",
+    "native_sdk_linux": "https://download.agora.io/sdk/release/Agora_Native_SDK_for_Linux_rel.v4.5.40_27324_FULL_20260128_1506_1004675.zip"
   }
 }
