@@ -54,7 +54,7 @@ export class RendererManager {
    */
   private defaultObservedFramePosition: number =
     VideoModulePosition.PositionPreRenderer |
-    VideoModulePosition.PositionPreEncoder;
+    VideoModulePosition.PositionPostCapturer;
 
   constructor() {
     this.renderingFps = 15;
