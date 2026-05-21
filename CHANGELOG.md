@@ -1,5 +1,7 @@
 
 
+## [4.6.3-build.133-rc.9](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.133-rc.8...v4.6.3-build.133-rc.9) (2026-05-21)
+
 ## [4.6.3-build.133-rc.8](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.133-rc.7...v4.6.3-build.133-rc.8) (2026-05-21)
 
 ## [4.6.3-build.133-rc.7](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.133-rc.6...v4.6.3-build.133-rc.7) (2026-05-08)
