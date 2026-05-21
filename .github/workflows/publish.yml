@@ -78,5 +78,5 @@ jobs:
           echo "[publish info][url]: https://download.shengwang.cn/sdk/release/Electron-mac-${{ inputs.increment }}-napi.zip"
           echo "[publish info][url]: https://download.shengwang.cn/sdk/release/Electron-win32-${{ inputs.increment }}-napi.zip"
           echo "[publish info][url]: https://download.shengwang.cn/sdk/release/Electron-win64-${{ inputs.increment }}-napi.zip"
-	  echo "[publish info][url]: https://download.shengwang.cn/sdk/release/Electron-linux_x64-${{ inputs.increment }}-napi.zip"
+          echo "[publish info][url]: https://download.shengwang.cn/sdk/release/Electron-linux_x64-${{ inputs.increment }}-napi.zip"
           echo "[publish info][url]: https://download.shengwang.cn/sdk/release/Electron-linux_arm64-${{ inputs.increment }}-napi.zip"
