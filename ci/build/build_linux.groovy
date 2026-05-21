@@ -6,7 +6,7 @@ import groovy.transform.Field
 buildUtils = new agora.build.BuildUtils()
 
 compileConfig = [
-    "sourceDir": "electron-sdk",
+    "sourceDir": "shengwang-electron-sdk",
     "docker": "",
     "buildCommand": "./ci/build/build_linux.sh",
     "non-publish": [
@@ -44,7 +44,7 @@ def doPublish(buildVariables) { // buildVariables parameter is required by pipel
         [
           'type': 'ARTIFACTORY',
           'archivePattern': '*_linux_*.zip',
-          'serverPath': "ELECTRON/${params.network_path}/${env.platform}/${params.arch}",
+          'serverPath': "shengwang_electron/${params.network_path}/${env.platform}/${params.arch}",
           'serverRepo': 'CSDC_repo' // ATTENTIONS: Update the artifactoryRepo if needed.
         ]
     ]
@@ -85,8 +85,9 @@ def doUploadCDN(artifactoryUrls) {
     build job: 'AD/Agora-Electron-Upload-CDN', propagate: false, parameters: [
         string(name: 'electron_sdk_url', value: cdnUrl),
         string(name: 'npmv', value: params.package_version),
+        string(name: 'company', value: params.repository.toLowerCase().contains('shengwang') ? 'shengwang' : 'agora'),
         string(name: 'electron_version', value: 'napi')
     ], wait: true
 }
 
-pipelineLoad(this, "ELECTRON", "build", "linux", "electron_linux")
+pipelineLoad(this, "shengwang_electron", "build", "linux", "electron_linux")
