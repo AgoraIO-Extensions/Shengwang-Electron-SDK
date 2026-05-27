@@ -81,6 +81,11 @@ interface ColorSpaceParams {
   bUCoeff: number;
 }
 
+interface EffectiveColorSpace {
+  primaries: PrimaryID;
+  range: RangeID;
+}
+
 export class WebGLRenderer extends IRenderer {
   gl: WebGLRenderingContext | WebGL2RenderingContext | null;
   program: WebGLProgram | null;
@@ -115,6 +120,7 @@ export class WebGLRenderer extends IRenderer {
     gVCoeff?: WebGLUniformLocation | null;
     bUCoeff?: WebGLUniformLocation | null;
   } = {};
+  private lastAppliedColorSpaceKey?: string;
 
   constructor(fallback?: WebGLFallback) {
     super();
@@ -578,6 +584,7 @@ export class WebGLRenderer extends IRenderer {
   private releaseTextures() {
     this.gl?.deleteProgram(this.program);
     this.program = null;
+    this.lastAppliedColorSpaceKey = undefined;
 
     this.positionLocation = undefined;
     this.texCoordLocation = undefined;
@@ -632,9 +639,7 @@ export class WebGLRenderer extends IRenderer {
    * Get color space conversion parameters based on color space and range
    */
   private getColorSpaceParams(colorSpace?: ColorSpace): ColorSpaceParams {
-    // Default to BT.601 Limited if not specified
-    const primaries = colorSpace?.primaries ?? PrimaryID.PrimaryidBt709;
-    const range = colorSpace?.range ?? RangeID.RangeidLimited;
+    const { primaries, range } = this.getEffectiveColorSpace(colorSpace);
 
     // Y offset and scale based on ran
     let yOffset: number;
@@ -727,11 +732,28 @@ export class WebGLRenderer extends IRenderer {
     };
   }
 
+  private getEffectiveColorSpace(colorSpace?: ColorSpace): EffectiveColorSpace {
+    return {
+      primaries: colorSpace?.primaries ?? PrimaryID.PrimaryidBt709,
+      range: colorSpace?.range ?? RangeID.RangeidLimited,
+    };
+  }
+
+  private getColorSpaceKey(colorSpace?: ColorSpace): string {
+    const { primaries, range } = this.getEffectiveColorSpace(colorSpace);
+    return `${primaries}:${range}`;
+  }
+
   /**
    * Set color space uniform values in the shader
    */
   private setColorSpaceUniforms(colorSpace?: ColorSpace): void {
     if (!this.gl || !this.program) return;
+
+    const colorSpaceKey = this.getColorSpaceKey(colorSpace);
+    if (this.lastAppliedColorSpaceKey === colorSpaceKey) {
+      return;
+    }
 
     const params = this.getColorSpaceParams(colorSpace);
 
@@ -753,5 +775,7 @@ export class WebGLRenderer extends IRenderer {
     if (this.colorSpaceUniforms.bUCoeff) {
       this.gl.uniform1f(this.colorSpaceUniforms.bUCoeff, params.bUCoeff);
     }
+
+    this.lastAppliedColorSpaceKey = colorSpaceKey;
   }
 }
