@@ -84,6 +84,7 @@ export abstract class IRendererCache {
 
   public addRenderer(renderer: IRenderer): void {
     this.renderers.push(renderer);
+    this.syncCacheContext();
   }
 
   /**
@@ -98,6 +99,7 @@ export abstract class IRendererCache {
       deleteCount = 1;
     }
     this.renderers.splice(start, deleteCount).forEach((it) => it.unbind());
+    this.syncCacheContext();
   }
 
   public setRendererContext(context: RendererContext): boolean {
@@ -105,6 +107,7 @@ export abstract class IRendererCache {
       const renderer = this.findRenderer(context.view);
       if (renderer) {
         renderer.setContext(context);
+        this.syncCacheContext();
         return true;
       }
       return false;
@@ -112,8 +115,15 @@ export abstract class IRendererCache {
       this.renderers.forEach((it) => {
         it.setContext(context);
       });
+      this.syncCacheContext();
       return this.renderers.length > 0;
     }
+  }
+
+  protected syncCacheContext(): void {
+    this.cacheContext.enableAlphaMask = this.renderers.some(
+      (renderer) => renderer.context.enableAlphaMask
+    );
   }
 
   public abstract fetchVideoFrame(): {

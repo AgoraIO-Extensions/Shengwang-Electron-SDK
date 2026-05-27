@@ -8991,10 +8991,10 @@ shelljs@^0.8.5:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-shengwang-electron-sdk@4.6.3-build.133-rc.2:
-  version "4.6.3-build.133-rc.2"
-  resolved "https://registry.npmjs.org/shengwang-electron-sdk/-/shengwang-electron-sdk-4.6.3-build.133-rc.2.tgz#5e597443ab7ee26b713dc1e43e6bde0c45615608"
-  integrity sha512-KPdQgrTSrXiV+mqxHo6IgG8lVXmN2ykl3nWFmvfmpwCS2Qa0LhAJY8WtCasWqZxngKiXBP29p+nIcb9rFMtYsA==
+shengwang-electron-sdk@4.6.3-build.133-rc.9:
+  version "4.6.3-build.133-rc.9"
+  resolved "https://registry.npmjs.org/shengwang-electron-sdk/-/shengwang-electron-sdk-4.6.3-build.133-rc.9.tgz#676a1f6b6f66aad3125e95a84c6d0bac5a1cce8a"
+  integrity sha512-HhZ+4eMpTnmutUGSeA+QPrNQKBuI9gDHPVIhVa2fiqAqjt5xwgCG+HYY0z8b9DZS3iOXBV0ai3XeGczTmNl8Nw==
   dependencies:
     archive-type "^4.0.0"
     buffer "^6.0.3"

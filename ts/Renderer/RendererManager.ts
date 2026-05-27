@@ -311,6 +311,21 @@ export class RendererManager {
   public setRendererContext(context: RendererContext): boolean {
     const checkedContext = this.presetRendererContext(context);
 
+    if (checkedContext.view) {
+      const renderer = this.findRenderer(checkedContext.view);
+      if (
+        renderer?.rendererType === RendererType.WEBGL &&
+        renderer.context.enableAlphaMask !== checkedContext.enableAlphaMask
+      ) {
+        this.addOrRemoveRenderer({
+          ...renderer.context,
+          ...checkedContext,
+          setupMode: VideoViewSetupMode.VideoViewSetupReplace,
+        });
+        return true;
+      }
+    }
+
     for (const rendererCache of this._rendererCaches) {
       const result = rendererCache.setRendererContext(checkedContext);
       if (result) {

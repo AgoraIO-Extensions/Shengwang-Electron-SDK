@@ -271,6 +271,10 @@ export class WebGLRenderer extends IRenderer {
     // Set color space conversion parameters based on frame properties
     this.setColorSpaceUniforms(colorSpace);
 
+    if (this.context.enableAlphaMask) {
+      this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    }
+
     this.gl.pixelStorei(this.gl.UNPACK_ALIGNMENT, 1);
 
     type TextureInfo = {
