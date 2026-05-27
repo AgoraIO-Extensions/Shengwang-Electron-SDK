@@ -6935,7 +6935,7 @@ export abstract class IRtcEngine {
   /**
    * 关闭虚拟节拍器。
    *
-   * 调用 startRhythmPlayer 后，你可以调用该方法关闭虚拟节拍器。
+   * 废弃 自 v4.6.2 版本废弃。 调用 startRhythmPlayer 后，你可以调用该方法关闭虚拟节拍器。
    */
   abstract stopRhythmPlayer(): number;
 
