@@ -89,9 +89,6 @@ echo example_electron_version: $example_electron_version
 echo example_sdk_mode: $example_sdk_mode
 echo package_version: $package_version
 
-# 设置代理 (Linux环境根据需要调整)
-export https_proxy=http://10.15.67.1:18080 http_proxy=http://110.15.67.1:18080 all_proxy=http://10.15.67.1:18080
-
 # 安装Node.js (Linux使用nvm)
 if [ -f ~/.nvm/nvm.sh ]; then
     source ~/.nvm/nvm.sh --install
@@ -99,9 +96,6 @@ if [ -f ~/.nvm/nvm.sh ]; then
     nvm install 16.18.1
     nvm use 16.18.1
 fi
-
-# 取消代理设置
-export -n https_proxy http_proxy all_proxy
 
 pushd /tmp/jenkins/shengwang-electron-sdk
 
