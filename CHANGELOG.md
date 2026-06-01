@@ -1,5 +1,12 @@
 
 
+## [4.6.3-build.133-rc.13](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.133-rc.12...v4.6.3-build.133-rc.13) (2026-06-01)
+
+
+### Performance Improvements
+
+* **renderer:** use a shared render loop for frame cache scheduling ([565a526](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/565a526e2a5621187f5d793399a1b5a12c992b37))
+
 ## [4.6.3-build.133-rc.12](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.133-rc.10...v4.6.3-build.133-rc.12) (2026-05-29)
 
 ## [4.6.3-build.133-rc.10](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.133-rc.9...v4.6.3-build.133-rc.10) (2026-05-27)
