@@ -130,6 +130,8 @@ export abstract class IRendererCache {
     hasMoreFrame: boolean;
     needRender: boolean;
   };
+  public abstract getTimeUntilNextRender(now?: number): number;
+  public abstract runRenderCycle(now?: number): void;
   public abstract renderFrame(): void;
   public abstract startRendering(): void;
   public abstract stopRendering(): void;
