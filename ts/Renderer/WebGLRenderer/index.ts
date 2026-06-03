@@ -265,8 +265,9 @@ export class WebGLRenderer extends IRenderer {
         vStride: vStride!,
       };
       this.rotateCanvas({ width, height, rotation });
-      this.updateRenderMode();
     }
+
+    this.updateRenderModeIfNeeded();
 
     // Set color space conversion parameters based on frame properties
     this.setColorSpaceUniforms(colorSpace);
