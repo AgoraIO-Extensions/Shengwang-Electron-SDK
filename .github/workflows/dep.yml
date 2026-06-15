@@ -25,8 +25,18 @@ jobs:
           dependencies-content: ${{ inputs.dependencies-content }}
 
       - name: Update dependencies
+        id: update_dependencies
         run: |
           sh scripts/internal/dep.sh ${{ steps.dep.outputs.matches }}
+
+      - name: Update terra shared headers
+        if: ${{ steps.update_dependencies.outputs.dep_version != '' && steps.update_dependencies.outputs.windows_dependency_url != '' }}
+        uses: AgoraIO-Extensions/terra_shared_configs/.github/actions/update_headers@main
+        with:
+          url: ${{ steps.update_dependencies.outputs.windows_dependency_url }}
+          version: ${{ steps.update_dependencies.outputs.dep_version }}
+          product_type: rtc
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Generate code and comment by terra
         uses: AgoraIO-Extensions/actions/.github/actions/generate@main

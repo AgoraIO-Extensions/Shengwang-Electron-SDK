@@ -7,6 +7,19 @@ PACKAGE_JSON_PATH="${PROJECT_ROOT}/package.json"
 TERRA_CONFIG_PATH1="${PROJECT_ROOT}/scripts/terra/config/types_config.yaml"
 TERRA_CONFIG_PATH2="${PROJECT_ROOT}/scripts/terra/config/impl_config.yaml"
 
+is_valid_value() {
+    [ -n "$1" ] && [ "$1" != "null" ]
+}
+
+write_github_output() {
+    local key=$1
+    local value=$2
+
+    if [ -n "${GITHUB_OUTPUT:-}" ] && is_valid_value "$value"; then
+        printf '%s=%s\n' "$key" "$value" >> "$GITHUB_OUTPUT"
+    fi
+}
+
 if [ "$#" -lt 1 ]; then
     exit 1
 fi
@@ -19,6 +32,7 @@ IRIS_WINDOWS_DEPENDENCIES=$(echo "$INPUT" | jq -r '.[] | select(.platform == "Wi
 LINUX_DEPENDENCIES=$(echo "$INPUT" | jq -r '.[] | select(.platform == "Linux") | .cdn[]')
 IRIS_LINUX_DEPENDENCIES=$(echo "$INPUT" | jq -r '.[] | select(.platform == "Linux") | .iris_cdn[]')
 DEP_VERSION=$(echo "$INPUT" | jq -r '.[] | select(.platform == "Windows") | .version')
+WINDOWS_DEPENDENCY_URL=$(printf '%s\n' "$WINDOWS_DEPENDENCIES" | head -n 1)
 
 if [ -z "$MAC_DEPENDENCIES" ]; then
   echo "No mac native dependencies need to change."
@@ -80,7 +94,7 @@ else
   done
 fi
 
-if [ -z "$DEP_VERSION" ]; then
+if ! is_valid_value "$DEP_VERSION"; then
   echo "can not find dependencies version."
 else
   echo "update dependencies version to $TERRA_CONFIG_PATH1"
@@ -89,3 +103,6 @@ else
   sed 's|sdkVersion: \(.*\)|sdkVersion: '$DEP_VERSION'|g' $TERRA_CONFIG_PATH2 > tmp
   mv tmp $TERRA_CONFIG_PATH2
 fi
+
+write_github_output "dep_version" "$DEP_VERSION"
+write_github_output "windows_dependency_url" "$WINDOWS_DEPENDENCY_URL"
