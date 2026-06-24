@@ -4493,6 +4493,10 @@ export class AudioTrackConfig {
    * 该参数设置仅对 AudioTrackDirect 类型的自定义音频采集轨道生效。 是否启用音频处理模块： true ：启用音频处理模块，应用回声消除 (AEC)、降噪 (ANS) 和自动增益控制 (AGC) 效果。 false ：（默认）不启用音频处理模块。
    */
   enableAudioProcessing?: boolean;
+  /**
+   * @ignore
+   */
+  totalExtraSendMs?: number;
 }
 
 /**
