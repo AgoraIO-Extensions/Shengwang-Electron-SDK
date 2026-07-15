@@ -1,5 +1,12 @@
 
 
+## [4.6.3-build.133-rc.17](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.136-rc.1...v4.6.3-build.133-rc.17) (2026-07-15)
+
+
+### Bug Fixes
+
+* colorspace ([12a5791](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/12a579121bb286918a58145869a8143e99f56c23))
+
 ## [4.6.3-build.136-rc.1](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.133-rc.16...v4.6.3-build.136-rc.1) (2026-06-24)
 
 ## [4.6.3-build.133-rc.16](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.133-rc.15...v4.6.3-build.133-rc.16) (2026-06-16)
