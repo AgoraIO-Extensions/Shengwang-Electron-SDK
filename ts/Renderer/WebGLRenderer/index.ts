@@ -5,7 +5,7 @@ import {
   VideoFrame,
 } from '../../Private/AgoraMediaBase';
 import { RendererContext, RendererType } from '../../Types';
-import { logWarn } from '../../Utils';
+import { logDebug, logWarn } from '../../Utils';
 import { IRenderer } from '../IRenderer';
 
 export type WebGLFallback = (renderer: WebGLRenderer, error: Error) => void;
@@ -778,6 +778,11 @@ export class WebGLRenderer extends IRenderer {
       this.gl.uniform1f(this.colorSpaceUniforms.bUCoeff, params.bUCoeff);
     }
 
+    if (this.lastAppliedColorSpaceKey !== undefined) {
+      logDebug(
+        `WebGLRenderer color space changed: ${this.lastAppliedColorSpaceKey} -> ${colorSpaceKey}`
+      );
+    }
     this.lastAppliedColorSpaceKey = colorSpaceKey;
   }
 }
