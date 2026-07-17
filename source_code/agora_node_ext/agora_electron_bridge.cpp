@@ -506,8 +506,10 @@ napi_value AgoraElectronBridge::GetVideoFrame(napi_env env,
   ret = agoraElectronBridge->_iris_rendering->GetVideoFrameCache(
       config, &videoFrame, hasMoreFrame);
   LOG_F(INFO,
-        "%s GetVideoFrameCache ret:%d, size:%dx%d, colorSpace:%d/%d/%d/%d",
-        __FUNCTION__, ret, videoFrame.width, videoFrame.height,
+        "%s GetVideoFrameCache frame:%p, ret:%d, size:%dx%d, "
+        "colorSpace:%d/%d/%d/%d",
+        __FUNCTION__, static_cast<void *>(&videoFrame), ret, videoFrame.width,
+        videoFrame.height,
         videoFrame.colorSpace.primaries, videoFrame.colorSpace.transfer,
         videoFrame.colorSpace.matrix, videoFrame.colorSpace.range);
 
