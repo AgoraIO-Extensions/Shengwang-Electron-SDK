@@ -7,6 +7,7 @@
 #include "agora_electron_bridge.h"
 #include "iris_base.h"
 #include "node_iris_event_handler.h"
+#include <cstddef>
 #include <iostream>
 #include <memory>
 #include <regex>
@@ -399,6 +400,16 @@ AgoraElectronBridge::DisableVideoFrameCache(napi_env env,
 
 napi_value AgoraElectronBridge::GetVideoFrame(napi_env env,
                                               napi_callback_info info) {
+  static const bool layout_logged = []() {
+    LOG_F(INFO,
+          "IrisCVideoFrame layout: sizeof:%zu, matrix:%zu, alphaBuffer:%zu, "
+          "colorSpace:%zu",
+          sizeof(IrisCVideoFrame), offsetof(IrisCVideoFrame, matrix),
+          offsetof(IrisCVideoFrame, alphaBuffer),
+          offsetof(IrisCVideoFrame, colorSpace));
+    return true;
+  }();
+  (void) layout_logged;
   napi_status status;
   napi_value jsthis;
   size_t argc = 3;
