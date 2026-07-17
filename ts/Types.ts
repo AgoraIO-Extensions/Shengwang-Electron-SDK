@@ -150,6 +150,8 @@ export interface IAgoraElectronBridge {
 
   ReleaseRenderer(): void;
 
+  SetAddonLogFile?(filePath: string): Result;
+
   EnableVideoFrameCache(context: RendererCacheContext): void;
 
   DisableVideoFrameCache(context: RendererCacheContext): void;

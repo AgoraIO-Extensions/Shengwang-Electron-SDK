@@ -179,6 +179,14 @@ const AgoraNode = require('../../../build/Release/agora_node_ext');
 export const AgoraElectronBridge: IAgoraElectronBridge =
   new AgoraNode.AgoraElectronBridge();
 
+if (process.platform === 'win32') {
+  const tempDir = process.env.TEMP ?? process.env.TMP ?? '.';
+  const separator = tempDir.endsWith('\\') || tempDir.endsWith('/') ? '' : '\\';
+  AgoraElectronBridge.SetAddonLogFile?.(
+    `${tempDir}${separator}agora-electron-addon.log`
+  );
+}
+
 AgoraElectronBridge.OnEvent('call_back_with_buffer', (...params: any) => {
   try {
     handleEvent(...params);
