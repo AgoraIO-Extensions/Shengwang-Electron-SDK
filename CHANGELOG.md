@@ -1,5 +1,12 @@
 
 
+## [4.6.3-build.136-rc.2](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.133-rc.17...v4.6.3-build.136-rc.2) (2026-07-20)
+
+
+### Bug Fixes
+
+* primaries ([3c2481d](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/3c2481d4bf369125e3f8ebd5a6dd05a57ed9d52c))
+
 ## [4.6.3-build.133-rc.17](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.136-rc.1...v4.6.3-build.133-rc.17) (2026-07-15)
 
 
