@@ -459,7 +459,7 @@ napi_value AgoraElectronBridge::GetVideoFrame(napi_env env,
 
   napi_obj_get_property(env, obj2, "renderAlpha", renderAlpha);
 
-  IrisCVideoFrame videoFrame;
+  IrisCVideoFrame videoFrame{};
   videoFrame.yBuffer = (uint8_t *) y_buffer;
   videoFrame.uBuffer = (uint8_t *) u_buffer;
   videoFrame.vBuffer = (uint8_t *) v_buffer;
