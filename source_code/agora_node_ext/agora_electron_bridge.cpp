@@ -400,16 +400,6 @@ AgoraElectronBridge::DisableVideoFrameCache(napi_env env,
 
 napi_value AgoraElectronBridge::GetVideoFrame(napi_env env,
                                               napi_callback_info info) {
-  static const bool layout_logged = []() {
-    LOG_F(INFO,
-          "IrisCVideoFrame layout: sizeof:%zu, matrix:%zu, alphaBuffer:%zu, "
-          "colorSpace:%zu",
-          sizeof(IrisCVideoFrame), offsetof(IrisCVideoFrame, matrix),
-          offsetof(IrisCVideoFrame, alphaBuffer),
-          offsetof(IrisCVideoFrame, colorSpace));
-    return true;
-  }();
-  (void) layout_logged;
   napi_status status;
   napi_value jsthis;
   size_t argc = 3;
@@ -505,13 +495,6 @@ napi_value AgoraElectronBridge::GetVideoFrame(napi_env env,
 
   ret = agoraElectronBridge->_iris_rendering->GetVideoFrameCache(
       config, &videoFrame, hasMoreFrame);
-  LOG_F(INFO,
-        "%s GetVideoFrameCache frame:%p, ret:%d, size:%dx%d, "
-        "colorSpace:%d/%d/%d/%d",
-        __FUNCTION__, static_cast<void *>(&videoFrame), ret, videoFrame.width,
-        videoFrame.height,
-        videoFrame.colorSpace.primaries, videoFrame.colorSpace.transfer,
-        videoFrame.colorSpace.matrix, videoFrame.colorSpace.range);
 
   napi_obj_set_property(env, retObj, "ret", ret);
   napi_obj_set_property(env, retObj, "hasMoreFrame", hasMoreFrame);
