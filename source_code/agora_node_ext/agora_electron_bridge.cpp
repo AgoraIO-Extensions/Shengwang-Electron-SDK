@@ -7,7 +7,6 @@
 #include "agora_electron_bridge.h"
 #include "iris_base.h"
 #include "node_iris_event_handler.h"
-#include <cstddef>
 #include <iostream>
 #include <memory>
 #include <regex>
