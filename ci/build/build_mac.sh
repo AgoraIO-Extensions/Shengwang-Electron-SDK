@@ -89,9 +89,9 @@ echo example_sdk_mode: $example_sdk_mode
 echo package_version: $package_version
 
 source ~/.nvm/nvm.sh --install
-nvm ls-remote 16.18.1
+# nvm ls-remote 16.18.1
 nvm install 16.18.1
-nvm use 16.18.1
+# nvm use 16.18.1
 
 pushd /tmp/jenkins/shengwang-electron-sdk
 
