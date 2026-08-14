@@ -2068,10 +2068,10 @@ export interface IRtcEngineEventHandler {
    * Token 已过期回调。
    *
    * 在音视频互动过程中，如果 Token 失效，SDK 会触发该回调报告 Token 已过期。
-   * 当收到该回调时，你需要重新在服务端生成新的 Token，然后通过下列任意一种方式来更新 Token：
+   * 收到该回调时，你需要在 Token 服务器上生成新的 Token，并根据场景更新 Token：
    *  单频道场景：
-   *  调用 renewToken 来传入新的 Token。
-   *  调用 leaveChannel 离开当前频道，然后在调用 joinChannel 时传入新的 Token 重新加入频道。
+   *  调用 renewToken 传入新的 Token，无需先离开频道。SDK 会通过 onRenewTokenResult 回调报告更新结果。
+   *  如果你的 App 需要离开并重新加入频道，也可以调用 leaveChannel 离开频道，然后在调用 joinChannel 时传入新的 Token。
    *  多频道场景：调用 updateChannelMediaOptionsEx 传入新的 Token。
    *
    * @param connection Connection 信息。详见 RtcConnection 。
@@ -2081,10 +2081,10 @@ export interface IRtcEngineEventHandler {
   /**
    * Token 即将在 30s 内过期回调。
    *
-   * 当收到该回调时，你需要重新在服务端生成新的 Token，然后通过下列任意一种方式来更新 Token：
+   * 收到该回调时，你需要在 Token 服务器上生成新的 Token，并根据场景更新 Token：
    *  单频道场景：
-   *  调用 renewToken 来传入新的 Token。
-   *  调用 leaveChannel 离开当前频道，然后在调用 joinChannel 时传入新的 Token 重新加入频道。
+   *  调用 renewToken 传入新的 Token，无需先离开频道。SDK 会通过 onRenewTokenResult 回调报告更新结果。
+   *  如果你的 App 需要离开并重新加入频道，也可以调用 leaveChannel 离开频道，然后在调用 joinChannel 时传入新的 Token。
    *  多频道场景：调用 updateChannelMediaOptionsEx 传入新的 Token。
    *
    * @param connection Connection 信息。详见 RtcConnection 。
