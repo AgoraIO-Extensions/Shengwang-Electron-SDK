@@ -164,8 +164,8 @@
   "agora_electron": {
     "iris_sdk_win": "https://download.agora.io/sdk/release/iris_4.6.3.140-build.1_DCG_Windows_Video_Standalone_20260814_0828_311027.zip",
     "iris_sdk_mac": "https://download.agora.io/sdk/release/iris_4.6.3.140-build.1_DCG_Mac_Video_Standalone_20260814_0831_32940.zip",
-    "native_sdk_win": "https://download.agora.io/sdk/release/Shengwang_Native_SDK_for_Windows_rel.v4.6.3.141_33312_FULL_20260910_1142_1290461_external.zip",
-    "native_sdk_mac": "https://download.agora.io/sdk/release/Shengwang_Native_SDK_for_Mac_rel.v4.6.3.141_28733_FULL_20260910_1143_1290463_external.zip",
+    "native_sdk_win": "https://download.agora.io/sdk/release/Shengwang_Native_SDK_for_Windows_rel.v4.6.3.141_33338_FULL_20260911_1020_1292054_external.zip",
+    "native_sdk_mac": "https://download.agora.io/sdk/release/Shengwang_Native_SDK_for_Mac_rel.v4.6.3.141_28759_FULL_20260911_1021_1292056_external.zip",
     "iris_sdk_linux": "https://download.agora.io/sdk/release/iris_4.6.3.133-build.10_DCG_Linux_Video_Standalone_20260527_0548_3550.zip",
     "native_sdk_linux": "https://download.agora.io/sdk/release/Shengwang_Native_SDK_for_Linux_rel.v4.6.3.135_28083_FULL_20260615_0900_1162679_private.zip"
   }
