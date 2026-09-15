@@ -35,6 +35,10 @@ class RenderLoopScheduler {
   private caches = new Set<IRendererCache>();
   private timer?: TimerHandle;
 
+  constructor() {
+    document.addEventListener('visibilitychange', this.handleVisibilityChange);
+  }
+
   public register(cache: IRendererCache): void {
     this.caches.add(cache);
     this.reschedule();
@@ -47,8 +51,14 @@ class RenderLoopScheduler {
 
   public clear(): void {
     this.caches.clear();
-    this.reschedule();
+    this.cancelTimer();
+    document.removeEventListener(
+      'visibilitychange',
+      this.handleVisibilityChange
+    );
   }
+
+  private handleVisibilityChange = () => this.reschedule();
 
   private tick = () => {
     this.timer = undefined;
@@ -64,12 +74,9 @@ class RenderLoopScheduler {
   };
 
   private reschedule(): void {
-    if (this.timer !== undefined) {
-      window.clearTimeout(this.timer);
-      this.timer = undefined;
-    }
+    this.cancelTimer();
 
-    if (this.caches.size === 0) {
+    if (this.caches.size === 0 || document.hidden) {
       return;
     }
 
@@ -82,6 +89,13 @@ class RenderLoopScheduler {
 
     const delay = Number.isFinite(minDelay) ? Math.max(0, minDelay) : 0;
     this.timer = window.setTimeout(this.tick, delay);
+  }
+
+  private cancelTimer(): void {
+    if (this.timer !== undefined) {
+      window.clearTimeout(this.timer);
+      this.timer = undefined;
+    }
   }
 }
 
