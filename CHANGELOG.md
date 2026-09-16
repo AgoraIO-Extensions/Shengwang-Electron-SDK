@@ -1,5 +1,12 @@
 
 
+## [4.6.3-build.140-rc.2](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.141-rc.2...v4.6.3-build.140-rc.2) (2026-09-16)
+
+
+### Bug Fixes
+
+* pause video rendering when window is hidden ([fc125a8](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/fc125a8da006ca8b13a1a29d7550b60f3dacb4bc))
+
 ## [4.6.3-build.141-rc.2](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.141-rc.1...v4.6.3-build.141-rc.2) (2026-09-11)
 
 ## [4.6.3-build.141-rc.1](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.140-rc.1...v4.6.3-build.141-rc.1) (2026-09-10)
