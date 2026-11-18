@@ -1,5 +1,12 @@
 
 
+## [4.6.3-build.141-rc.4](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.141-rc.3...v4.6.3-build.141-rc.4) (2026-11-18)
+
+
+### Bug Fixes
+
+* **ci:** pin publish runner for Python 3.11.5 (ASS-3144) ([1da2d3c](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/commit/1da2d3c58cf4d8a3b163e01c153d8bdb05cbe19d))
+
 ## [4.6.3-build.141-rc.3](https://github.com/AgoraIO-Extensions/Shengwang-Electron-SDK/compare/v4.6.3-build.140-rc.2...v4.6.3-build.141-rc.3) (2026-09-24)
 
 
